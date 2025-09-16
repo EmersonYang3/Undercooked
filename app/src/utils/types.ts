@@ -1,37 +1,34 @@
-type TerminalName =
-      "oven"
-    | "stove"
-    | "chop"
-    | "cook"
-    | "boil"
-    | "gather"
-    | "serve";
+export type TerminalName = "oven" | "stove" | "chop" | "cook" | "boil" | "gather" | "serve" | "holding";
 
-type food = {
+export type food = {
     foodName: string,
     requiredIngredients: [string],
     quality: number,
 }
-type ingredient = {
+
+export type ingredient = {
     ingredientName: string,
-    methods: Record<string, string>,
+    methods: [string],
     quality: number
 }
-type player = {
-    heldItem: string | null
+
+export type player = {
+    heldItem: string | null,
+    score: number
 }
-type order = {
+
+export type order = {
     foodName: string,
     expiration: number
 }
-type stationTerminal = {
+
+export type stationTerminal = {
     terminalName: TerminalName,
     onStation: ingredient | food | null
 }
 
-type coreTrackedDrata = {
+export type coreTrackedData = {
     currentOrders: [order],
     orderProgress: { completed: number, failed: number },
-    players: Record<string, player>
+    playerPorts: Record<string, player>,
 }
-//prob use a map for the records instead 
