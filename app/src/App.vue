@@ -1,10 +1,5 @@
 <template>
-  <div class="flex h-screen items-center justify-center bg-gray-100">
-    <h1 class="text-4xl font-bold text-blue-600">
-      🚀 Tailwind is working in Vue!
-    </h1>
-  </div>
-  <div class="w-20 h-20 bg-red-500"></div>
+  <input class="bg-black focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="email" placeholder="jane@example.com">
 
 </template>
 
