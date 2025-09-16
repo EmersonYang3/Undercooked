@@ -4,11 +4,11 @@
 
 <template>
     <div>
-        <button @click="$emit('host')">Host Game</button>
+        <button class="text-blue-600" @click="$emit('host')">Host Game</button>
         <button @click="$emit('set_role')">Join Game</button>
         <div v-show="join_game">
             <input type="text" v-model="code">  
-            <button @click="">Submit</button>
+            <button @click="createNewClient">Submit</button>
             <button>Client</button>
             <div v-show="true">
                 <button>Be Terminal</button>
@@ -36,6 +36,8 @@ function createNewTerminal() {
     //generate a terminal type or pick idk which one 
     //then make a reuqest to the backend to request new terminal be mad
 }
+
+
 
 </script>
 
