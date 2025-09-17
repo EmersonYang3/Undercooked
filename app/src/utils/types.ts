@@ -1,5 +1,6 @@
 export type TerminalName = "oven" | "stove" | "chop" | "cook" | "boil" | "gather" | "serve" | "holding";
-
+export type Ingredients =  "fruits" | "bacon" | "egg" | "sausage" | ""; 
+//fruits is currently a placeholder waiting for assets 
 export type food = {
     foodName: string,
     requiredIngredients: [string],
@@ -7,7 +8,7 @@ export type food = {
 }
 
 export type ingredient = {
-    ingredientName: string,
+    ingredientName: Ingredients,
     methods: [string],
     quality: number
 }

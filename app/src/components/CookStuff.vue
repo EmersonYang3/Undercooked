@@ -1,5 +1,7 @@
 <template>
-    <div class="relative w-screen h-screen text-center overflow-hidden">
+    <div class="relative w-screen h-screen text-center overflow-hidden" 
+    :style="{ cursor: `url(${knife}) 16 16, auto`}"
+    >
     <div class="absolute w-screen h-12 z-1 bg-green-300"> Score: {{ score }}</div>
         <div
             class="w-screen h-screen bg-center bg-cover absolute"
@@ -15,11 +17,13 @@
                 }"
                 @click="handleFruit(fruit)"></div>
     </div>
+    <div :style="{ cursor: `url(${knife})`}"></div>
 </template>
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, reactive, ref } from 'vue'
-import placeholder from '../assets/placeholderdontuse.png'
+import placeholder from '../assets/bg.png'
+import knife from '../assets/knife.png'
 //possible optimization would be define fruit spin rate outside
 //really minor tho considering it barely takes up any space
 
@@ -41,13 +45,15 @@ interface Fruit {
     rotation: number, 
     spin: number, 
     active: boolean, 
-    score:number
+    score:number, 
+
 }
 
 //add bad fruits or good fruits to make it score based
 
 function makeFruit(id:number): Fruit {
     const negative =  Math.round(Math.random()) == 1 ? 1 : -1;
+    if (negative)
     return {
         id,
         x: Math.random() * window.innerWidth,
