@@ -1,7 +1,15 @@
 <template>
-    <div class="flex items-center h-screen">
-        <div class="w-full h-64 bg-blue-300  items-center justify-center text-center">ligma</div>
+    <div class="flex items-center h-screen" v-show="test">
+        <div class="w-full h-32 bg-blue-300  items-center text-center text-[4rem] leading-none font-bungee">
+            <input type="button" placeholder="keowoefowjofiwfoijw" class="bg-black w-12 h-12" @click="stupid">
+            START
+        </div>
     </div>
+    <div class="flex justify-center rounded-full h-16 w-16 bg-black items-center">
+        <div class="rounded-full h-12 w-12 bg-white text-center">{{ progress }}</div>
+    </div>
+    <div @click="handleStove" class=""></div>
+    <circle></circle>
 </template>
 
 <script setup lang="ts">
@@ -14,8 +22,25 @@
 //every frame compare if out of range
 //if out of range calculate penalty based off of how long out of it
 //have a number to make it less of a guessing game for the user
+import { start } from 'repl';
 import { ref } from 'vue';
 const progress = ref(0);
+const test = ref(true);
+
+function handleStove() {
+    //this function increases the temperature
+}
+function update() {
+
+}
+
+function stupid() {
+    test.value = !test.value
+}
+
+requestAnimationFrame(update)
+
+
 //set the user within a habitable range
 
 
