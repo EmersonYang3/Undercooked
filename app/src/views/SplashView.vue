@@ -4,25 +4,23 @@
 
 <template>
     <div>
-        <button class="text-blue-600" @click="$emit('host')">Host Game</button>
-        <button @click="$emit('set_role')">Join Game</button>
-        <div v-show="join_game">
-            <input type="text" v-model="code">  
-            <button @click="createNewClient">Submit</button>
-            <button>Client</button>
-            <div v-show="true">
-                <button>Be Terminal</button>
-                <button>Player Client</button>
-            </div>
-        </div>
+        <button class="bg-red-500 rounded-xl " @click="$emit('host')">Host Game</button>
+        <button class="appearance-auto" @click="debug('ligma')">Join Game</button>
+        <SelectRole></SelectRole>
+        
         <!--This will allow you to set whether you're a player or a terminal-->
     </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import SelectRole from '@/components/SelectRole.vue';
+
 const join_game = ref(false);
 const code = ref("Enter Game Code");
+function debug(stringy:string) {
+    console.log(stringy);
+}
 function getValidGame() {
     //check if the code.value is a valid code against the registry (access the backend or smth idk)
     //if code valid allow them to go to the next sequence which is the select terminal or player view
