@@ -22,10 +22,12 @@
 //every frame compare if out of range
 //if out of range calculate penalty based off of how long out of it
 //have a number to make it less of a guessing game for the user
-import { start } from 'repl';
 import { ref } from 'vue';
 const progress = ref(0);
 const test = ref(true);
+
+
+
 
 function handleStove() {
     //this function increases the temperature
