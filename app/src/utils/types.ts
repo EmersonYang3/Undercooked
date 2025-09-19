@@ -1,5 +1,6 @@
 export type TerminalName = "oven" | "stove" | "chop" | "cook" | "boil" | "gather" | "serve" | "holding";
-export type Ingredients =  "fruits" | "bacon" | "egg" | "sausage" | ""; 
+export type Ingredients =  "fruits" | "bacon" | "egg" | "sausage" | "potato" | "carrot"; 
+export type Methods = "fry" | "flip" | "boil" | "chop" | "mash" | "peel" 
 //fruits is currently a placeholder waiting for assets 
 export type food = {
     foodName: string,
@@ -7,7 +8,7 @@ export type food = {
     quality: number,
 }
 
-export type ingredient = {
+export type ingredient_info = {
     ingredientName: Ingredients,
     methods: [string],
     quality: number
@@ -25,7 +26,7 @@ export type order = {
 
 export type stationTerminal = {
     terminalName: TerminalName,
-    onStation: ingredient | food | null
+    onStation: ingredient_info | food | null
 }
 
 export type coreTrackedData = {

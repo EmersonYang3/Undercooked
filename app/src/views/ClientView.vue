@@ -2,28 +2,29 @@
     Client View, only for viewing a player's currently held item, no actual functionality.
 -->
 <template>
-    <div class="h-screen w-screen bg-black flex-row flex">
-        <div class="text-white">Ready</div>
-        <div class="text-white">Not Ready</div>
-        <div v-for="timers in activeTimers" :key="timers.id" 
-        class="m-3"
-        :style="{
-            
-        }"> 
-            <div
-            class="h-8 w-40 rounded-t-lg transition-colors duration-1000"
-            :style="{
-                backgroundColor: getProgressColor(timers)
-            }"
-            >
-                {{ timers.IngredientName }}
-            </div>
-            <div class="z-10 w-40 bg-white h-48 rounded-b-lg">
-                {{( timers.time_remaining/timers.cook_time ) * 100}} %
-                {{ timers.time_remaining }}s / {{ timers.cook_time }}s
-                <img :src="timers.asset" class="w-32 h-32">      
+    <div class="h-screen w-screen bg-black flex-col flex">
+        <div class="flex-row">
+            <div class="text-white">Ready</div>
+                <div v-for="timers in activeTimers" :key="timers.id" 
+                class="m-3"
+                :style="{
+                    
+                }"> 
+                    <div
+                class="h-8 w-40 rounded-t-lg transition-colors duration-1000"
+                :style="{
+                    backgroundColor: getProgressColor(timers)
+                }"
+                >
+                    {{ timers.IngredientName }}
+                </div>
+                <div class="z-10 w-40 bg-white h-48 rounded-b-lg items-center justify-center items-center ">
+                    {{ timers.time_remaining }}s / {{ timers.cook_time }}s
+                    <img :src="timers.asset" class="w-32 h-32">      
+                </div>
             </div>
         </div>
+        <div class="text-white">Not Ready</div>
     </div>
 </template>
 
@@ -43,6 +44,8 @@ import meat from '../assets/meat.png'
 import { onMounted, Reactive, reactive} from 'vue';
 const activeTimers:Reactive<Array<Timer>> =  reactive([]);
 const inactiveTimers:Reactive<Array<Timer>> = reactive([]);
+const activeRecipes:Reactive<Array<Timer>> =  reactive([]);
+
 //has an expiry time to encourage players not to just leave it sitting which ruins the setting of the game
 //this should only be terminal to host to ensure it doesnt ha
 
