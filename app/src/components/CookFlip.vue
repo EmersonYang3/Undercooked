@@ -1,11 +1,36 @@
 <template>
-    <div>
-        <div class="absolute h-full w-full z-1 bg-center bg-cover bg-contain" :style="{ backgroundImage: `url(${pan})`}"></div>
+    <div class="flex items-center justify-center h-screen">
+        <div class="rounded-full h-screen aspect-square bg-black">
+            
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import pan from '../assets/pan.png'
+import { onMounted, Reactive, reactive } from 'vue';
+
+
+const foods:Reactive<Array<Fryable>> = reactive({});
+
+type Fryable = {
+    remaining_time:
+}
+
+function update() { //could make this update_array_timers function that takes in an array
+    for(let i = foods.length; i >= 0; i-- ) 
+    {
+        foods[i].
+    } 
+}
+onMounted(()=> {
+    setInterval(()=>{
+        update()
+    }, 1000)
+})
+
+
+
+
 </script>
 
 <style scoped>
