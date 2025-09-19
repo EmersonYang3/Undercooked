@@ -33,3 +33,10 @@ export type coreTrackedData = {
     orderProgress: { completed: number, failed: number },
     playerPorts: Record<string, player>,
 }
+export type Timer = {
+    IngredientName: Ingredients,
+    time_remaining: number,
+    cook_time: number, 
+    id:number,
+    asset:string
+}//for v-for to ensure proper indentification due to possible clashing ingredient Name

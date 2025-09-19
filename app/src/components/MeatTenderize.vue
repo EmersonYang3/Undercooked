@@ -1,20 +1,30 @@
 <template>
-    <div class="object-center bg-red-500 w-full h-32 font-cherry">
+    <div class="object-center bg-red-200 w-full h-32 font-cherry">
         <div class="text-8xl text-center text-a-500 bubble-outline">Mash the Space BAR!</div>
     </div>
     <div 
-    class="bg-no-repeat w-[auto] h-[auto] z-10"
+    class="w-[auto] h-[auto] z-10"
     :style="{ 
         transform: `rotate(${hammerRotation}deg)`,
         transformOrigin: `bottom right`,
         backgroundImage: `url(${masher})`
     }"></div>
+    <div
+    class="bg-no-repeat z-10"
+    :style="
+    {
+        backgroundImage: `url(${meat})`
+    }"
+    >
+    <img src="../assets/meat.png">
+    </div>
     <div>Hits: {{ amountMashed }}</div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
 import masher from '../assets/masher.png'
+import meat from '../assets/meat.png'
 //meat tenderizing
 //basically just key mashing as fast as possible
 //low skill and it fits overcookeds face paced theme
@@ -25,6 +35,9 @@ const hammerRotation = ref(0);
 //based off of how many times the user clicks the hammer rotates to match the respective speed at which it was clicked
 let negMulti = 1;
 const amountMashed = ref(0);
+
+
+
 window.addEventListener("keydown", function (e) {
     if(e.key == " ") {
         
