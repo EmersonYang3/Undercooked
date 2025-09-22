@@ -12,8 +12,6 @@ import MeatTenderize from './components/MeatTenderize.vue';
 import SelectRole from './components/SelectRole.vue';
 import ClientView from './views/ClientView.vue';
 import SplashView from './views/SplashView.vue';
-
-
 </script>
 
 <style scoped>

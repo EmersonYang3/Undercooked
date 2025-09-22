@@ -1,9 +1,9 @@
-import type { food, Food, order } from "./types";
+import type { food, Food } from "./types";
 
 const foods:Record<Food, food> = { 
     "curry": {
         foodName:"curry",
-        requiredIngredients: ["fruits"],
+        requiredIngredients: ["curry_cubes","water","potato", "carrot"],
         quality:0,
     },
     "british_meal": {
