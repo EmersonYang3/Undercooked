@@ -10,8 +10,25 @@ function doesLobbyExist(lobbyCode: string): boolean {
     return !!lobby
 }
 
-function createLobby(lobbyCode: string) { }
+function createLobby(lobbyCode: string, playerIdentifier: number, socketIdentifier: string): Lobby | null { 
+    if (doesLobbyExist(lobbyCode)) { return null }
 
-function removeLobby(lobbyCode: string) { }
+    const newLobby: Lobby = {
+        host: { internalIdentifier: playerIdentifier, socketId: socketIdentifier },
+        lobbyCode: lobbyCode,
+        activeRecipes: [],
+        terminals: [],
+        players: [],
 
-export default { doesLobbyExist, createLobby }
+        creationTime: new Date().toISOString()
+    }
+
+    return newLobby
+}
+
+function removeLobby(lobbyCode: string) { 
+    if (!doesLobbyExist(lobbyCode)) { return }
+    delete lobbies[lobbyCode]
+}
+
+export default { doesLobbyExist, createLobby, removeLobby }

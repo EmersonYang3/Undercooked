@@ -4,7 +4,7 @@ import hostSocket from  "../sockets/host.ts"
 import playerSocket from "../sockets/player.ts"
 import terminalSocket from "../sockets/terminal.ts"
 
-const socketMap: Record<string, { init: () => void }> = {
+const socketMap: Record<string, { init: (socket: Socket) => void }> = {
     "host": hostSocket,
     "player": playerSocket,
     "terminal": terminalSocket
@@ -17,7 +17,7 @@ function onConnected(socket: Socket) {
     const handler = socketMap[role]
 
     if (handler) {
-        handler.init();
+        handler.init(socket);
     } else {
         console.log("No handler found for role:", role); 
     }

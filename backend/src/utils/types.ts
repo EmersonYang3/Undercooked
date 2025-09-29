@@ -8,6 +8,7 @@ export interface handshakeData {
 }
 
 export type host = {
+    internalIdentifier: number,
     socketId: string,
 }
 
@@ -27,7 +28,8 @@ export type ingredient = {
     quality: number
 }
 
-export type player = {
+export type player = { 
+    internalIdentifier: number,
     currentlyHolding: ingredient | recipe | null,
     specialKey: string,
     socketId: string,
@@ -44,6 +46,8 @@ export type timedRecipe = {
 }
 
 export type terminal = {
+    internalIdentifier: number,
+
     socketId: string,
     terminalName: terminalNames,
     currentItem: ingredient | recipe | null,

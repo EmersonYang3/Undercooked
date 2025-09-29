@@ -11,20 +11,20 @@ const app = express()
 const httpServer = createServer(app)
 
 const serverPort = new Server(httpServer, {cors: {origin: "*"}})
-const clientPort = io("http://localhost:4000", {auth: { intendedRole: "host", targetLobbyCode: "ABCD1234" }});
+const clientPort = io("http://localhost:4000", {auth: { intendedRole: "host", targetLobbyCode: "JOHNNYSUCKS" }});
 
 serverPort.use(connValidatorService.validateConnection);
 
 serverPort.on("connection", (socket) => {
   connRouterService.onConnected(socket)
-  
-  socket.on("disconnect", (reason) => connRouterService.onDisconnected(socket, reason));
 });
 
 httpServer.listen(4000, () => {
   console.log("Backend running on http://localhost:4000");
 })
 
+clientPort.emit("testing", { msg: "Hello from client" });
+
 setTimeout(() => {
   clientPort.disconnect();
-}, 1000);
+}, 2500);
