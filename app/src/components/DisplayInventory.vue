@@ -5,12 +5,11 @@
         <div v-for="item in items" :key="item.id" class="flex flex-row justify-center">
         <div
             v-if="valid_food(item)"
-            class="relative group text-white text-xs h-32 w-32 bg-white items-center rounded-lg p-2 m-2 relative"
+            class="relative group text-white text-xs h-32 w-32 bg-white border-gray-500 border-5 items-center rounded-lg p-2 m-2 relative"
         >
             <!-- Item Name -->
             <img class="w-full h-full" src="../assets/tomato.png"  alt="tomato"/>
-            <!-- Quantity -->
-            <div class="absolute bottom-0  right-0 bg-white w-10 h-10 rounded-full text-black text-center content-center">{{ item.quantity }}</div>
+            <div class="absolute bottom-0  right-0 bg-gray-500 w-7 h-7 rounded-tl-xl text-black text-center content-center">{{ item.quantity }}</div>
 
             <!-- Methods (Only visible on hover) -->
             <div
@@ -30,6 +29,8 @@
 </template>
 
 <script setup lang="ts">
+//change the color scheme of the borders and thequantity counter 
+
 //this is only for the terminals specifically
 import { paths } from '@/utils/enum';
 const tomatoImg = (paths['tomato']);
