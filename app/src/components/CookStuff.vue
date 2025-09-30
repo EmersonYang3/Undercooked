@@ -11,16 +11,20 @@
                 v-for="fruit in fruits"
                 :key="fruit.id"
                 v-show="fruit.active"
-                class="absolute w-64 h-32 rounded-full bg-yellow-400"
+                class="absolute w-64 h-64 bg-yellow-500" 
                 :style="{
                     transform: `translate(${fruit.x}px, ${fruit.y}px) rotate(${fruit.rotation}deg)`
                 }"
-                @click="handleFruit(fruit)"></div>
+                @click="handleFruit(fruit)">
+                <img :src="ImageLut[fruit.image].file_path">
+            
+            </div>
     </div>
     <div :style="{ cursor: `url(${knife})`}"></div>
 </template>
 
 <script setup lang="ts">
+import { ImageLut } from '@/utils/lut';
 import { onMounted, onUnmounted, reactive, ref } from 'vue'
 import placeholder from '../assets/bg.png'
 import knife from '../assets/knife.png'
@@ -46,13 +50,18 @@ interface Fruit {
     spin: number, 
     active: boolean, 
     score:number, 
-
+    image:string
 }
+const validfruits = ["apple", "banana", "melon", "watermelon", "pineapple"];
+
+
+
 
 //add bad fruits or good fruits to make it score based
 
 function makeFruit(id:number): Fruit {
     const negative =  Math.round(Math.random()) == 1 ? 1 : -1;
+    const random_index = Math.floor(Math.random() * validfruits.length - 1) + 1;
     if (negative)
     return {
         id,
@@ -63,7 +72,8 @@ function makeFruit(id:number): Fruit {
         rotation: 0,
         spin: (Math.random() - 0.5) * 12,
         active: true, 
-        score: (Math.round(Math.random()*100) + 1) * negative
+        score: (Math.round(Math.random()*100) + 1) * negative,
+        image: validfruits[random_index]
     }
 }
 const fruits = reactive(Array.from({length: 4}, (_, i)=> makeFruit(i)));

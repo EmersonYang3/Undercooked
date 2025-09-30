@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TerminalView></TerminalView>
+    <CookStuff></CookStuff>
   </div>
 </template>
 

@@ -1,32 +1,21 @@
 <template>
-    <div class="bg-black w-screen h-screen">
         <!-- make this a scroll bar thingie majingie where  -->
-        <div class="bg-white w-full flex flex-col items-center">
+        <div class="bg-white w-full h-full flex flex-col items-center">
             <div v-for="terminals in valTerms" :key="terminals.id"
-            class="bg-white h-20 w-20"
+            class="bg-black h-48 w-48 items-center flex flex-col"
             >
-                <div>{{ terminals.name }}</div>
-                <img :src="ImageLut[terminals.name].file_path">
+                <div class="text-center text-white items-center flex flex-col text-black">{{ terminals.name }}</div>
+                <img :src="ImageLut[terminals.name].file_path"  class="w-10 h-10">
             </div>
         </div>
-    </div>
 
 
 </template>
 
 <script setup lang="ts">
-import { reactive, Reactive, } from 'vue';
+import { onMounted, reactive, Reactive } from 'vue';
 
-type Image = {
-    name:string,
-    file_path: string,
-
-}
-const ImageLut:Record<string, Image> = {
-    "tomato":"../assets/tomato.png"
-}//example of a lut entry
-
-
+import { ImageLut } from '@/utils/lut';
 
 type Terminal = {
     id:string, 
@@ -37,8 +26,12 @@ const valTerms:Reactive<ValidTerminals> = reactive([]);
 document.addEventListener("scroll",function (e) {
     
 })
-
-
+onMounted(()=>{
+    valTerms.push({
+        id:"12",
+        name:"orange"
+    })
+})
 
 </script>
 
