@@ -2,7 +2,7 @@
     <div class="relative w-screen h-screen text-center overflow-hidden" 
     :style="{ cursor: `url(${knife}) 16 16, auto`}"
     >
-    <div class="absolute w-screen h-12 z-1 bg-green-300"> Score: {{ score }}</div>
+    <div class="absolute w-screen h-12 z-1 bg-green-400 rounded-lg=full"> Score: {{ score }}</div>
         <div
             class="w-screen h-screen bg-center bg-cover absolute"
             :style="{ backgroundImage: `url(${placeholder})` }"
@@ -11,7 +11,7 @@
                 v-for="fruit in fruits"
                 :key="fruit.id"
                 v-show="fruit.active"
-                class="absolute w-64 h-64 bg-yellow-500" 
+                class="absolute w-64 h-64" 
                 :style="{
                     transform: `translate(${fruit.x}px, ${fruit.y}px) rotate(${fruit.rotation}deg)`
                 }"
@@ -54,30 +54,38 @@ interface Fruit {
 }
 const validfruits = ["apple", "banana", "melon", "watermelon", "pineapple"];
 
-
-
-
+let negativeAmount = 0;
 //add bad fruits or good fruits to make it score based
 
 function makeFruit(id:number): Fruit {
-    const negative =  Math.round(Math.random()) == 1 ? 1 : -1;
+    let negative =  Math.round(Math.random()) == 1 ? 1 : -1;
+    if (negative == -1) {
+        if(negativeAmount <= 3) {
+            negativeAmount+=1;
+        }
+        else {
+            negative = 1;
+        }
+    }
     const random_index = Math.floor(Math.random() * validfruits.length - 1) + 1;
-    if (negative)
+    const asset_path = negative == -1 ? "bomb" : validfruits[random_index];
+    //limit the amount of bombs that can appear 
+
     return {
         id,
         x: Math.random() * window.innerWidth,
         y: window.innerHeight,
-        vx: (Math.random() - 0.5) * 6,
-        vy: -15 - Math.random() * 4,
+        vx: (Math.random() - 0.5) * 3,
+        vy: -15 - Math.random() * 2,
         rotation: 0,
         spin: (Math.random() - 0.5) * 12,
         active: true, 
         score: (Math.round(Math.random()*100) + 1) * negative,
-        image: validfruits[random_index]
+        image: asset_path
     }
 }
-const fruits = reactive(Array.from({length: 4}, (_, i)=> makeFruit(i)));
-const gravity = 0.2;
+const fruits = reactive(Array.from({length: 6}, (_, i)=> makeFruit(i)));
+const gravity = 0.22;
 let animationFrame:number;
 function update() {
     
@@ -89,20 +97,19 @@ function update() {
         fruit.rotation += fruit.spin
         if(fruit.y > window.innerHeight + 500 || fruit.y < 10) {
             resetFruit(fruit)        
+            negativeAmount -= 1;
         }
-    
     })
     requestAnimationFrame(update)
 }
 //reuse the preexisting object to avoid remaking the div which would be a performance hit cuz dom update or smth
 //use a setTimeout function to prevent the fruits from respawning too quikcly which can overwhelm the player
-const promsies = [];
-
 
 
 
 function handleFruit(fruit:Fruit) {
     fruit.active = false;
+    if(Math.sign(fruit.score)==-1) negativeAmount -=1;
     score.value+=fruit.score;
     setTimeout(()=> {
         Object.assign(fruit, makeFruit(fruit.id))

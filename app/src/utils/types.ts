@@ -65,6 +65,12 @@ export type coreTrackedData = {
     orderProgress: { completed: number, failed: number },
     playerPorts: Record<string, player>,
 }
+
+export type ActualFood = {
+    
+}
+
+
 export type Timer = {
     IngredientName: Ingredients,
     time_remaining: number,

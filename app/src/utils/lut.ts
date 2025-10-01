@@ -32,6 +32,10 @@ const ImageLut:Record<string, Image> = {
         name:"banana",
         file_path:"/fruits/pineapple.png"
     },
+    "bomb":{
+        name:"bomb",
+        file_path:"/fruits/bomb.png"
+    }
 
 }//example of a lut entry
 export {ImageLut};
