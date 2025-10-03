@@ -1,6 +1,16 @@
 function assign_recipe() {
 
 }
+const terminalNames: TerminalName[] = [
+  "oven",
+  "stove",
+  "chop",
+  "cook",
+  "boil",
+  "gather",
+  "serve",
+  "holding",
+];
 type TerminalName = "oven" | "stove" | "chop" | "cook" | "boil" | "gather" | "serve" | "holding";
 const terminalLookUp:Record<TerminalName, number> = {
     //contains the list of current terminals
@@ -17,7 +27,10 @@ const terminalLookUp:Record<TerminalName, number> = {
 //makes it much more easier
 //if needed for efficiency could pre calculate the possible permutations beforehand for a given amount
 const uniqueTerminals = new Set();
-
+const unselectedTerminals = [];
+//put all the unselected terminals here
+//remove one when it gets selected
+//might not be the mo0st efficient but simple enough
 //iterate thru the food
 //read the methods attributed with each
 //use set.cotains
@@ -31,5 +44,8 @@ function possible_recipes() {
 }
 //game has to calculate the list of possible recipes that can be done
 function possible_terminal_type() {
-    f
+    if (unselectedTerminals.length == 0) {
+        return 
+    }
+    return unselectedTerminals;
 }

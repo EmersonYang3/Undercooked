@@ -1,4 +1,19 @@
 <template>
+    <!-- start screen where the player clicsk to start the game -->
+    <div v-show="showStart" class="bg-black h-screen w-screen flex justify-center flex-column items-center absolute z-10">
+        <div class="text-red-500 text-xl w-64 h-64 z-1">Start!</div>
+        <div @click="quickset" class="rounded-full bg-yellow-500 w-64 h-64 justify-center item-center flex">
+            
+        </div>  
+        <!-- bind the player here using the bindplayer component -->
+    </div>
+
+
+
+    <!-- actual gameplay area make it so until the player actually clicks start does it start -->
+    <div v-show="timer" class="w-screen h-screen bg-black text-white text-center items-center flex justify-center text-9xl">
+        {{ time }}
+    </div>
     <div class="relative w-screen h-screen text-center overflow-hidden" 
     :style="{ cursor: `url(${knife}) 16 16, auto`}"
     >
@@ -21,6 +36,9 @@
             </div>
     </div>
     <div :style="{ cursor: `url(${knife})`}"></div>
+    <div></div>
+
+
 </template>
 
 <script setup lang="ts">
@@ -30,6 +48,19 @@ import placeholder from '../assets/bg.png'
 import knife from '../assets/knife.png'
 //possible optimization would be define fruit spin rate outside
 //really minor tho considering it barely takes up any space
+const time = ref(3);
+const timer = ref(false);
+function quickset() {
+    showStart.value = false;
+    for(let i = 0; i<3 ; i++) {
+        setTimeout(()=>{
+            time.value -= 1;
+        }, 1000 * (i + 1));
+    }
+
+}
+const showStart = ref(true);
+
 
 const score = ref(0);
 //to increase difficulty, either increase the amount of fruits that can be sent out at a given time
