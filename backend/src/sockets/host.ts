@@ -6,11 +6,9 @@ import disconnect from "../modules/host/disconnect.ts"
 function init(socket: Socket) {
     const { lobbyCode, hostIdentifier } = connect.connected(socket)
 
-    socket.on("disconnect", (reason) => {
-        disconnect.disconnected(socket, reason)
+    socket.on("disconnect", (reason) => { disconnect.disconnected(socket, reason) })
 
-        console.log(lobbyCode, hostIdentifier)
-    })
+    socket.emit("host:connected", { lobbyCode, hostIdentifier }
 }
 
 export default { init }

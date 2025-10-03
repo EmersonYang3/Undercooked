@@ -31,14 +31,18 @@ function validateConnection(socket: Socket, next: (err?: ExtendedError) => void)
         return next(new Error("Invalid handshake data"));
     }
 
-    if (!validateIfHost(ensureHandshakeData(socket.handshake.auth))) {
-        console.log("Host trying to join existing lobby:", socket.handshake.auth);
+    const ensuredHandshakeData = ensureHandshakeData(socket.handshake.auth);
+
+    if (ensuredHandshakeData.intendedRole === "host" && !validateIfHost(ensuredHandshakeData)) {
+        console.log("Host attempted to connect to an already existing lobby:", ensuredHandshakeData.targetLobbyCode);
 
         return next(new Error("Lobby with this code already exists"));
+    } else if (ensuredHandshakeData.intendedRole !== "host" && !lobbyService.doesLobbyExist(ensuredHandshakeData.targetLobbyCode)) {
+        console.log("Player/Terminal attempted to connect to a non-existing lobby:", ensuredHandshakeData.targetLobbyCode);
+        return next(new Error("Lobby with this code does not exist"));
     }
 
-    const data = ensureHandshakeData(socket.handshake.auth);
-    socket.data = data;
+    socket.data = ensuredHandshakeData;
 
     next();
 }

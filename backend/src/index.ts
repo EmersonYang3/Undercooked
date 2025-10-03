@@ -23,7 +23,9 @@ httpServer.listen(4000, () => {
   console.log("Backend running on http://localhost:4000");
 })
 
-clientPort.emit("testing", { msg: "Hello from client" });
+clientPort.on("host:connected", (data) => {
+  console.log("Connected as host to lobby:", data.lobbyCode, "with identifier:", data.hostIdentifier);
+});
 
 setTimeout(() => {
   clientPort.disconnect();
