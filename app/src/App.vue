@@ -1,6 +1,6 @@
 <template>
   <div>
-    <CookStuff></CookStuff>
+    <CookFlip></CookFlip>
   </div>
 </template>
 
@@ -14,6 +14,8 @@ import ClientView from './views/ClientView.vue';
 import SplashView from './views/SplashView.vue';
 import TerminalView from './views/TerminalView.vue';
 </script>
+
+
 
 <style scoped>
 

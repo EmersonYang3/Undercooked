@@ -1,13 +1,12 @@
 <template>
     <!-- start screen where the player clicsk to start the game -->
     <div v-show="showStart" class="bg-black h-screen w-screen flex justify-center flex-column items-center absolute z-10">
-        <div class="text-red-500 text-xl w-64 h-64 z-1">Start!</div>
-        <div @click="quickset" class="rounded-full bg-yellow-500 w-64 h-64 justify-center item-center flex">
-            
-        </div>  
+        <div @click="quickset" class="rounded-full bg-yellow-500 w-64 h-64 flex items-center justify-center text-center">
+            <div class="text-red-500 text-4xl">Start!!</div>
+        </div>
         <!-- bind the player here using the bindplayer component -->
     </div>
-
+<!-- use a diff font for this later on -->
 
 
     <!-- actual gameplay area make it so until the player actually clicks start does it start -->
@@ -43,25 +42,25 @@
 
 <script setup lang="ts">
 import { ImageLut } from '@/utils/lut';
-import { onMounted, onUnmounted, reactive, ref } from 'vue'
+import { onUnmounted, reactive, ref } from 'vue'
 import placeholder from '../assets/bg.png'
 import knife from '../assets/knife.png'
 //possible optimization would be define fruit spin rate outside
 //really minor tho considering it barely takes up any space
 const time = ref(3);
 const timer = ref(false);
-function quickset() {
+async function quickset() { 
     showStart.value = false;
-    for(let i = 0; i<3 ; i++) {
-        setTimeout(()=>{
-            time.value -= 1;
-        }, 1000 * (i + 1));
+    timer.value = true;
+    for (let i = 0; i < 3; i++) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        time.value -= 1;
     }
-
+    console.log("timer was completd")
+    timer.value = false;
+    animationFrame = requestAnimationFrame(update);
 }
 const showStart = ref(true);
-
-
 const score = ref(0);
 //to increase difficulty, either increase the amount of fruits that can be sent out at a given time
 //or just make them faster
@@ -89,12 +88,15 @@ let negativeAmount = 0;
 //add bad fruits or good fruits to make it score based
 
 function makeFruit(id:number): Fruit {
-    let negative =  Math.round(Math.random()) == 1 ? 1 : -1;
+    let negative =  Math.round(Math.random() * 1.0) == 1 ? 1 : -1;
     if (negative == -1) {
-        if(negativeAmount <= 3) {
+        if(negativeAmount < 2) {
             negativeAmount+=1;
         }
         else {
+            console.log(negativeAmount);
+            console.log("too many negatives changing to a positve");
+
             negative = 1;
         }
     }
@@ -127,8 +129,11 @@ function update() {
         fruit.vy+= gravity
         fruit.rotation += fruit.spin
         if(fruit.y > window.innerHeight + 500 || fruit.y < 10) {
-            resetFruit(fruit)        
-            negativeAmount -= 1;
+            if (Math.sign(fruit.score) == -1) {
+                console.log(negativeAmount)
+                negativeAmount -= 1;
+            }     
+            resetFruit(fruit);
         }
     })
     requestAnimationFrame(update)
@@ -151,9 +156,6 @@ function handleFruit(fruit:Fruit) {
 function resetFruit(fruit:Fruit) {
     Object.assign(fruit, makeFruit(fruit.id))
 }
-onMounted(()=> {
-    animationFrame = requestAnimationFrame(update)
-})
 onUnmounted(()=> {
     cancelAnimationFrame(animationFrame)
 })
