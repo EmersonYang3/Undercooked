@@ -65,12 +65,6 @@ export type coreTrackedData = {
     orderProgress: { completed: number, failed: number },
     playerPorts: Record<string, player>,
 }
-
-export type ActualFood = {
-    
-}
-
-
 export type Timer = {
     IngredientName: Ingredients,
     time_remaining: number,
@@ -80,4 +74,21 @@ export type Timer = {
 }//for v-for to ensure proper indentification due to possible clashing ingredient Name
 //possibly limit the amount of recipes served based off ot the total amount of statiwon temrinals able to perform an action
 //make sure that the requirement is atleast 3 terminals to avoid boring gameplay
+//
+
+
+export type MethodsArray = Array<Methods>
+
+export type InventoryItem = {
+    id:number,
+    name:string,
+    quantity:number,
+    methods: MethodsArray
+}
+export type TimedItem = {
+    remaining_time: number,
+    id: number,
+}
+
+//id = slot number???
 //

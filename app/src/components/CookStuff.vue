@@ -30,7 +30,7 @@
                     transform: `translate(${fruit.x}px, ${fruit.y}px) rotate(${fruit.rotation}deg)`
                 }"
                 @click="handleFruit(fruit)">
-                <img :src="ImageLut[fruit.image].file_path">
+                <img :src="ImageLut[fruit.image]">
             
             </div>
     </div>

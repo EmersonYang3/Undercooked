@@ -36,7 +36,8 @@
 <script setup lang="ts">
 //change the color scheme of the borders and thequantity counter 
 //need to synchronize to backend everytime the inventory opens as new items could be put in
-
+import { InventoryItem } from '@/utils/types';
+import { Methods } from '@/utils/types';
 
 //make it so u can select items
 const emit = defineEmits<{
@@ -44,7 +45,6 @@ const emit = defineEmits<{
 }>();
 function selectFruit(item:InventoryItem) {
     //do everything with tweaking the data here first
-    
     emit("select-item",item);
     //remove said item from the array or make it so the cursor is dragging it
     //make it so u can unselect it later on
@@ -62,16 +62,9 @@ console.log(tomatoImg);
 import { onMounted, Reactive, reactive } from 'vue';
 const props = defineProps<{
     clientKey:string,
-    method:string
+    method:Methods
 }>();
-type Methods = Array<string>
 const items:Reactive<Array<InventoryItem>> = reactive([]);
-type InventoryItem = {
-    id:number,
-    name:string,
-    quantity:number,
-    methods:Methods
-}
 function valid_food(item:InventoryItem) {
     if(item.methods.includes(props.method)) {
         return true;
