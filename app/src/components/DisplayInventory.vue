@@ -1,13 +1,13 @@
 <template>
-    <div class= "text-center absolute bg-black w-screen h-screen">
-        <h1 class="m-2 text-white text-xl">Inventory for {{ clientKey }}</h1>
-        <div class="w-full h-full flex flex-row justify-center gap-2 item-center">
-        <div v-for="item in items" :key="item.id" class="w-full h-full flex flex-row justify-center">
+    <div class= "text-center absolute bg-black w-screen h-screen overflow-hidden">
+        <h1 class="m-5 text-white text-xl">Inventory for {{ clientKey }}</h1>
+        <div class="w-full h-full flex flex-wrap justify-center items-start gap-1 overflow-auto">
+        <div v-for="item in items" :key="item.id" class="flex flex-row justify-center gap-1">
             <!-- make this conform to the screen dims -->
             <div
             v-if="valid_food(item)"
             @click="selectFruit(item)"
-            class="relative group text-white text-xs h-32 w-32 bg-white border-gray-500 border-5 items-center rounded-lg p-2 m-2 relative"
+            class="relative group text-white text-xs h-32 w-32 bg-white border-gray-500 border-5 items-center rounded-lg m-1 relative"
         >   
             <!-- Item Name -->
             <img class="w-full h-full" src="../assets/tomato.png"  alt="tomato"/>

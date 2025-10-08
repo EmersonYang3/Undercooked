@@ -1,13 +1,14 @@
 <template>
-    <div class="z-0 flex items-center justify-center h-screen bg-center bg-no-repeat bg-white absolute">
-        <img :src="ImageLut[`pan`]">
+    <div class="z-0 flex items-center justify-center w-screen h-screen bg-center bg-no-repeat bg-white absolute">
+        <img :src="ImageLut[`pan`]" class="w-full h-full absolute">
+        <div class="bg-black rounded-full w-180 h-180 absolute z-10"></div>
         <div v-for="food in foods" :key="food.id" class="bg-no-repeat z-10 m-1 bg-black w-1/6 h-2/6">
             {{ food.remaining_time }}
             <img :src="bacon" alt="panini" class="w-full h-full object-contain"/>
         </div>
         <div></div>
     </div>
-    <button @click="showItems = !showItems" class="bg-white h-64 w-64 absolute z-100">Text</button>
+    <button @click="showItems = !showItems" class="border-4 bg-white h-32 w-32 m-10 rounded-xl absolute z-100 bottom-0 right-0 ">Open Inventory</button>
     <DisplayInventory @select-item="(e)=>{
         test(e)
     }" v-if="showItems" class="z-10"  method="chop" :clientKey="specialKey"/>
@@ -41,6 +42,8 @@ function update() { //could make this update_array_timers function that takes in
     {
         foods[i].remaining_time-=1;
         if(foods[i].remaining_time <= 0) {
+            foods[i].LUT_KEY = "";
+            foods[i].status = true;
             foods.splice(i, 1);
         }
     } 
@@ -49,7 +52,9 @@ function mock_data(limit:number) {
     for(let i = 0; i<limit; i++) {
         foods.push({
             remaining_time:10,
-            id:i
+            id:i,
+            status:false,
+            LUT_KEY:"orange",
         })
     }
 }
@@ -57,7 +62,9 @@ function add_new_item() {
     if(foods.length < panLimit) {
         foods.push({
             remaining_time:10,
-            id:foods.length
+            id:foods.length,
+            status:false,
+            LUT_KEY:"orange",
         })
     }
 }
@@ -81,7 +88,7 @@ document.addEventListener('keydown', (e) => {
 
 
 onMounted(()=> {
-    mock_data(3);
+    mock_data(5);
     setInterval(()=>{
         update()
     }, 1000)

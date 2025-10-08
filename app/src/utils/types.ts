@@ -88,7 +88,15 @@ export type InventoryItem = {
 export type TimedItem = {
     remaining_time: number,
     id: number,
+    status:boolean,
+    LUT_KEY:string,
 }
+
+
+
+
+
+
 
 //id = slot number???
 //
