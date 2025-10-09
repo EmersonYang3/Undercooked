@@ -1,5 +1,5 @@
 <template>
-    <div class="z-0 flex items-center justify-center w-screen h-screen bg-center bg-no-repeat bg-white absolute">
+    <div class="z-0 flex items-center justify-center w-screen h-screen bg-center bg-no-repeat absolute">
         <img :src="ImageLut[`pan`]" class="w-full h-full absolute">
         <div class="bg-black rounded-full w-180 h-180 absolute z-10"></div>
         <div v-for="food in foods" :key="food.id" class="bg-no-repeat z-10 m-1 bg-black w-1/6 h-2/6">
