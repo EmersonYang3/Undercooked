@@ -1,14 +1,17 @@
 <template>
-    <div class="z-0 flex items-center justify-center w-screen h-screen bg-center bg-no-repeat absolute">
-        <img :src="ImageLut[`pan`]" class="w-full h-full absolute">
-        <div class="bg-black rounded-full w-180 h-180 absolute z-10"></div>
-        <div v-for="food in foods" :key="food.id" class="bg-no-repeat z-10 m-1 bg-black w-1/6 h-2/6">
-            {{ food.remaining_time }}
-            <img :src="bacon" alt="panini" class="w-full h-full object-contain"/>
+    <div class="z-0 flex items-center justify-center w-screen h-screen bg-center bg-[url('/public/checkeredbg.png')] outline outline-10 outline-blue-300 border-blue-300  rounded-4xl border-10 absolute">
+        <img :src="ImageLut[`pan`]" class="w-full absolute">
+        <div class="bg-black rounded-full w-180 h-180 absolute z-10 border-gray-700 border-60 outline outline-20">
+            <div v-for="food in foods" :key="food.id" class="bg-no-repeat z-10 w-1/6 h-1/6">
+                {{ food.remaining_time }}
+                <img :src="bacon" alt="panini" class="w-1/6 h-1/6 object-contain"/>
+            </div>
         </div>
+
         <div></div>
     </div>
     <button @click="showItems = !showItems" class="border-4 bg-white h-32 w-32 m-10 rounded-xl absolute z-100 bottom-0 right-0 ">Open Inventory</button>
+    <!-- change this to show only one slot, gets reset via a key that gets updated at the end of the game -->
     <DisplayInventory @select-item="(e)=>{
         test(e)
     }" v-if="showItems" class="z-10"  method="chop" :clientKey="specialKey"/>
