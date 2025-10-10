@@ -1,13 +1,19 @@
-# How to install dependencies
+# How to set up!
 
-1. `npm install` on app/
-2. `npm install` on backend/
+1. Run `npm install` on app, shared, and eternity folders.
 
-# How to run backend server
+# Front end
 
-1. Change the websocket URL from backend/src/index.ts to your desired URL.
-2. Run the backend/src/index.ts file. It will automatically register everything.
+1. | Johnny Input |
 
-# shared/
+# Backend
 
-This folder contains shared code between the backend and the frontend, it should only contain enums and type for easy sharing and syncing.
+1. Run `npm run dev` in the eternity folder to kick start the backend server.
+
+# Shared
+
+1. There is no need to run anything in the shared folder. It is just for shared types and enums.
+
+# Extra
+
+Lucille - Eternity server is the backend server that is currently in development. I am refactoring the code to make it cleaner and more efficient, avoiding magic numbers and strings. There is no need to handle multiple game sessions/lobbies as I see no use in that. The goal currently is to get a MVP up and running with a lobby system, player roles, and basic game mechanics. After that, I will focus on polishing the game and adding more features.
