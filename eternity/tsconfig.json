@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+
+        "paths": {
+            "shared/*": ["../shared/src/*"],
+            "services/*": ["./src/services/*"]
+        },
+
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "moduleResolution": "node"
+    },
+
+    "ts-node": {
+        "require": ["tsconfig-paths/register"]
+    },
+}
