@@ -20,3 +20,13 @@ serverPort.on("connection", (socket) => { connectionRouter(socket) })
 httpServer.listen(sharedEnums.portServer.port, () => {
     console.log(`Eternity server running on http://localhost:${sharedEnums.portServer.port}`)
 })
+
+// For testing purposes only
+import { io } from "socket.io-client"
+
+const authData = {auth: {intendedRole: 'host', lobbyCode: "ABCDEF"}}
+const clientSocket = io(`http://localhost:${sharedEnums.portServer.port}`, authData)
+
+clientSocket.on("connect_error", (err) => {
+    console.log(`Connection error: ${err.message}`)
+})
