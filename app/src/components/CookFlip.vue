@@ -17,7 +17,6 @@
 
         <div></div>
     </div>
-    <!-- change this to show only one slot, gets reset via a key that gets updated at the end of the game -->
 </template>
 
 
