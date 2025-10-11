@@ -8,7 +8,6 @@ export type handshakeData = {
     intendedRole: intendedRoles,
     lobbyCode?: string
 }
-
 export type connection = {
     socket: Socket,
     identifier: uniqueIdentifier
