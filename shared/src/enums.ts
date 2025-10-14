@@ -8,8 +8,8 @@ enum portServer {
 
 enum gameRoles {
     host = 'host',
-    player = 'player',
-    terminal = 'terminal'
+    client = 'client',
+    station = 'station'
 }
 
 enum connValidatorErrors {
