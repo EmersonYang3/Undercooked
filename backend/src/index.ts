@@ -6,6 +6,7 @@ import { io } from "socket.io-client"
 
 import connValidatorService from "./services/connValidator.ts"
 import connRouterService from "./services/connRouter.ts"
+import sharedEnums from "shared/enums.ts"
 
 const app = express()
 const httpServer = createServer(app)
@@ -23,7 +24,9 @@ httpServer.listen(4000, () => {
   console.log("Backend running on http://localhost:4000");
 })
 
-clientPort.on("host:connected", (data) => {
+const socketEvents = sharedEnums.socketEvents
+
+clientPort.on(socketEvents.hostConnected, (data) => {
   console.log("Connected as host to lobby:", data.lobbyCode, "with identifier:", data.hostIdentifier);
 });
 

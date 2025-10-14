@@ -8,7 +8,7 @@ function connected(socket: Socket): { lobbyCode: string | undefined, hostIdentif
     const handshakeData = socket.data as handshakeData
 
     const hostIdentifier = socketRegistryService.registerSocket(socket)
-    const createdLobby = lobbyService.createLobby(handshakeData.targetLobbyCode, hostIdentifier, socket.id)wwwww
+    const createdLobby = lobbyService.createLobby(handshakeData.targetLobbyCode, hostIdentifier, socket.id)
 
     return { lobbyCode: createdLobby?.lobbyCode, hostIdentifier: hostIdentifier }
 }
