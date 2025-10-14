@@ -5,7 +5,6 @@
 </template>
 
 <script setup lang="ts">
-    import SelectType from '@/components/SelectType.vue';
     //select the types of terminals 
     //the terminal requests the host for a role 
     //the terminal takes said role and tells the host that it has sucessfully picked said role

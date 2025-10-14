@@ -1,42 +1,45 @@
-<!--
-    Splash screen where players can select to join or host their own game.
--->
-
 <template>
     <div>
-        <button class="bg-red-500 rounded-xl " @click="$emit('host')">Host Game</button>
-        <button class="appearance-auto" @click="debug('ligma')">Join Game</button>
-        <SelectRole></SelectRole>
-        
-        <!--This will allow you to set whether you're a player or a terminal-->
+        <div class="flex flex-center items-center justify-center w-screen h-screen flex-row text-center absolute" >
+                <button @click="join = true" class="w-32 h-32 bg-black text-white rounded-full ">Join Game</button>
+                <button @click="host = true" class="w-32 h-32 bg-black text-white rounded-full ">Host Game</button>
+        </div>
+        <!-- make this so the buttons float from the center to the top left of the screen just in case the player wants to change their choice -->
+        <div id="join_game" class="absolute bg-black w-screen h-screen" v-show="join">
+
+        </div>
+        <div id="host_game" class="absolute bg-red-500 w-screen h-screen flex flex-center justify-center " v-show="host">
+            <div>
+
+            </div>
+            <button @click="startup" class="bg-blue-500 h-16">Host Game(No Code Input)</button>
+            <div>
+                
+            </div>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
+
 import { ref } from 'vue';
-import SelectRole from '@/components/SelectRole.vue';
+import { useRouter } from 'vue-router';
 
-const join_game = ref(false);
-const code = ref("Enter Game Code");
-function debug(stringy:string) {
-    console.log(stringy);
-}
-function getValidGame() {
-    //check if the code.value is a valid code against the registry (access the backend or smth idk)
-    //if code valid allow them to go to the next sequence which is the select terminal or player view
-}
-function createNewClient() {
-    //generate a unique id for the client
-    //then make a request to the backend to request that a new client be made
-}
-function createNewTerminal() {
-    //generate a unique id for the terminal
-    //generate a terminal type or pick idk which one 
-    //then make a reuqest to the backend to request new terminal be mad
+const join = ref(false);
+const host = ref(false);
+
+//assume there is a method to start up a server in the backend
+function startup() {
+    
 }
 
 
 
+
+const router = useRouter();
+const goToJoin = () => {
+
+}
 </script>
 
 <style scoped>

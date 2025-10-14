@@ -2,17 +2,6 @@
     <div class="z-0 flex items-center justify-center w-screen h-screen bg-center bg-[url('/public/checkeredbg.png')] outline outline-10 outline-blue-300 border-blue-300  rounded-4xl border-10 absolute">
         <img :src="ImageLut[`pan`]" class="w-full absolute">
         <div class="bg-black rounded-full w-[720px] h-[720px] relative z-10 border-gray-700 border-[60px] outline outline-[20px]">
-            <!-- <div
-            v-for="(food, index) in foods"
-            :key="food.id"
-            class="absolute w-[80px] h-[80px] flex items-center justify-center"
-            :style="getPositionStyle(index, foods.length)"
-            >
-            <div class="text-white text-xs text-center">
-                {{ food.remaining_time }}
-                <img :src="bacon" alt="panini" class="w-full h-full object-contain" />
-            </div>
-            </div> -->
         </div>
 
         <div></div>
@@ -21,44 +10,20 @@
 
 
 <script setup lang="ts">
-//leaving in the multiple items functionality just in case we need it 
-//for now its just one item
-
 import { onMounted, Reactive,  ref, reactive } from 'vue';
-
-
-
-
-
-
-import bacon from '../assets/bacon.png';
-import DisplayInventory from './DisplayInventory.vue';
-import { TimedItem, InventoryItem } from '@/utils/types';
+import { TimedItem } from '@/utils/types';
 const panLimit = 3;
-const specialKey = 'a';
 import { ImageLut } from '@/utils/lut';
-import SlotItem from './SlotItem.vue';
-
 const foods:Reactive<Array<TimedItem>> = reactive([]);
 const showItems = ref(true);
-function test(item:InventoryItem) {
-    //construct a fryableitem and put it into array where it gets updated
-
-
-
-}
-
-function getPositionStyle (index:number, total:number) {
-    const radius = 300; // Adjust based on circle size (720px - borders)
-    const angle = (index / total) * 2 * Math.PI;
-    const x = radius + radius * Math.cos(angle) - 40; // 40 = half of item width
-    const y = radius + radius * Math.sin(angle) - 40;
-
-    return {
-        left: `${x}px`,
-        top: `${y}px`,
-    };
-};
+let currentFood:Reactive<TimedItem> = reactive(
+    {
+        remaining_time:0,
+        id: 0,
+        status: null,
+        LUT_KEY: "null",
+    }
+);
 
 
 
@@ -93,19 +58,14 @@ function add_new_item() {
         })
     }
 }
-const clientArray =[];
+const clientArray = [];
 //this will hold all the valid client keys 
-function display_client_items(key:string) {
-
-
-}
-
-
-
 document.addEventListener('keydown', (e) => {
     if(clientArray.includes(e.key)) {
         //ask the host machine to establish a connection between the client and the terminal
         showItems.value = true;
+        //fetch the item the client is currently holding from the backend and then set it
+        currentFood = 
         add_new_item();
     }
 })
