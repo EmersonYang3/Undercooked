@@ -14,6 +14,15 @@
 
 1. There is no need to run anything in the shared folder. It is just for shared types and enums.
 
+# Socket Architecture
+
+The eternity server uses a clean, modular architecture for socket connections:
+- **Routes** (`eternity/src/sockets/`) - Socket event handlers for each role
+- **Initializers** (`eternity/src/modules/`) - Business logic for connect/disconnect
+- **Shared Enums** (`shared/src/enums.ts`) - Centralized event and role definitions
+
+See `SOCKET_ARCHITECTURE.md` for detailed documentation.
+
 # Extra
 
 Lucille - Eternity server is the backend server that is currently in development. I am refactoring the code to make it cleaner and more efficient, avoiding magic numbers and strings. There is no need to handle multiple game sessions/lobbies as I see no use in that. The goal currently is to get a MVP up and running with a lobby system, player roles, and basic game mechanics. After that, I will focus on polishing the game and adding more features.
