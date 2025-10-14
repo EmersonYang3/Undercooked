@@ -24,9 +24,19 @@ httpServer.listen(sharedEnums.portServer.port, () => {
 // For testing purposes only
 import { io } from "socket.io-client"
 
+const socketEvents = sharedEnums.socketEvents
+
 const authData = {auth: {intendedRole: 'host', lobbyCode: "ABCDEF"}}
 const clientSocket = io(`http://localhost:${sharedEnums.portServer.port}`, authData)
 
 clientSocket.on("connect_error", (err) => {
     console.log(`Connection error: ${err.message}`)
 })
+
+clientSocket.on(socketEvents.hostConnected, (data) => {
+    console.log("Connected as host to lobby:", data.lobbyCode, "with identifier:", data.hostIdentifier)
+})
+
+setTimeout(() => {
+    clientSocket.disconnect()
+}, 2500)

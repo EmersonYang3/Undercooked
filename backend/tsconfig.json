@@ -5,6 +5,12 @@
     // "rootDir": "./src",
     // "outDir": "./dist",
 
+    // Path mappings
+    "baseUrl": ".",
+    "paths": {
+      "shared/*": ["../shared/src/*"]
+    },
+
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
     "module": "nodenext",
@@ -42,6 +48,16 @@
     "moduleDetection": "force",
     "skipLibCheck": true,
     "emitDeclarationOnly": true,
-    "allowImportingTsExtensions": true
+    "allowImportingTsExtensions": true,
+
+    // ts-node specific
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node"
+  },
+
+  "ts-node": {
+    "require": ["tsconfig-paths/register"],
+    "esm": true
   }
 }

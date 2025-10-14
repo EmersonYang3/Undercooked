@@ -19,9 +19,24 @@ enum connValidatorErrors {
     otherConnectionsFailed = "No lobby with provided code exists."
 }
 
+enum socketEvents {
+    // Connection events
+    disconnect = "disconnect",
+    
+    // Host events
+    hostConnected = "host:connected",
+    
+    // Player events
+    playerConnected = "player:connected",
+    
+    // Terminal events
+    terminalConnected = "terminal:connected",
+}
+
 export default { 
     hostToServerRemotes, 
     portServer, 
     connValidatorErrors, 
-    gameRoles 
+    gameRoles,
+    socketEvents
 }
