@@ -10,7 +10,7 @@
         
         <div id="join_game" class="text-4xl absolute bg-black w-screen h-screen flex items-center justify-center flex-col" v-show="join">
             Enter Join Code 
-            <form>
+            <form @submit.prevent="connect">
                 <input type="text" v-model="client_join_code" placeholder="Code" class="text-center rounded-xl m-10 text-black z-10 bg-white w-64 h-16">    
                 <button type="submit">Submit</button>        
             </form>
@@ -35,18 +35,44 @@ import { useRouter } from 'vue-router';
 const join = ref(false);
 const host = ref(false);
 const joinCode:Ref<null | number> = ref(null);
+const client_join_code:Ref<null | number> = ref(null);
+
 //assume there is a method to start up a server in the backend
 function startup(): number {
     return Math.round(Math.random() * 1000);
     //generatea random code from the backend
+    //send the host to a waiting room/area for them
+    //also add a couple of buttons for terminating the waiting/queueing and also a button for starting
+    
 }
 const router = useRouter();
 const goToJoin = () => {
 
 }
-function connect(e:Event) {
-    
+function connect() {
+    console.log(client_join_code.value)
+    //waiting for backend ocde here
+    //basically just submit the code to the backend to search for a game
+    if(test()) {
+        //route to the client view now 
+        //might add atomatic device detection to determine client or terminal
+        //for now imma just roue to terminal view as i needa flesh that out
+        router.push('/terminal')
+    }
 }
+function test():boolean { 
+    return true;
+}
+
+
+
+
+
+//each of these functions will resolve routing to the proper views for the host
+//for the clients they are routed to the role screen where thet have an option to pick a terminal or as a client
+//clients will most likely use their phone to do so or 
+//if phones arent allowed we can remove sending client info as the info sent to the phone is just for rendering
+//and isnt an integral part of the actual game 
 
 
 

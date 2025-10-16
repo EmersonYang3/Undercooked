@@ -1,37 +1,38 @@
 <template>
     <div>
-        <SelectType></SelectType>
+
     </div>
 </template>
 
 <script setup lang="ts">
-    //select the types of terminals 
-    //the terminal requests the host for a role 
-    //the terminal takes said role and tells the host that it has sucessfully picked said role
-    //the host broadcasts this information to the other terminals that said terminal is valid to be used 
-    type Terminal = string;
-    type ValidTerminals = Array<Terminal>;
-    
-    function select_valid_role(): ValidTerminals {
-        //make a request to the host for a list of
-        //select a terminal type
-        return [];
+import { onMounted } from 'vue';
+import { useRouter } from 'vue-router'
+//select a terminal
+//make a request to the backend asking it for a valid terminal to select
+//then route the right terminal to it so for example if the slice component is selected
+//the path would resolve to terminal/slice
+//will need to leverage pinia or we can just send info to the bakcend to keep track of instead
+type TerminalType  = {
+    terminal_path:string,
+    terminal_name:string, 
+}
+
+const router = useRouter();
+function select_terminal_type() {
+    //get the terminal type
+    let test:TerminalType = {
+        terminal_name:"slice",
+        terminal_path:"/terminal/slice"
     }
-    
-    const test_data  = {
-        role_requesting: "fry"
-    };
-    function send_request(data:any) {
-        return data
-    };
-    send_request(test_data);
-    const data_back = {
-        success:true
-    }
-    if (data_back.success) {
-        //continue
-    }
-    
+    router.push(test.terminal_path);
+    //load the component at that path
+    //
+}
+onMounted(()=> {
+    select_terminal_type();
+    //loads everything from here 
+})
+
 </script>
 
 <style scoped>

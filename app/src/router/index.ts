@@ -6,10 +6,10 @@ import ClientView from '@/views/ClientView.vue'
 
 
 const routes = [
+  { path: '/', name: "Splash", component: SplashView },
   { path: '/host', name: 'Host', component: HostView },
   { path: '/terminal', name: 'Terminal', component: TerminalView },
   { path: '/client', name: 'Client', component: ClientView },
-  { path: '/splash', name: 'Splash', component: SplashView},
 ]
 
 
