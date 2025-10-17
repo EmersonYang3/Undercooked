@@ -7,7 +7,7 @@ const ImageLut: Record<string, string> = {
   "banana": "/fruits/banana.png",
   "pineapple": "/fruits/pineapple.png",
   "bomb": "/fruits/bomb.png",
-  "pan": "/public/fryingpan.png"
+  "pan": "/fryingpan.png"
 }
 
-export {ImageLut};
+export { ImageLut };

@@ -22,7 +22,7 @@ function select_terminal_type() {
     //get the terminal type
     let test:TerminalType = {
         terminal_name:"slice",
-        terminal_path:"/terminal/slice"
+        terminal_path:"/terminal/fry"
     }
     router.push(test.terminal_path);
     //load the component at that path
