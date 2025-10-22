@@ -23,9 +23,20 @@
                 1212313131
             </div>
             <button @click="startup" class="bg-blue-500 h-12 rounded-xl w-64">Host Game(No Code Input)</button>
-            <div>
 
+        </div>
+        <div v-show="waiting_screen" class="bg-black w-full h-full z-10 absolute">
+            <div class="text-white text-xl">
+                <!-- holds the current role that has been selected -->
+                Role : {{ role }}
             </div>
+            <div class="text-white text-xl">
+               player_count :  {{ current_player_count }}
+            </div>
+            <button @click="startGame" class="text-xl text-white bg-red-500 w-64 h-64">
+                Start 
+
+            </button>
         </div>
     </div>
 </template>
@@ -36,10 +47,19 @@ const join = ref(false);
 const host = ref(false);
 const joinCode:Ref<null | number> = ref(null);
 const client_join_code:Ref<null | number> = ref(null);
+const waiting_screen = ref(false);
+const current_player_count = ref(0);
+const role:Ref<null | Role> = ref(null);
 
+
+type Role = "host" | "terminal" | "player";
 //assume there is a method to start up a server in the backend
 function startup(): number {
+    host.value = false;
+    waiting_screen.value = true;
+    role.value = "host";
     return Math.round(Math.random() * 1000);
+
     //generatea random code from the backend
     //send the host to a waiting room/area for them
     //also add a couple of buttons for terminating the waiting/queueing and also a button for starting
@@ -49,6 +69,11 @@ const router = useRouter();
 const goToJoin = () => {
 
 }
+function startGame() {
+    router.push('/host');
+}
+
+
 function connect() {
     console.log(client_join_code.value)
     //waiting for backend ocde here

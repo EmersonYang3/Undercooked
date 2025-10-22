@@ -30,7 +30,7 @@ const currentMeals: Map<PossibleMeals, Meal> = new Map();
 //this wil contain the incomplete meals that need to continue cooking
 //for the ingredients i might switch to a map if performance is needed
 //everytime the user wants to submit an ingredient the terminal checks against recipes to determine if the ingredient is valid to beutilize
-const recipes: Map<string, Meal> = new Map();
+export const recipes: Map<string, Meal> = new Map();
 recipes.set("british_meal", {
     ingredients: ["cooked_egg"],
     quality: 0,
@@ -62,8 +62,10 @@ function submit_ingredient_to_meal(meal_name: PossibleMeals, ingredient: Ingredi
 }
 //
 function select_recipes() {
-    let rando
-}
+    const random_index = Math.floor(Math.random() * recipes.size);
+    const random_item = recipes.entries[random_index];
+    return random_item;
+} 
 
 
 
