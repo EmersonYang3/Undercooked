@@ -1,34 +1,22 @@
-import unqiService from "./unqi.ts"
+let currentLobbyData = {}
+let currentLobbyCode = ''
 
-import type { Lobby } from "../utils/types.ts"
+function generateLobbyCode(): string {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const charactersLength = characters.length;
 
-let lobbies: Record<string, Lobby> = {}
+    let result = '';
 
-function doesLobbyExist(lobbyCode: string): boolean {
-    const lobby = lobbies[lobbyCode]
-
-    return !!lobby
-}
-
-function createLobby(lobbyCode: string, playerIdentifier: number, socketIdentifier: string): Lobby | null { 
-    if (doesLobbyExist(lobbyCode)) { return null }
-
-    const newLobby: Lobby = {
-        host: { internalIdentifier: playerIdentifier, socketId: socketIdentifier },
-        lobbyCode: lobbyCode,
-        activeRecipes: [],
-        terminals: [],
-        players: [],
-
-        creationTime: new Date().toISOString()
+    for (let i = 0; i < 6; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
 
-    return newLobby
+    return result;
+
 }
 
-function removeLobby(lobbyCode: string) { 
-    if (!doesLobbyExist(lobbyCode)) { return }
-    delete lobbies[lobbyCode]
+function lobbyExists(lobbyCode: string): boolean {
+    return (lobbyCode === currentLobbyCode && lobbyCode !== '')
 }
 
-export default { doesLobbyExist, createLobby, removeLobby }
+export default { generateLobbyCode, lobbyExists }
