@@ -30,14 +30,80 @@ const currentMeals: Map<PossibleMeals, Meal> = new Map();
 //this wil contain the incomplete meals that need to continue cooking
 //for the ingredients i might switch to a map if performance is needed
 //everytime the user wants to submit an ingredient the terminal checks against recipes to determine if the ingredient is valid to beutilize
-export const recipes: Map<string, Meal> = new Map();
-recipes.set("british_meal", {
-    ingredients: ["cooked_egg"],
-    quality: 0,
-    id: 0,
-    max_quality: 1,
-
-})
+export const recipes: Map<string, Meal> = new Map([
+  [
+    "british_meal",
+    {
+      id: 0,
+      ingredients: ["cooked_egg"],
+      quality: 0,
+      max_quality: 1,
+    },
+  ],
+  [
+    "italian_pasta",
+    {
+      id: 1,
+      ingredients: ["noodles", "tomato_sauce", "parmesan"],
+      quality: 2,
+      max_quality: 5,
+    },
+  ],
+  [
+    "japanese_sushi",
+    {
+      id: 2,
+      ingredients: ["rice", "fish", "seaweed"],
+      quality: 4,
+      max_quality: 5,
+    },
+  ],
+  [
+    "mexican_taco",
+    {
+      id: 3,
+      ingredients: ["tortilla", "beef", "lettuce", "cheese"],
+      quality: 3,
+      max_quality: 5,
+    },
+  ],
+  [
+    "french_crepe",
+    {
+      id: 4,
+      ingredients: ["flour", "milk", "egg", "sugar"],
+      quality: 1,
+      max_quality: 5,
+    },
+  ],
+  [
+    "american_burger",
+    {
+      id: 5,
+      ingredients: ["bun", "beef_patty", "lettuce", "cheddar"],
+      quality: 3,
+      max_quality: 5,
+    },
+  ],
+  [
+    "indian_curry",
+    {
+      id: 6,
+      ingredients: ["chicken", "curry_powder", "coconut_milk"],
+      quality: 4,
+      max_quality: 5,
+    },
+  ],
+  [
+    "chinese_noodles",
+    {
+      id: 7,
+      ingredients: ["noodles", "soy_sauce", "vegetables"],
+      quality: 2,
+      max_quality: 5,
+    },
+  ],
+])
 
 
 
@@ -65,7 +131,7 @@ function select_recipes() {
     const random_index = Math.floor(Math.random() * recipes.size);
     const random_item = recipes.entries[random_index];
     return random_item;
-} 
+}
 
 
 
