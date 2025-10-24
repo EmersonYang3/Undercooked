@@ -2,11 +2,16 @@
     Host View, this will display the current code (if in loading mode) or the active recipes and game logic
 -->
 <template>
-  <div class="bg-black w-screen min-h-screen flex flex-wrap justify-center items-start p-4 gap-4">
+  <!-- set the background here if we wanna do a map of the players -->
+  <div>
+
+  </div>
+  <div class="bg-black w-screen min-h-screen flex flex-wrap justify-center items-start gap-4">
+    
     <div
       v-for="[key, value] in current_meals"
       :key="key"
-      class="z-10 text-xs text-black bg-red-500 w-48 rounded-xl shadow-lg overflow-hidden flex flex-col"
+      class="z-10 text-xs text-black bg-white rounded-t-xl shadow-lg overflow-hidden flex flex-col"
     >
       <!-- Meal header -->
       <div class="bg-red-600 text-center text-white text-sm font-bold p-2 rounded-t-xl">
@@ -15,18 +20,38 @@
       
       <!-- Ingredients section -->
       <div class="flex flex-wrap justify-center p-2 gap-2">
-        
+        <div class="w-full h-8">
+          <div class="bg-green-500 h-4"
+          :style="
+          {
+            width: progressPx + '%'
+          }">
+          <!-- switch progressPx to the reactiveTable -->
+          </div>
+          <!-- put da timer here -->
+        </div>  
+        <div class="w-full bg-blue-100 h-16">
+          <!-- put fully assembled ingredient here -->
+        </div>
         <div
           v-for="(item, index) in value[1].ingredients"
           :key="index"
-          class="bg-red-300 text-black text-xs font-semibold w-16 h-16 flex items-center justify-center rounded-md shadow-sm"
+          class="bg-gray-100 text-black text-xs font-semibold w-12 h-12 flex items-center justify-center rounded-full shadow-sm"
         >
 
-        <!-- no text just the asset to avoid clutter -->
-        <!-- should probably try and condense the ingredients via  acounter in the bottom of the asset -->
-        <img :src="ImageLut['apple']">
+          <!-- no text just the asset to avoid clutter -->
+          <!-- should probably try and condense the ingredients via  acounter in the bottom of the asset -->
+          <img :src="ImageLut['apple']">
         </div>
       </div>
+    </div>
+    
+    <div>
+
+
+      <!-- switches to another screen that displays player stats or other stuff thats important -->
+
+
     </div>
   </div>
 </template>
@@ -40,9 +65,10 @@ import { BasicIngredients } from '@/utils/ingredients';
 import { CookedIngredients } from '@/utils/ingredients';
 import { PossibleMeals } from '@/utils/ingredients';
 import { Meal } from '@/utils/ingredients';
-import { onMounted, reactive } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 const amounts_of_meals = 10;
 const current_meals =  reactive(new Map());
+const progressPx = ref(100);
 //for each new item attach a timer object to it
 
 function start_loop() {
