@@ -13,4 +13,8 @@ function registerSocketConnection(socket: Socket): socketConnection {
     return registry[identifier]
 }
 
-export default { registerSocketConnection }
+function getSocketConnectionById(identifier: uniqueIdentifier): socketConnection | null {
+    return registry[identifier] || null
+}
+
+export default { registerSocketConnection, getSocketConnectionById }
