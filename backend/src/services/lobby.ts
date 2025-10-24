@@ -1,4 +1,11 @@
-let currentLobbyData = {}
+import type { lobbyData, socketConnection, fixedSocketData } from "utils/types";
+
+let currentLobbyData: lobbyData = {
+    host: { socket: null, identifier: 0 },
+    clients: [],
+    stations: []
+}
+
 let currentLobbyCode = ''
 
 function generateLobbyCode(): string {
@@ -19,4 +26,17 @@ function lobbyExists(lobbyCode: string): boolean {
     return (lobbyCode === currentLobbyCode && lobbyCode !== '')
 }
 
-export default { generateLobbyCode, lobbyExists }
+function createLobby(hostConnection: socketConnection): string {
+    const hostConnectionData = hostConnection.socket.data as fixedSocketData
+
+    currentLobbyData.host = hostConnection
+    currentLobbyCode = hostConnectionData.lobbyCode
+
+    return currentLobbyCode
+}
+
+function getLobbyData(): lobbyData {
+    return currentLobbyData
+}
+
+export default { generateLobbyCode, lobbyExists, createLobby, getLobbyData }

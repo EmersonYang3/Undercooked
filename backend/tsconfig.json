@@ -4,7 +4,9 @@
 
         "paths": {
             "shared/*": ["../shared/src/*"],
-            "services/*": ["./src/services/*"]
+            "services/*": ["./src/services/*"],
+            "routers/*": ["./src/routers/*"],
+            "utils/*": ["./src/utils/*"]
         },
 
         "esModuleInterop": true,

@@ -18,7 +18,7 @@ serverPort.use(validateConnection)
 serverPort.on("connection", (socket) => { connectionRouter(socket) })
 
 httpServer.listen(sharedEnums.portServer.port, () => {
-    console.log(`Eternity server running on http://localhost:${sharedEnums.portServer.port}`)
+    console.log(`Backend server running on http://localhost:${sharedEnums.portServer.port}`)
 })
 
 // For testing purposes only
@@ -30,3 +30,9 @@ const clientSocket = io(`http://localhost:${sharedEnums.portServer.port}`, authD
 clientSocket.on("connect_error", (err) => {
     console.log(`Connection error: ${err.message}`)
 })
+
+clientSocket.on(sharedEnums.serverToHostRemotes.lobbyStarted, (data) => {
+    console.log(`Lobby started with code: ${data.lobbyCode}`)
+})
+
+clientSocket.emit(sharedEnums.hostToServerRemotes.acceptClientJoin, 1)
