@@ -1,5 +1,15 @@
 enum hostToServerRemotes {
     startLobby = "startLobby",
+    acceptClientJoin = "acceptClientJoin"
+}
+
+enum serverToHostRemotes {
+    lobbyStarted = "lobbyStarted",
+    clientPendingJoin = "clientPendingJoin"
+}
+
+enum serverToClientRemotes {
+    pendingJoin = "pendingJoin"
 }
 
 enum portServer {
@@ -20,8 +30,10 @@ enum connValidatorErrors {
 }
 
 export default { 
-    hostToServerRemotes, 
+    hostToServerRemotes,
+    serverToHostRemotes, 
+    serverToClientRemotes,
     portServer, 
     connValidatorErrors, 
-    gameRoles 
+    gameRoles
 }

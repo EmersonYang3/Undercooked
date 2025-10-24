@@ -1,0 +1,3 @@
+enum generalToServerEvents {
+    socketDisconnect = "disconnect",
+}
