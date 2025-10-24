@@ -1,26 +1,35 @@
 <template>
-    <div class="z-0 flex items-center justify-center w-screen h-screen bg-center bg-no-repeat absolute">
-        <img :src="ImageLut[`pan`]" class="w-full h-full absolute">
-        <div class="bg-black rounded-full w-180 h-180 absolute z-10"></div>
-        <div v-for="food in foods" :key="food.id" class="bg-no-repeat z-10 m-1 bg-black w-1/6 h-2/6">
-            {{ food.remaining_time }}
-            <img :src="bacon" alt="panini" class="w-full h-full object-contain"/>
+    <div class="z-0 flex items-center justify-center w-screen h-screen bg-center bg-[url('/public/checkeredbg.png')] outline outline-10 outline-blue-300 border-blue-300  rounded-4xl border-10 absolute">
+        <img :src="ImageLut[`pan`]" class="w-full absolute">
+        <div class="bg-black rounded-full w-[720px] h-[720px] relative z-10 border-gray-700 border-[60px] outline outline-[20px]">
+            <!-- <div
+            v-for="(food, index) in foods"
+            :key="food.id"
+            class="absolute w-[80px] h-[80px] flex items-center justify-center"
+            :style="getPositionStyle(index, foods.length)"
+            >
+            <div class="text-white text-xs text-center">
+                {{ food.remaining_time }}
+                <img :src="bacon" alt="panini" class="w-full h-full object-contain" />
+            </div>
+            </div> -->
         </div>
+
         <div></div>
     </div>
-    <button @click="showItems = !showItems" class="border-4 bg-white h-32 w-32 m-10 rounded-xl absolute z-100 bottom-0 right-0 ">Open Inventory</button>
-    <DisplayInventory @select-item="(e)=>{
-        test(e)
-    }" v-if="showItems" class="z-10"  method="chop" :clientKey="specialKey"/>
 </template>
 
 
 <script setup lang="ts">
+//leaving in the multiple items functionality just in case we need it 
+//for now its just one item
+
 import { onMounted, Reactive,  ref, reactive } from 'vue';
-//assets must be high height and low width 
-//add a sidebar instead if we dont wanna make the assets a specific size
-//just make it a square if so so it fits within the boundary
-//for this once its done cooking add a signal that tells it to the flip said thingie
+
+
+
+
+
 
 import bacon from '../assets/bacon.png';
 import DisplayInventory from './DisplayInventory.vue';
@@ -28,6 +37,7 @@ import { TimedItem, InventoryItem } from '@/utils/types';
 const panLimit = 3;
 const specialKey = 'a';
 import { ImageLut } from '@/utils/lut';
+import SlotItem from './SlotItem.vue';
 
 const foods:Reactive<Array<TimedItem>> = reactive([]);
 const showItems = ref(true);
@@ -37,6 +47,21 @@ function test(item:InventoryItem) {
 
 
 }
+
+function getPositionStyle (index:number, total:number) {
+    const radius = 300; // Adjust based on circle size (720px - borders)
+    const angle = (index / total) * 2 * Math.PI;
+    const x = radius + radius * Math.cos(angle) - 40; // 40 = half of item width
+    const y = radius + radius * Math.sin(angle) - 40;
+
+    return {
+        left: `${x}px`,
+        top: `${y}px`,
+    };
+};
+
+
+
 function update() { //could make this update_array_timers function that takes in an array
     for(let i = foods.length - 1; i >= 0; i-- ) 
     {
@@ -88,7 +113,7 @@ document.addEventListener('keydown', (e) => {
 
 
 onMounted(()=> {
-    mock_data(5);
+    mock_data(1);
     setInterval(()=>{
         update()
     }, 1000)
