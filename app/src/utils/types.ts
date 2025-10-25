@@ -1,15 +1,26 @@
 export type TerminalName = "oven" | "stove" | "chop" | "cook" | "boil" | "gather" | "serve" | "holding";
-export type Ingredients =  "fruits" 
-                         | "bacon" 
-                         | "egg" 
-                         | "sausage" 
-                         | "potato" 
-                         | "carrot" 
-                         | "curry_cubes" 
-                         | "raw_rice"
-                         | "chicken"
-                         | ""
-                         | ""
+export type Ingredients =
+    | "fruits"
+    | "bacon"
+    | "egg"
+    | "sausage"
+    | "potato"
+    | "carrot"
+    | "curry_cubes"
+    | "raw_rice"
+    | "chicken"
+    | "tomato"
+    | "lettuce"
+    | "bread"
+    | "cheese"
+    | "onion"
+    | "flour"
+    | "butter"
+    | "milk"
+    | "salt"
+    | "pepper"
+    | "" // placeholder slots if needed
+
 export type Methods = "fry" | "flip" | "boil" | "chop" | "mash" | "peel";
 export type Food = "curry" | "british_meal" | "rice" | "fried_chicken" | "";
 
@@ -68,9 +79,9 @@ export type coreTrackedData = {
 export type Timer = {
     IngredientName: Ingredients,
     time_remaining: number,
-    cook_time: number, 
-    id:number,
-    asset:string
+    cook_time: number,
+    id: number,
+    asset: string
 }//for v-for to ensure proper indentification due to possible clashing ingredient Name
 //possibly limit the amount of recipes served based off ot the total amount of statiwon temrinals able to perform an action
 //make sure that the requirement is atleast 3 terminals to avoid boring gameplay
@@ -80,17 +91,19 @@ export type Timer = {
 export type MethodsArray = Array<Methods>
 
 export type InventoryItem = {
-    id:number,
-    name:string,
-    quantity:number,
+    id: number,
+    name: string,
+    quantity: number,
     methods: MethodsArray
 }
 export type TimedItem = {
     remaining_time: number,
     id: number,
-    status:boolean,
-    LUT_KEY:string,
+    status: boolean,
+    LUT_KEY: string,
 }
+
+
 
 
 

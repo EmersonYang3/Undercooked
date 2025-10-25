@@ -1,11 +1,8 @@
 <template>
-  <div>
-    <CookFlip></CookFlip>
-  </div>
+  <router-view />
 </template>
 
 <script setup lang="ts">
-import CookFlip from './components/CookFlip.vue';
 </script>
 
 

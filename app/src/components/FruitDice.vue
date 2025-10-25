@@ -19,7 +19,7 @@
     <div class="absolute w-screen h-12 z-1 bg-green-400 rounded-lg=full"> Score: {{ score }}</div>
         <div
             class="w-screen h-screen bg-center bg-cover absolute"
-            :style="{ backgroundImage: `url(${placeholder})` }"
+            :style="{ backgroundImage: `url(${'placeholder'})` }"
         ></div>
             <div
                 v-for="fruit in fruits"
@@ -41,10 +41,15 @@
 </template>
 
 <script setup lang="ts">
+//ill add slicing functionality later
+//i think the way to implement this would be to check the line formed between cursors across frames
+//check if said line intersects with the html div of the item
+//if it does then that counts as a slice occuring
+
+
 import { ImageLut } from '@/utils/lut';
+import { ingredient_info } from '@/utils/types';
 import { onUnmounted, reactive, ref } from 'vue'
-import placeholder from '../assets/bg.png'
-import knife from '../assets/knife.png'
 //possible optimization would be define fruit spin rate outside
 //really minor tho considering it barely takes up any space
 const time = ref(3);
@@ -58,10 +63,12 @@ async function quickset() {
     }
     console.log("timer was completd")
     timer.value = false;
+    start_time = performance.now();
     animationFrame = requestAnimationFrame(update);
 }
 const showStart = ref(true);
 const score = ref(0);
+let start_time = 0;
 //to increase difficulty, either increase the amount of fruits that can be sent out at a given time
 //or just make them faster
 //or make more bad fruits in porportion to good fruits
@@ -83,6 +90,8 @@ interface Fruit {
     image:string
 }
 const validfruits = ["apple", "banana", "melon", "watermelon", "pineapple"];
+
+
 
 let negativeAmount = 0;
 //add bad fruits or good fruits to make it score based
@@ -112,8 +121,9 @@ function makeFruit(id:number): Fruit {
         vy: -15 - Math.random() * 2,
         rotation: 0,
         spin: (Math.random() - 0.5) * 12,
-        active: true, 
-        score: (Math.round(Math.random()*100) + 1) * negative,
+        active: true,
+        //(Math.round(Math.random()*100) + 1) tweak this later on to make it more customizable
+        score: 1 * negative,
         image: asset_path
     }
 }
@@ -136,12 +146,41 @@ function update() {
             resetFruit(fruit);
         }
     })
+    if((performance.now() - start_time) >= 10*1000) {
+        console.log("game finished")
+        //handle the exit logic here
+        const score_number = calculate_reward();
+        const test:ingredient_info = {
+            ingredientName:"fruits",
+            methods:[""],
+            quality:score_number
+        }
+        //do some item logic here 
+        return test; 
+        //use an emit or call the backend and tell it that the player has gained an item in their inventory
+
+    }
     requestAnimationFrame(update)
 }
+
+function calculate_reward():number {
+    //set a score based off of 
+    if (score.value > 0) {
+        return 3;
+    }
+    else if(score.value == 0) {
+        return 2;
+    }
+    else {
+        return 1;
+    }
+}
+
+
 //reuse the preexisting object to avoid remaking the div which would be a performance hit cuz dom update or smth
 //use a setTimeout function to prevent the fruits from respawning too quikcly which can overwhelm the player
 
-
+//start a timer that 
 
 function handleFruit(fruit:Fruit) {
     fruit.active = false;

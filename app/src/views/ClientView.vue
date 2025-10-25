@@ -40,7 +40,6 @@
 
 
 import { Timer } from '@/utils/types';
-import meat from '../assets/meat.png'
 import { onMounted, Reactive, reactive} from 'vue';
 const activeTimers:Reactive<Array<Timer>> =  reactive([]);
 const inactiveTimers:Reactive<Array<Timer>> = reactive([]);
@@ -76,7 +75,7 @@ function mockTimer() : Timer {
         time_remaining: 20,
         cook_time: 20,
         id: 1, 
-        asset: meat
+        asset: "test"
 
     }
     return timer;
