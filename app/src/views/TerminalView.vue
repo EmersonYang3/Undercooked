@@ -1,6 +1,6 @@
 <template>
     <div>
-
+        
     </div>
 </template>
 
@@ -28,6 +28,8 @@ function select_terminal_type() {
     //load the component at that path
     //
 }
+
+
 onMounted(()=> {
     select_terminal_type();
     //loads everything from here 

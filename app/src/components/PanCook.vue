@@ -1,10 +1,13 @@
 <template>
     <div class="z-0 flex items-center justify-center w-screen h-screen bg-center bg-[url('/checkeredbg.png')] outline outline-10 outline-blue-300 border-blue-300  rounded-4xl border-10 absolute">
         <img :src="ImageLut[`pan`]" class="h-full absolute">
-        <div class="bg-black rounded-full w-[720px] h-[720px] relative z-10 border-gray-700 border-[60px] outline outline-[20px]">
+        <div class="bg-black rounded-full w-[720px] h-[720px] items-center justify-center flex relative z-10 border-gray-700 border-[60px] outline outline-[20px]">
+            <div v-if="currentFood" class="text-white text-10 z-1100 absolute">
+                {{ currentFood.remaining_time }}
+                <img :src="ImageLut[currentFood.LUT_KEY]"> 
+            </div>
         </div>
-
-        <div></div>
+        
         <div v-show="error" class="absolute top-0 left-0 bg-red-500 w-64 h-32 flex justify-flex text-center text-2xl text-white" >
             Item cannot be fried, try another terminal for item.
         </div>
@@ -22,27 +25,30 @@ const error = ref(false);
 import { ImageLut } from '@/utils/lut';
 const foods:Reactive<Array<TimedItem>> = reactive([]);
 const showItems = ref(true);
-let currentFood:Reactive<TimedItem> = reactive(
+let currentFood:Reactive<TimedItem | null> = reactive(
     {
-        remaining_time:0,
+        remaining_time:3,
         id: 0,
         status: null,
-        LUT_KEY: "null",
+        LUT_KEY: "apple",
     }
 );
 
 
+function flip_item() {
+
+}
+
 
 function update() { //could make this update_array_timers function that takes in an array
-    for(let i = foods.length - 1; i >= 0; i-- ) 
-    {
-        foods[i].remaining_time-=1;
-        if(foods[i].remaining_time <= 0) {
-            foods[i].LUT_KEY = "";
-            foods[i].status = true;
-            foods.splice(i, 1);
-        }
-    } 
+    currentFood.remaining_time-=1;
+    if(currentFood.remaining_time <= 0) {
+        currentFood.LUT_KEY = "";
+        currentFood.status = true;
+        //set this to a negative 
+        currentFood = reactive(null);
+    }
+
 }
 function mock_data(limit:number) {
     for(let i = 0; i<limit; i++) {

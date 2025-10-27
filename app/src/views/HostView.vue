@@ -6,7 +6,7 @@
   <div>
 
   </div>
-  <div class="bg-black w-screen min-h-screen flex flex-wrap justify-center items-start gap-4">
+  <div class="bg-black w-screen min-h-screen flex flex-wrap items-start gap-4">
     
     <div
       v-for="[key, value] in current_meals"
@@ -17,23 +17,20 @@
       <div class="bg-red-600 text-center text-white text-sm font-bold p-2 rounded-t-xl">
         {{ value[0]}}
       </div>
-      
+      <div class="bg-gray-200 m-2 rounded-md overflow-hidden">
+        <!-- Progress bar -->
+        <div
+          class="bg-green-500 h-4 transition-all duration-300"
+          :style="{ width: progressPx + '%' }"
+        ></div>
+      </div>
       <!-- Ingredients section -->
-      <div class="flex flex-wrap justify-center p-2 gap-2">
-        <div class="w-full h-8">
-          <div class="bg-green-500 h-4"
-          :style="
-          {
-            width: progressPx + '%'
-          }">
-          <!-- switch progressPx to the reactiveTable -->
-          </div>
-          <!-- put da timer here -->
-        </div>  
-        <div class="w-full bg-blue-100 h-16">
+      <div class="flex flex-wrap justify-center m">
+        <div class="w-full bg-blue-100 h-20 mx-2 mb-2">
           <!-- put fully assembled ingredient here -->
         </div>
-        <div
+        <div class="flex flex-wrap justify-center m-2 bg-gray-500 p-2">
+          <div
           v-for="(item, index) in value[1].ingredients"
           :key="index"
           class="bg-gray-100 text-black text-xs font-semibold w-12 h-12 flex items-center justify-center rounded-full shadow-sm"
@@ -43,9 +40,11 @@
           <!-- should probably try and condense the ingredients via  acounter in the bottom of the asset -->
           <img :src="ImageLut['apple']">
         </div>
+        </div>
+
       </div>
     </div>
-    
+
     <div>
 
 
@@ -84,9 +83,11 @@ function start_loop() {
     //determine the max possible recipes that can be made
 }
 onMounted(()=>{
-    start_loop();
+  start_loop();
 })
-function update() {
+async function update() {
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    progressPx.value -= 1;
     requestAnimationFrame(update);
 }
 const recipes: Map<string, Meal> = new Map([
@@ -184,10 +185,6 @@ function select_recipes() {
   console.log("Random item:", random_item)
   return random_item
 }
-
-
-
-
 function submit_ingredient_to_meal(meal_name: PossibleMeals, ingredient: Ingredient): number {
     //do a check with a
     const meal = current_meals.get(meal_name);
@@ -201,7 +198,6 @@ function submit_ingredient_to_meal(meal_name: PossibleMeals, ingredient: Ingredi
     meal.ingredients.splice(index, 1);
     //remove the ingredient from valid ingredients to be used
     if (meal.ingredients.length == 0) {
-
         return meal.quality / meal.max_quality;
     };
 }
@@ -211,7 +207,7 @@ function communicate_terminal() {
 function communicate_client(data:any) {
     //this is just a plaeholder
     JSON.stringify(data);
-    //do some socket stuff 
+    //do some socket stuff  
 }
 
 
