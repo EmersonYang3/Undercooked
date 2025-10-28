@@ -1,50 +1,83 @@
-import { Socket } from "socket.io";
+import lobbyService from "services/lobby"
+import sharedEnums from "shared/enums"
 
-import type { ExtendedError } from "socket.io"
-import type { handshakeData, role } from "../utils/types.ts";
+import type { Socket, ExtendedError } from "socket.io";
+import type { handshakeData, intendedRoles } from "shared/types";
 
-import lobbyService from "./lobby.ts"
+const connValidatorErr = sharedEnums.connValidatorErrors
+const gameRoles = sharedEnums.gameRoles
 
-const allowedRoles: Record<role, boolean> = {"host": true, "player": true, "terminal": true}
+const validRoles: Record<intendedRoles, true> = { host: true, client: true, station: true }
 
-function isHandshakeDataValid(data: any): boolean {
-    return data && typeof data === "object" 
-    && typeof data.targetLobbyCode === "string" 
-    && typeof data.intendedRole === "string"
-    && (data.intendedRole in allowedRoles);
+function throwError(message: string) {
+    return new Error(message)
 }
 
-function ensureHandshakeData(data: any): handshakeData {
-    return { targetLobbyCode: data.targetLobbyCode, intendedRole: data.intendedRole as role }
+function ensureHandshakeData(data: any): boolean {
+    if (!data) { return false }
+
+    if (!data.intendedRole || typeof data.intendedRole !== 'string') { return false }
+
+    if (!validRoles[data.intendedRole as intendedRoles]) { return false }
+
+    return true
 }
 
-function validateIfHost(data: handshakeData): boolean {
-    if (data.intendedRole !== "host") return true;
-    
-    return !lobbyService.doesLobbyExist(data.targetLobbyCode);
+function formatHandshakeData(data: any): handshakeData {
+    const formattedHandshakeData: handshakeData = {
+        intendedRole: data.intendedRole,
+        lobbyCode: data.lobbyCode
+    }
+
+    return formattedHandshakeData
+}
+
+function validateHost(data: handshakeData, socket: Socket): boolean {
+    let targetLobbyCode = ""
+
+    if (!data.lobbyCode) { 
+        targetLobbyCode = lobbyService.generateLobbyCode() 
+    } else {
+        targetLobbyCode = data.lobbyCode.toUpperCase()
+    }
+
+    const isHostingAlready = lobbyService.lobbyExists(targetLobbyCode)
+
+    if (isHostingAlready) { return false }
+
+    socket.data = { ...data, lobbyCode: targetLobbyCode }
+
+    return true
+}
+
+function validateOthers(data: handshakeData, socket: Socket): boolean {
+    if (!data.lobbyCode) { return false }
+    if (!lobbyService.lobbyExists(data.lobbyCode)) { return false }
+
+    socket.data = { ...data, lobbyCode: data.lobbyCode.toUpperCase() }
+
+    return true
 }
 
 function validateConnection(socket: Socket, next: (err?: ExtendedError) => void) {
-    if (!isHandshakeDataValid(socket.handshake.auth)) {
-        console.log("Recived invalid handshake data:", socket.handshake.auth);
+    const handshakeAuthData = socket.handshake.auth
+    if (!handshakeAuthData) { return next(throwError(connValidatorErr.noHandshakeData)) }
 
-        return next(new Error("Invalid handshake data"));
+    const isHandshakeDataValid = ensureHandshakeData(handshakeAuthData)
+    if (!isHandshakeDataValid) { return next(throwError(connValidatorErr.invalidHandshakeData)) }
+
+    const formattedHandshakeData: handshakeData = formatHandshakeData(handshakeAuthData)
+
+    if (formattedHandshakeData.intendedRole === gameRoles.host) {
+        const isHostValid = validateHost(formattedHandshakeData, socket)
+        if (!isHostValid) { return next(throwError(connValidatorErr.hostConnectionFailed)) }
+
+    } else {
+        const isOtherValid = validateOthers(formattedHandshakeData, socket)
+        if (!isOtherValid) { return next(throwError(connValidatorErr.otherConnectionsFailed)) }
     }
 
-    const ensuredHandshakeData = ensureHandshakeData(socket.handshake.auth);
-
-    if (ensuredHandshakeData.intendedRole === "host" && !validateIfHost(ensuredHandshakeData)) {
-        console.log("Host attempted to connect to an already existing lobby:", ensuredHandshakeData.targetLobbyCode);
-
-        return next(new Error("Lobby with this code already exists"));
-    } else if (ensuredHandshakeData.intendedRole !== "host" && !lobbyService.doesLobbyExist(ensuredHandshakeData.targetLobbyCode)) {
-        console.log("Player/Terminal attempted to connect to a non-existing lobby:", ensuredHandshakeData.targetLobbyCode);
-        return next(new Error("Lobby with this code does not exist"));
-    }
-
-    socket.data = ensuredHandshakeData;
-
-    next();
+    return next()
 }
 
-export default { validateConnection }
+export default validateConnection

@@ -1,27 +1,16 @@
 {
-  "name": "backend",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.9.3"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "module",
-  "description": "",
   "dependencies": {
     "express": "^5.1.0",
+    "http": "^0.0.1-security",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1"
   },
-  "devDependencies": {
-    "@types/express": "^5.0.3",
-    "@types/node": "^24.4.0",
-    "@types/socket.io": "^3.0.1",
-    "nodemon": "^3.1.10",
-    "ts-node": "^10.9.2",
-    "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.9.2"
+  "scripts": {
+    "dev": "ts-node -r tsconfig-paths/register src/index.ts"
   }
 }
