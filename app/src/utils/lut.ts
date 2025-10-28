@@ -7,7 +7,8 @@ const ImageLut: Record<string, string> = {
   "banana": "/fruits/banana.png",
   "pineapple": "/fruits/pineapple.png",
   "bomb": "/fruits/bomb.png",
-  "pan": "/fryingpan.png"
+  "pan": "/fryingpan.png",
+  "chop_board": "/cuttingboard.png"
 }
 
 export { ImageLut };

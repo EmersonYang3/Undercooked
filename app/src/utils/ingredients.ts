@@ -7,25 +7,26 @@
 
 
 export type Meal = {
-    ingredients: Array<string>,
-    quality: number,
-    id: number,
-    max_quality: number
+  ingredients: Array<string>,
+  quality: number,
+  id: number,
+  max_quality: number
 }//for reference max_quality is defined as the length of inrgedients times some number;
 export type Ingredient = {
-    //each ingredient has a state to allow a terminal to act on said item
-    name: string,
-    id: number,
-    quality: number,
-    state: boolean
+  //each ingredient has a state to allow a terminal to act on said item
+  name: string,
+  id: number,
+  quality: number,
+  state: boolean
 }
 export type PossibleMeals = "fried_rice" | "fruit_salad" | "steak" | "british_meal" | "grilled_cheese_sandwhich" | "omelette" | "omurice";
 export type CookedIngredients = "cooked_egg" | "diced_carrots" | "meat" | "boiled_peas" | "rice" | "sausage" | "bread";
 export type BasicIngredients = "aromatics" | "meat" | "egg" | "peas" | "rice" | "raw_sausage" | "cheese";
 
 
-//the ingredients might have states
 
+
+//the ingredients might have states
 const currentMeals: Map<PossibleMeals, Meal> = new Map();
 //this wil contain the incomplete meals that need to continue cooking
 //for the ingredients i might switch to a map if performance is needed
@@ -112,25 +113,25 @@ export const recipes: Map<string, Meal> = new Map([
 
 //this contains the actual recipes
 function submit_ingredient_to_meal(meal_name: PossibleMeals, ingredient: Ingredient): number {
-    //do a check with a
-    const meal = currentMeals.get(meal_name);
-    if (!meal.ingredients.includes(ingredient.name)) {
-        //return that the ingredient cannot be submitted to it
-        return;
-    };
-    meal.quality += ingredient.quality;
-    const index = meal.ingredients.indexOf(ingredient.name);
-    meal.ingredients.splice(index, 1);
-    //remove the ingredient from valid ingredients to be used
-    if (meal.ingredients.length == 0) {
-        return meal.quality / meal.max_quality;
-    };
+  //do a check with a
+  const meal = currentMeals.get(meal_name);
+  if (!meal.ingredients.includes(ingredient.name)) {
+    //return that the ingredient cannot be submitted to it
+    return;
+  };
+  meal.quality += ingredient.quality;
+  const index = meal.ingredients.indexOf(ingredient.name);
+  meal.ingredients.splice(index, 1);
+  //remove the ingredient from valid ingredients to be used
+  if (meal.ingredients.length == 0) {
+    return meal.quality / meal.max_quality;
+  };
 }
 //
 function select_recipes() {
-    const random_index = Math.floor(Math.random() * recipes.size);
-    const random_item = recipes.entries[random_index];
-    return random_item;
+  const random_index = Math.floor(Math.random() * recipes.size);
+  const random_item = recipes.entries[random_index];
+  return random_item;
 }
 
 
