@@ -1,11 +1,6 @@
 import type { lobbyData, socketConnection, fixedSocketData } from "utils/types";
 
-let currentLobbyData: lobbyData = {
-    host: { socket: null, identifier: 0 },
-    clients: [],
-    stations: []
-}
-
+let currentLobbyData: lobbyData = { host: { socket: null, identifier: 0 }, clients: [], stations: [] }
 let currentLobbyCode = ''
 
 function generateLobbyCode(): string {
@@ -39,4 +34,28 @@ function getLobbyData(): lobbyData {
     return currentLobbyData
 }
 
-export default { generateLobbyCode, lobbyExists, createLobby, getLobbyData }
+function getLobbyCode(): string {
+    return currentLobbyCode
+}
+
+function isConnectionRegistered(connection: socketConnection): boolean {
+    if (currentLobbyData.host.socket.id === connection.socket.id) {
+        return true
+    }
+
+    for (const client of currentLobbyData.clients) {
+        if (client.socket.id === connection.socket.id) {
+            return true
+        }
+    }
+
+    for (const station of currentLobbyData.stations) {
+        if (station.socket.id === connection.socket.id) {
+            return true
+        }
+    }
+
+    return false
+}
+
+export default { generateLobbyCode, lobbyExists, createLobby, getLobbyData, isConnectionRegistered, getLobbyCode }
