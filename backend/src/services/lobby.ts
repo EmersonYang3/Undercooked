@@ -58,4 +58,12 @@ function isConnectionRegistered(connection: socketConnection): boolean {
     return false
 }
 
-export default { generateLobbyCode, lobbyExists, createLobby, getLobbyData, isConnectionRegistered, getLobbyCode }
+function connectClientToLobby(clientConnection: socketConnection): void {
+    currentLobbyData.clients.push(clientConnection)
+}
+
+function connectStationToLobby(stationConnection: socketConnection): void {
+    currentLobbyData.stations.push(stationConnection)
+}
+
+export default { generateLobbyCode, lobbyExists, createLobby, getLobbyData, isConnectionRegistered, getLobbyCode, connectClientToLobby, connectStationToLobby }

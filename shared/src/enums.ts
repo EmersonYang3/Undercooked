@@ -5,11 +5,13 @@ enum hostToServerRemotes {
 
 enum serverToHostRemotes {
     lobbyStarted = "lobbyStarted",
-    clientPendingJoin = "clientPendingJoin"
+    clientPendingJoin = "clientPendingJoin",
+    newClientJoined = "newClientJoined"
 }
 
 enum serverToClientRemotes {
-    pendingJoin = "pendingJoin"
+    pendingJoin = "pendingJoin",
+    clientAccepted = "clientAccepted"
 }
 
 enum portServer {
