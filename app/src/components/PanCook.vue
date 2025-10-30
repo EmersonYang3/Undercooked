@@ -36,7 +36,8 @@ let currentFood:Reactive<TimedItem | null> = reactive(
 
 
 function flip_item() {
-    //set a timer for how long the user is gonna be able to flip the item
+
+
 }
 
 

@@ -111,7 +111,12 @@ export const recipes: Map<string, Meal> = new Map([
 
 
 
-//this contains the actual recipes
+
+
+//submits the ingredient to the meal to see if its part of it
+//if so then just remove the item from the list of current items for the meal
+//if array len = 0 it means the food has finished
+//return it and submit to the backend that it's finished
 function submit_ingredient_to_meal(meal_name: PossibleMeals, ingredient: Ingredient): number {
   //do a check with a
   const meal = currentMeals.get(meal_name);
@@ -119,6 +124,7 @@ function submit_ingredient_to_meal(meal_name: PossibleMeals, ingredient: Ingredi
     //return that the ingredient cannot be submitted to it
     return;
   };
+
   meal.quality += ingredient.quality;
   const index = meal.ingredients.indexOf(ingredient.name);
   meal.ingredients.splice(index, 1);
