@@ -5,11 +5,7 @@ function hookEvents(socket: Socket, events: eventsRegistering) {
     socket.onAny((eventName, ...args) => {
         const eventHandler = events[eventName]
 
-        console.log(`Event received: ${eventName}`, ...args)
-
-        if (eventHandler) {
-            eventHandler(socket, ...args)
-        }
+        if (eventHandler) { eventHandler(socket, ...args) }
     })
 }
 

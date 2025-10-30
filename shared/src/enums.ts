@@ -11,7 +11,12 @@ enum serverToHostRemotes {
 
 enum serverToClientRemotes {
     pendingJoin = "pendingJoin",
-    clientAccepted = "clientAccepted"
+    clientAccepted = "clientAccepted",
+    changeCurrentlyHeldItem = "changeCurrentlyHeldItem"
+}
+
+enum serverToStationRemotes {
+    stationAssigned = "stationAssigned"
 }
 
 enum portServer {
@@ -35,6 +40,7 @@ export default {
     hostToServerRemotes,
     serverToHostRemotes, 
     serverToClientRemotes,
+    serverToStationRemotes,
     portServer, 
     connValidatorErrors, 
     gameRoles

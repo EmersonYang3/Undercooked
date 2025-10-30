@@ -66,4 +66,16 @@ function connectStationToLobby(stationConnection: socketConnection): void {
     currentLobbyData.stations.push(stationConnection)
 }
 
-export default { generateLobbyCode, lobbyExists, createLobby, getLobbyData, isConnectionRegistered, getLobbyCode, connectClientToLobby, connectStationToLobby }
+function emitToAllClients(eventName: string, ...args: any[]): void {
+    for (const client of currentLobbyData.clients) {
+        client.socket.emit(eventName, ...args)
+    }
+}
+
+function emitToAllStations(eventName: string, ...args: any[]): void {
+    for (const station of currentLobbyData.stations) {
+        station.socket.emit(eventName, ...args)
+    }  
+}
+
+export default { generateLobbyCode, lobbyExists, createLobby, getLobbyData, isConnectionRegistered, getLobbyCode, connectClientToLobby, connectStationToLobby, emitToAllClients, emitToAllStations }

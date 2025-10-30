@@ -30,4 +30,14 @@ function getSocketConnectionByKey(key: string): socketConnection | null {
     return registry[key] || null;
 }
 
-export default { generateSpecialKey, releaseSpecialKey, registerSocketConnection, getSocketConnectionByKey }
+function getKeyByConnection(socket: socketConnection): string | null {
+    for (const key in registry) {
+        if (registry[key].socket.id === socket.socket.id) {
+            return key;
+        }
+    }
+    
+    return null;
+}
+
+export default { generateSpecialKey, releaseSpecialKey, registerSocketConnection, getSocketConnectionByKey, getKeyByConnection }
