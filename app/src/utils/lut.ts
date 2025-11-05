@@ -10,6 +10,10 @@ const ImageLut: Record<string, string> = {
   "pan": "/fryingpan.png",
   "chop_board": "/cuttingboard.png"
 }
+//click the right keys to properly cut the segment
+//time limit + precise key clicking
+//improper key clicking = score ded
+
 const chopable = new Map([
   ["carrots", {
     segments: 5,
@@ -34,6 +38,9 @@ const chopable = new Map([
     final_item: "chopped_mushrooms"
   }]
 ]);
+//constant stirring
+//maybe use mouse and measure how accurate the user is stirring the pot
+//have a circle that tracevs the 
 const boilable = new Map([
   ["potatos", {
     time: 30,
@@ -52,6 +59,8 @@ const boilable = new Map([
     final_items: "hardboiled_eggs"
   }]
 ])
+//make sure to flip the item on time or it gets burnt 
+
 const fryable = new Map([
   ["eggs", {
     time: 10,
@@ -74,6 +83,7 @@ const fryable = new Map([
     final_item: "seared_meat",
   }]
 ])
+//maintain a constant temperature via key mashing
 const ovenable = new Map([
   ["cookie_dough", {
     time: 90,
