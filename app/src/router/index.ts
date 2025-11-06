@@ -6,6 +6,7 @@ import ClientView from '@/views/ClientView.vue'
 import FruitDice from '@/components/FruitDice.vue'
 import TestIcle from '@/components/TestIcle.vue'
 import OvenTerm from '@/components/OvenTerm.vue'
+import BoilTerminal from '@/components/BoilTerminal.vue'
 const prefix = '/terminal'
 
 const routes = [
@@ -14,7 +15,7 @@ const routes = [
   { path: '/terminal', name: 'Terminal', component: TerminalView },
   { path: '/client', name: 'Client', component: ClientView },
   { path: `${prefix}/slice`, name: 'Slice Terminal', component: FruitDice },
-  { path: `${prefix}/keymash`, name: 'Mash Key', component: OvenTerm },
+  { path: `${prefix}/keymash`, name: 'Mash Key', component: BoilTerminal },
 ]
 
 
