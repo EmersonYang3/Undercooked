@@ -57,6 +57,7 @@
 
 
 <script setup lang="ts">
+import RequestNotif from '@/components/RequestNotif.vue';
 import { ImageLut } from '@/utils/lut';
 
 

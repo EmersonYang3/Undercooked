@@ -60,7 +60,6 @@ const boilable = new Map([
   }]
 ])
 //make sure to flip the item on time or it gets burnt 
-
 const fryable = new Map([
   ["eggs", {
     time: 10,
