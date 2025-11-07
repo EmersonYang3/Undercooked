@@ -6,7 +6,8 @@ enum hostToServerRemotes {
 enum serverToHostRemotes {
     lobbyStarted = "lobbyStarted",
     clientPendingJoin = "clientPendingJoin",
-    newClientJoined = "newClientJoined"
+    stationPendingJoin = "stationPendingJoin",
+    newClientJoined = "newClientJoined" 
 }
 
 enum serverToClientRemotes {
@@ -16,6 +17,7 @@ enum serverToClientRemotes {
 }
 
 enum serverToStationRemotes {
+    pendingJoin = "pendingJoin",
     stationAssigned = "stationAssigned"
 }
 
