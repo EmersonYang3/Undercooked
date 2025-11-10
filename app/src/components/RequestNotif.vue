@@ -36,6 +36,12 @@
 </template>
 
 <script setup lang="ts">
+
+//socket for message polling or smth 
+//pass in a prop that defines the socket to get to be used for this component listener
+//use it to show messages
+
+
 import { Reactive, reactive } from 'vue';
 defineProps(['message']);
 type Message =  { 

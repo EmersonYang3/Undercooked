@@ -14,10 +14,7 @@
 //timer-based
 import { watch, ref } from 'vue';
 import { useClientConnection } from './clientTerm';
-
 const started = ref(false);
-
-
 //this could probably be wrapped even more
 //might make the code too complex though
 //maybe break it into a category
