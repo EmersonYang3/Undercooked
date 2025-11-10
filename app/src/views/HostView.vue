@@ -1,130 +1,19 @@
-<!--
-    Host View, this will display the current code (if in loading mode) or the active recipes and game logic
--->
 <template>
-  <!-- set the background here if we wanna do a map of the players -->
-  <div>
-
-  </div>
-  <div class="bg-black w-screen min-h-screen flex flex-wrap items-start gap-4">
-    
-    <div
-      v-for="[key, value] in current_meals"
-      :key="key"
-      class="z-10 text-xs text-black bg-white rounded-t-xl shadow-lg overflow-hidden flex flex-col"
-    >
-      <!-- Meal header -->
-      <div class="bg-red-600 text-center text-white text-sm font-bold p-2 rounded-t-xl">
-        {{ value[0]}}
+  <div class="flex flex-col items-center bg-white w-screen h-screen">
+    <h1 class="text-4xl p-4 m-4">Current Recipes</h1>
+    <div class="flex flex-row h-full w-full">
+      <div class="relative bg-gray-400 w-32 h-64 text-white rounded-xl p-2 m-1" v-for="(item, index) in recipes" :key="index">
+          {{ item }}
+          
+        <div class="bg-green-500 w-full h-4 rounded-full"></div>
       </div>
-      <div class="bg-gray-200 m-2 rounded-md overflow-hidden">
-        <!-- Progress bar -->
-        <div
-          class="bg-green-500 h-4 transition-all duration-300"
-          :style="{ width: progressPx + '%' }"
-        ></div>
-      </div>
-      <!-- Ingredients section -->
-      <div class="flex flex-wrap justify-center m">
-        <div class="w-full bg-blue-100 h-20 mx-2 mb-2">
-          <!-- put fully assembled ingredient here -->
-        </div>
-        <div class="flex flex-wrap justify-center m-2 bg-gray-500 p-2">
-          <div
-          v-for="(item, index) in value[1].ingredients"
-          :key="index"
-          class="bg-gray-100 text-black text-xs font-semibold w-12 h-12 flex items-center justify-center rounded-full shadow-sm"
-        >
-
-          <!-- no text just the asset to avoid clutter -->
-          <!-- should probably try and condense the ingredients via  acounter in the bottom of the asset -->
-          <img :src="ImageLut['apple']">
-        </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div>
-
-
-      <!-- switches to another screen that displays player stats or other stuff thats important -->
-
-
     </div>
   </div>
 </template>
 
-
 <script setup lang="ts">
-import RequestNotif from '@/components/RequestNotif.vue';
-import { ImageLut } from '@/utils/lut';
-
-
-import { BasicIngredients } from '@/utils/ingredients';
-import { CookedIngredients } from '@/utils/ingredients';
-import { PossibleMeals } from '@/utils/ingredients';
-import { Meal } from '@/utils/ingredients';
-import { onMounted, reactive, ref } from 'vue';
-const amounts_of_meals = 10;
-const current_meals =  reactive(new Map());
-const progressPx = ref(100);
-//for each new item attach a timer object to it
-
-function start_loop() {
-    for(let i  = 0; i < amounts_of_meals; i++ ) {
-        const recipe = select_recipes();
-        const name =  recipe[0];
-        //could do0 some stirng cleaning here to make it look better
-        current_meals.set(`recipe_${i}`, recipe);
-        
-    }    
-    requestAnimationFrame(update);
-    //this is the jmain
-    //determine the max possible recipes that can be made
-}
-onMounted(()=>{
-  start_loop();
-})
-async function update() {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    progressPx.value -= 1;
-    requestAnimationFrame(update);
-}
-function select_recipes() {
-  const random_index = Math.floor(Math.random() * recipes.size)
-  console.log("Random index:", random_index)
-
-  const entries = Array.from(recipes.entries())
-  const random_item = entries[random_index]
-
-  console.log("Random item:", random_item)
-  return random_item
-}
-function submit_ingredient_to_meal(meal_name: PossibleMeals, ingredient: Ingredient): number {
-    //do a check with a
-    const meal = current_meals.get(meal_name);
-    if (!meal.ingredients.includes(ingredient.name)) {
-        communicate_client("a");
-        //return that the ingredient cannot be submitted to it
-        return;
-    };
-    meal.quality += ingredient.quality;
-    const index = meal.ingredients.indexOf(ingredient.name);
-    meal.ingredients.splice(index, 1);
-    //remove the ingredient from valid ingredients to be used
-    if (meal.ingredients.length == 0) {
-        return meal.quality / meal.max_quality;
-    };
-}
-function communicate_terminal() {
-    //this is just a plaeholder
-}
-function communicate_client(data:any) {
-    //this is just a plaeholder
-    JSON.stringify(data);
-    //do some socket stuff  
-}
+import { reactive } from 'vue';
+const recipes = reactive([1, 2, 3, 4, 5, 6, 7]);
 
 
 
