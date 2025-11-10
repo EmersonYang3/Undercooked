@@ -1,6 +1,7 @@
 enum hostToServerRemotes {
     startLobby = "startLobby",
-    acceptClientJoin = "acceptClientJoin"
+    acceptClientJoin = "acceptClientJoin",
+    acceptStationJoin = "acceptStationJoin"
 }
 
 enum serverToHostRemotes {
