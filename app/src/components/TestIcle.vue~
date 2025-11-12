@@ -38,6 +38,7 @@ function rearm() {
 }
 
 
+
 const keys:Reactive<Array<string>> = reactive([]);
 function randomLetter(): string {
     return String.fromCharCode(97 + Math.floor(Math.random() * 26));

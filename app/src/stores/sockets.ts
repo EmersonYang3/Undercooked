@@ -1,23 +1,34 @@
-import { Socket } from "socket.io-client";
+import { io } from "socket.io-client"
 import { defineStore } from "pinia";
-type Path = string;
-//define the sockets that can be used 
-//each terminal/client has their own socket type and each client/terminal has their own unique socket 
-//ided by an unqi
+export const useChatStore = defineStore("chat", {
+    state: () => ({
+        messages: [],
+        socket: io("ws://localhost:3000"),
+        connected: false,
+    }),
 
-
-
-export const routerStore = defineStore('socket', {
-    state: () => {
-        return { num: 0 }
-    },
     actions: {
-        connect(path: Path) {
+        initSocket() {
+            if (this.connected) return; // avoid double connection
+            this.socket.connect();
 
+            this.socket.on("connect", () => {
+                this.connected = true;
+                console.log("this.socket connected:", this.socket.id);
+            });
+
+            this.socket.on("disconnect", () => {
+                this.connected = false;
+                console.log("this.socket disconnected");
+            });
+
+            this.socket.on("chat:message", (msg: any) => {
+                this.messages.push(msg);
+            });
         },
-        send_message(data: any) {
 
-        }
-    }
-
-})
+        sendMessage(content: any) {
+            this.socket.emit("chat:message", { content });
+        },
+    },
+});
