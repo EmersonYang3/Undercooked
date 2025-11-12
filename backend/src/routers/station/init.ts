@@ -13,7 +13,7 @@ function initStationSocket(socket: Socket) {
     const hostSocket = currentLobbyData.host.socket
 
     hostSocket.emit(serverTHRemotes.stationPendingJoin, { identifier: socketConnection.identifier })
-    socket.emit(serverTSRemotes.stationAssigned, { identifier: socketConnection.identifier })
+    socket.emit(serverTSRemotes.pendingJoin, { identifier: socketConnection.identifier })
 }
 
 export default { initStationSocket }

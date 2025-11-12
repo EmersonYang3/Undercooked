@@ -39,4 +39,4 @@ clientSocketHost.on(sharedEnums.serverToHostRemotes.clientPendingJoin, (data: an
 
 clientSocketClient.on(sharedEnums.serverToClientRemotes.clientAccepted, (specialKey: string) => {
     console.log(`Client accepted with special key: ${specialKey}`)
-})
+})  

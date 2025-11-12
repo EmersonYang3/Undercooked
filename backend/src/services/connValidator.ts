@@ -42,7 +42,7 @@ function validateHost(data: handshakeData, socket: Socket): boolean {
     }
 
     const isHostingAlready = lobbyService.lobbyExists(targetLobbyCode)
-
+    
     if (isHostingAlready) { return false }
 
     socket.data = { ...data, lobbyCode: targetLobbyCode }
@@ -71,7 +71,6 @@ function validateConnection(socket: Socket, next: (err?: ExtendedError) => void)
     if (formattedHandshakeData.intendedRole === gameRoles.host) {
         const isHostValid = validateHost(formattedHandshakeData, socket)
         if (!isHostValid) { return next(throwError(connValidatorErr.hostConnectionFailed)) }
-
     } else {
         const isOtherValid = validateOthers(formattedHandshakeData, socket)
         if (!isOtherValid) { return next(throwError(connValidatorErr.otherConnectionsFailed)) }
