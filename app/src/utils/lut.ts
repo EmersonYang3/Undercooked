@@ -8,12 +8,39 @@ const ImageLut: Record<string, string> = {
   "pineapple": "/fruits/pineapple.png",
   "bomb": "/fruits/bomb.png",
   "pan": "/fryingpan.png",
-  "chop_board": "/cuttingboard.png"
+  "chop_board": "/cuttingboard.png",
+  "Avocado toast": "/public/final/Avocado toast.png",
+  "Bacon toast": "/public/final/Bacon toast.png",
+  "Burger": "/public/final/Burger.png",
+  "Carrot stew": "/public/final/Carrot stew.png",
+  "Cheese": "/public/final/Cheese.png",
+  "Chocolate croissant": "/public/final/Chocolate croissant.png",
+  "Chocolate doughnut": "/public/final/Chocolate doughnut.png",
+  "Croissant": "/public/final/Croissant.png",
+  "Cup of coffee": "/public/final/Cup of coffee.png",
+  "Cup of tea": "/public/final/Cup of tea.png",
+  "Egg toast": "/public/final/Egg toast.png",
+  "Empty bowl 1": "/public/final/Empty bowl 1.png",
+  "Empty bowl 2": "/public/final/Empty bowl 2.png",
+  "Empty cup 1": "/public/final/Empty cup 1.png",
+  "Empty cup 2": "/public/final/Empty cup 2.png",
+  "Jam doughnut": "/public/final/Jam doughnut.png",
+  "Jam pastrie": "/public/final/Jam pastrie.png",
+  "Jam toast": "/public/final/Jam toast.png",
+  "Meatballs": "/public/final/Meatballs.png",
+  "Milk and cookies": "/public/final/Milk and cookies.png",
+  "Mushroom Stew": "/public/final/Mushroom Stew.png",
+  "Peanut butter and jelly toast": "/public/final/Peanut butter and jelly toast.png",
+  "Pistachio doughnut": "/public/final/Pistachio doughnut.png",
+  "Pumpkin soup": "/public/final/Pumpkin soup.png",
+  "Strawberry cake": "/public/final/Strawberry cake.png",
+  "Strawberry doughnut": "/public/final/Strawberry doughnut.png",
+  "Toast": "/public/final/Toast.png",
+  "Tomato stew": "/public/final/Tomato stew.png"
 }
 //click the right keys to properly cut the segment
 //time limit + precise key clicking
 //improper key clicking = score ded
-
 const chopable = new Map([
   ["carrots", {
     segments: 5,
@@ -196,8 +223,30 @@ const fridgeItems = new Set([
   "fruits",
   "potato",
 ])
+const recipe_lookup = {
+  "chopable": chopable,
+  "fridgeItems": fridgeItems,
+  "required_items": required_items,
+  "deep_fryable": deep_fryable,
+  "ovenable": ovenable,
+  "fryable": fryable,
+};
 
-export { ImageLut, chopable, boilable, fryable, mixable, deep_fryable, fridgeItems, ovenable, combinable, required_items };
+//rewrite based off of the assets i got
+const ingredients = {
+
+}
+const possible_recipes = {
+  "avocado_toast": {
+
+  },
+  "bacon_toast"
+}
+
+
+
+
+export { recipe_lookup, ImageLut, chopable, boilable, fryable, mixable, deep_fryable, fridgeItems, ovenable, combinable, required_items };
 //6 action terminals
 //fry
 //boil

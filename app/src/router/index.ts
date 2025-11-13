@@ -8,11 +8,12 @@ import TestIcle from '@/components/TestIcle.vue'
 import OvenTerm from '@/components/OvenTerm.vue'
 import BoilTerminal from '@/components/BoilTerminal.vue'
 import RequestNotif from '@/components/RequestNotif.vue'
+import RecipeSelector from '@/components/RecipeSelector.vue'
 const prefix = '/terminal'
 
 const routes = [
   { path: '/', name: "Splash", component: SplashView },
-  { path: '/host', name: 'Host', component: HostView },
+  { path: '/host', name: 'Host', component: RecipeSelector },
   { path: '/terminal', name: 'Terminal', component: TerminalView },
   { path: '/client', name: 'Client', component: ClientView },
   { path: `${prefix}/slice`, name: 'Slice Terminal', component: FruitDice },
