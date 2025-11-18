@@ -38,251 +38,139 @@ const ImageLut: Record<string, string> = {
   "Toast": "/public/final/Toast.png",
   "Tomato stew": "/public/final/Tomato stew.png"
 }
-//click the right keys to properly cut the segment
-//time limit + precise key clicking
-//improper key clicking = score ded
-const chopable = new Map([
-  ["carrots", {
-    segments: 5,
-    max_score: 5,
-    difficulty: 0,
-    final_item: "chopped_carrots"
-  }],
-  ["cucumbers", {
-    segments: 20,
-    max_score: 10,
-    difficulty: 5,
-    final_item: "cucumber_slices"
-  }],
-  ["lettuce", {
-    segments: 10,
-    max_score: 5,
-    difficulty: 2,
-    final_item: "chopped_lettuce"
-  }],
-  ["mushrooms", {
-    segments: 10,
-    final_item: "chopped_mushrooms"
-  }]
-]);
-//constant stirring
-//maybe use mouse and measure how accurate the user is stirring the pot
-//have a circle that tracevs the 
-const boilable = new Map([
-  ["potatos", {
-    time: 30,
-    final_item: "boiled_potato",
-  }],
-  ["rice", {
-    time: 45,
-    final_item: "cooked_rice",
-  }],
-  ["noodles", {
-    time: 20,
-    final_item: "boiled_noodles"
-  }],
-  ["eggs", {
-    time: 10,
-    final_items: "hardboiled_eggs"
-  }]
-])
-//make sure to flip the item on time or it gets burnt 
-const fryable = new Map([
-  ["eggs", {
-    time: 10,
-    final_item: "fried_egg"
-  }],
-  ["mixed_eggs", {
-    time: 10,
-    final_item: "scrambled_eggs"
-  }],
-  ["omeltte_mix", {
-    time: 10,
-    final_item: "omelette"
-  }],
-  ["duxelle_paste", {
-    time: 10,
-    final_item: "duxelle"
-  }],
-  ["preapred_meat", {
-    time: 10,
-    final_item: "seared_meat",
-  }]
-])
-//maintain a constant temperature via key mashing
-const ovenable = new Map([
-  ["cookie_dough", {
-    time: 90,
-    final_item: "cookies",
-  },],
-  ["puff_pastry_mix", {
-
-    time: 10,
-    final_item: "puff_pastry"
-  }],
-  ["bread_dought", {
-    time: 90,
-    final_item: "bread",
-  }],
-  ["pizza_dough", {
-    time: 80,
-    final_item: "pizza_crust"
-  }],
-  ["uncooked_pie", {
-    time: 100,
-    final_item: "baked_pie",
-  }],
-  ["cake_mix", {
-    time: 80,
-    final_item: "cake",
-
-  }]
-])
-//might change this to become a set + map combo like the other one
-const mixable = new Map([
-  ["eggs", {
-    time: 10,
-    final_items: "mixed_eggs",
-  }],
-  ["e", {}]
-])
-const deep_fryable = new Map([
-  ["potato_slices", {
-    time: 10,
-    final_item: "potato_fries"
-  }],
-  ["battered_shrimp", {
-    time: 10,
-    final_item: "tempura",
-  }],
-  ["battered_chicken", {
-    time: 10,
-    final_item: "fried_chicken"
-  }],
-  ["dough_ring", {
-    time: 10,
-    final_item: "donut",
-  }],
-  ["battered_onions", {
-    time: 10,
-    final_item: "donut_rings",
-  }],
-])
-//must manually select a combinable item
-//combine station is much more different from the other terminals
-//skips the whole start screen in exchange for fast placing of items
-const combinable = new Set(["cake_mix", "flour_batter", "battered_shrimp", "battered_chicken", "cookie_dough", "omelette_mix", "aromatics", "duxelle_paste", "prepared_meat", "puff_pastry_mix"])
-const required_items = new Map([
-  ["cake_mix", {
-    ingredients: ["water", "flour", "eggs", "sugar"]
-  }],
-  ["flour_batter", {
-    ingredients: ["water, flour, eggs"]
-  }],
-  ["battered_chicken", {
-    ingredients: ["flour_batter", "chicken"],
-  }],
-  ["battered_shrimp", {
-    ingredients: ["flour_batter", "shrimp"],
-  }],
-  ["cookie_dough", {
-    ingredients: ["eggs, flour, butter, sugar, salt, chocolate_chips"]
-  }],
-  ["salad", {
-    ingredinets: ["sliced_cucumbes", "tomato_slices", "salad_dressing", "croutons", "sliced_lettuce", "grated_cheese"],
-  }],
-  ["omelette_mix", {
-    ingredients: ["mixed_eggs", "salt", "butter", "pepper"]
-  }],
-  ["aromatics", {
-    ingredients: ["garlic", "shallots", "thyme"],
-  }],
-  ["duxelle_paste", {
-    ingredients: ["chopped_mushrooms. aromatics"]
-  }],
-  ["prepared_meat", {
-    ingredinets: ["beef_tenderloin", "mustard", "oil"],
-  }],
-  ["puff_pastry_mix", {
-    ingredients: ["eggs", "flour", "water", "oil"],
-  }],
-  ["uncooked_beef_wellington", {
-    ingredinents: ["puff_pastry, duxelle, seared_meat, egg_wash, proscuitto"]
-  }]
-]);
-const fridgeItems = new Set([
-  "eggs",
-  "flour",
-  "water",
-  "mustard",
-  "beef_tenderloin",
-  "cucumbers",
-  "mushrooms",
-  "chicken",
-  "shrimp",
-  "fruits",
-  "potato",
-])
-const recipe_lookup = {
-  "chopable": chopable,
-  "fridgeItems": fridgeItems,
-  "required_items": required_items,
-  "deep_fryable": deep_fryable,
-  "ovenable": ovenable,
-  "fryable": fryable,
+//base stuff off of this
+const dishToPrepared = {
+  "Avocado toast": ["Toast", "Mashed avocado"],
+  "Bacon toast": ["Toast", "Cooked bacon"],
+  "Burger": ["Burger bun", "Cooked burger patty", "Cheese (optional)", "Lettuce (optional)"],
+  "Carrot stew": ["Stew base", "Cooked carrots"],
+  "Cheese": ["Cheese block"],
+  "Chocolate croissant": ["Croissant dough (baked)", "Chocolate filling"],
+  "Chocolate doughnut": ["Doughnut (fried)", "Chocolate glaze"],
+  "Croissant": ["Croissant dough (baked)"],
+  "Cup of coffee": ["Brewed coffee"],
+  "Cup of tea": ["Brewed tea"],
+  "Egg toast": ["Toast", "Fried egg"],
+  "Jam doughnut": ["Doughnut (fried)", "Jam filling"],
+  "Jam pastrie": ["Pastry dough (baked)", "Jam filling"],
+  "Jam toast": ["Toast", "Jam"],
+  "Meatballs": ["Cooked meatballs"],
+  "Milk and cookies": ["Milk", "Cookies"],
+  "Mushroom Stew": ["Stew base", "Cooked mushrooms"],
+  "Peanut butter and jelly toast": ["Toast", "Peanut butter", "Jelly"],
+  "Pistachio doughnut": ["Doughnut (fried)", "Pistachio cream"],
+  "Pumpkin soup": ["Soup base", "Cooked pumpkin"],
+  "Strawberry cake": ["Cake base", "Strawberry frosting", "Strawberries"],
+  "Strawberry doughnut": ["Doughnut (fried)", "Strawberry glaze"],
+  "Toast": ["Toast"],
+  "Tomato stew": ["Stew base", "Cooked tomatoes"]
 };
-
-//rewrite based off of the assets i got
-const ingredients = {
-
-}
-const possible_recipes = {
-  "avocado_toast": {
-
-  },
-  "bacon_toast"
-}
-
-
-
-
-export { recipe_lookup, ImageLut, chopable, boilable, fryable, mixable, deep_fryable, fridgeItems, ovenable, combinable, required_items };
-//6 action terminals
-//fry
-//boil
-//chop
-//mix
-//deep_fry
-//oven
-//2 station terminals
-//fridge 
-//combine station(could just be the assembling station or smth)
-
-
-
-//beef wellington = hardest thing to cook
-//ultimately the score is based off of the final big components like seared meat, duxelle paste and the puff pastry
-//chopped_mushrooms - chop mushrooms
-
-//aromatics - combine garlic, shallots, thyme
-//duxelle_paste - combine chopped_mushrooms and aromatics
-//prepared-meat - beef-tenderloin, mustard, oil
-//seared-meat - prepared-meat
-//puff pastry - oven cook the puff-pastry mix
-//puff-pastry-mix - eggs, flour, water, oil?
-//egg wash - eggs
-//mustard - fridge
-
-//first step is preparing the meat. the meat gets covered with mustard 
-//prepared meat
-//next is searing it
-//we get lightly_cooked_meat
-//create a mushroom_mixture from aromatics + diced_mushrooms
-//cook the mushroom_mixture to get a duxelles
-//combine meat with duxelles
-//next is the puff pastry
-//make that with flour water and eggs and wahtnot
-//combine the meat with the duxelles with the puff pastry with egg wash with the proscuitto
-//maybe make it so you gotta slice the proscuitto urself
-//u get uncooked beef wellington
-//put it into the oven to cook until ready 
+const preparedIngredients = [
+  "Toast",
+  "Mashed avocado",
+  "Cooked bacon",
+  "Burger bun",
+  "Cooked burger patty",
+  "Cheese (optional)",
+  "Lettuce (optional)",
+  "Stew base",
+  "Cooked carrots",
+  "Cheese block",
+  "Croissant dough (baked)",
+  "Chocolate filling",
+  "Doughnut (fried)",
+  "Chocolate glaze",
+  "Brewed coffee",
+  "Brewed tea",
+  "Fried egg",
+  "Jam filling",
+  "Pastry dough (baked)",
+  "Jam",
+  "Cooked meatballs",
+  "Milk",
+  "Cookies",
+  "Cooked mushrooms",
+  "Peanut butter",
+  "Jelly",
+  "Pistachio cream",
+  "Soup base",
+  "Cooked pumpkin",
+  "Cake base",
+  "Strawberry frosting",
+  "Strawberries",
+  "Strawberry glaze",
+  "Cooked tomatoes"
+];
+const rawIngredients = [
+  "Bread slice",
+  "Avocado",
+  "Bacon (raw)",
+  "Ground beef",
+  "Cheese curds / milk",
+  "Flour",
+  "Butter",
+  "Chocolate",
+  "Cocoa",
+  "Tea leaves",
+  "Coffee beans",
+  "Egg",
+  "Yeast",
+  "Sugar",
+  "Milk (raw)",
+  "Carrot",
+  "Mushroom",
+  "Pumpkin",
+  "Tomato",
+  "Peanuts",
+  "Strawberries",
+  "Wheat for flour",
+  "Oil",
+  "Jam ingredients (fruit + sugar)",
+  "Pistachios"
+];
+const Toaster = [
+  { raw: "Bread slice", produces: "Toast", time: 10 }
+];
+const StovePan = [
+  { raw: "Bacon (raw)", produces: "Cooked bacon", time: 15 },
+  { raw: "Ground beef", produces: "Cooked burger patty", time: 25 },
+  { raw: "Egg", produces: "Fried egg", time: 10 },
+  { raw: "Mushroom", produces: "Cooked mushrooms", time: 8 }
+];
+const OvenBakery = [
+  { raw: "Dough", produces: "Croissant dough (baked)", time: 30 },
+  { raw: "Pastry dough", produces: "Pastry dough (baked)", time: 25 },
+  { raw: "Cake batter", produces: "Cake base", time: 35 },
+  { raw: "Dough", produces: "Doughnut (fried)", time: 20 }
+];
+const BoilerPot = [
+  { raw: "Carrot", produces: "Cooked carrots", time: 15 },
+  { raw: "Pumpkin", produces: "Cooked pumpkin", time: 20 },
+  { raw: "Tomato", produces: "Cooked tomatoes", time: 12 }
+];
+const GrinderMixer = [
+  { raw: "Peanuts", produces: "Peanut butter", time: 10 },
+  { raw: "Pistachios", produces: "Pistachio cream", time: 12 },
+  { raw: "Chocolate", produces: "Chocolate filling", time: 8 },
+  { raw: "Cocoa", produces: "Chocolate glaze", time: 10 },
+  { raw: "Jam ingredients (fruit + sugar)", produces: "Jam", time: 20 }
+];
+const Brewer = [
+  { raw: "Coffee beans", produces: "Brewed coffee", time: 12 },
+  { raw: "Tea leaves", produces: "Brewed tea", time: 10 }
+];
+const Assembler = [
+  { raw: "Avocado", produces: "Mashed avocado", time: 5 },
+  { raw: "Strawberries", produces: "Strawberries", time: 2 },
+  { raw: "Sugar", produces: "Frosting base", time: 10 }
+];
+const preparationStations = {
+  Toaster,
+  StovePan,
+  OvenBakery,
+  BoilerPot,
+  GrinderMixer,
+  Brewer,
+  Assembler
+};
+export { ImageLut, preparationStations, dishToPrepared };

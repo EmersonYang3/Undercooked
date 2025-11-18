@@ -1,24 +1,42 @@
 <template>
-  <div class="flex flex-col w-screen h-screen bg-black text-white">
-    <h1 class="text-5xl md:text-7xl lg:text-9xl font-bold bg-red-600 text-center py-6 mb-6 rounded-4xl">
-      Recipe Browser
-    </h1>
-    <div class="flex flex-wrap justify-center gap-4 px-4 overflow-auto">
+  <div class="w-full p-6">
+    <h2 class="text-3xl font-bold mb-4 text-center">Recipe Selector</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
       <div
-        v-for="(value, index) in recipe_lookup[test]"
-        :key="index"
-        class="relative flex flex-col items-center justify-center bg-gray-700 rounded-xl aspect-square w-64 sm:w-56 md:w-60 lg:w-72 p-2 hover:scale-105 transition-transform duration-200"
+        v-for="(ingredients, dishName) in dishToPrepared"
+        :key="dishName"
+        @click="selectDish(dishName)"
+        class="cursor-pointer rounded-lg border border-gray-300 bg-white hover:shadow-lg transition p-3 flex flex-col items-center"
+        :class="{ 'ring-4 ring-blue-400': selectedDish === dishName }"
       >
         <img
-          class="pixel-sprite rounded-lg bg-gray-300 w-full h-full object-contain"
-          :src="ImageLut['Avocado toast']"
-          alt="Recipe Image"
+          :src="ImageLut[dishName]"
+          :alt="dishName"
+          class="w-20 h-20 object-contain pixel-sprite"
         />
+        <p class="text-center mt-2 font-semibold text-sm">{{ dishName }}</p>
+      </div>
+    </div>
+    <div
+      v-if="selectedDish"
+      class="mt-8 p-6 bg-gray-100 border border-gray-300 rounded-xl shadow"
+    >
+      <h3 class="text-2xl font-bold mb-4 text-center">
+        {{ selectedDish }} Ingredients
+      </h3>
 
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
         <div
-          class="absolute bottom-0 w-full bg-gray-900/80 text-xs sm:text-sm rounded-b-xl py-1"
+          v-for="(ingredient, idx) in dishToPrepared[selectedDish]"
+          :key="idx"
+          class="flex flex-col items-center"
         >
-          Final Item: {{ value[1].final_item }}
+          <img
+            :src="ImageLut[ingredient] || '/fallback.png'"
+            :alt="ingredient"
+            class="w-16 h-16 object-contain pixel-sprite"
+          />
+          <p class="mt-2 font-medium text-sm text-center">{{ ingredient }}</p>
         </div>
       </div>
     </div>
@@ -26,20 +44,21 @@
 </template>
 
 <script setup lang="ts">
-import { recipe_lookup, ImageLut } from '@/utils/lut';
-let test = "deep_fryable";
-function show_recipe() {
+//this is for the actual preparation area
+import { ref } from 'vue';
+import { dishToPrepared } from '@/utils/lut';
+import { ImageLut } from '@/utils/lut';
 
+const selectedDish = ref<string | null>(null);
+
+function selectDish(dish: string) {
+  selectedDish.value = dish;
 }
 </script>
 
 <style scoped>
 .pixel-sprite {
-    width:100%;
-    height:100%;
-    image-rendering: pixelated;
-    image-rendering: -moz-crisp-edges; /* fallback for older Firefox */
-    image-rendering: crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
-
 </style>
