@@ -29,6 +29,11 @@
 <script setup>
 import { ref } from 'vue'
 
+//will change this to use the lut
+//seems good but the issue is lack of asset paths
+//also horrendous ui 
+//will fix later
+//lack of integration with the game aswell
 const Toaster = [
   { raw: "Bread slice", produces: "Toast", time: 10 }
 ]

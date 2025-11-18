@@ -82,10 +82,12 @@ function rejectMessage(id:number) {
 function acceptMessage(id:number) {
     removeMessage(id)
 }
-
-
+//!!!
+//THIS EXISTS ONLY FOR TESTING PURPOSES
+//CHANGE TO USE BACKEND LISTENING VIA SOCKET LATER
 document.addEventListener('keydown', (event) => {
     if (event.key !== '~') return
+
     createMessage({
         client_name: 'a',
         message: "Accept New Player?",

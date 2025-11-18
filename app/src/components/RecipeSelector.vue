@@ -1,6 +1,6 @@
 <template>
   <div class="w-full p-6">
-    <h2 class="text-3xl font-bold mb-4 text-center">Recipe Selector</h2>
+    <h2 class="text-6xl font-bold mb-4 text-center">Recipe Selector</h2>
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
       <div
         v-for="(ingredients, dishName) in dishToPrepared"
