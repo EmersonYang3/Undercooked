@@ -1,15 +1,27 @@
 enum hostToServerRemotes {
     startLobby = "startLobby",
-    acceptClientJoin = "acceptClientJoin"
+    acceptClientJoin = "acceptClientJoin",
+    acceptStationJoin = "acceptStationJoin"
 }
 
 enum serverToHostRemotes {
     lobbyStarted = "lobbyStarted",
-    clientPendingJoin = "clientPendingJoin"
+    clientPendingJoin = "clientPendingJoin",
+    stationPendingJoin = "stationPendingJoin",
+    newClientJoined = "newClientJoined",
+    newStationJoined = "newStationJoined"
 }
 
 enum serverToClientRemotes {
-    pendingJoin = "pendingJoin"
+    pendingJoin = "pendingJoin",
+    clientAccepted = "clientAccepted",
+    changeCurrentlyHeldItem = "changeCurrentlyHeldItem"
+}
+
+enum serverToStationRemotes {
+    pendingJoin = "pendingJoin",
+    stationAssigned = "stationAssigned",
+    gameStarted = "gameStarted"
 }
 
 enum portServer {
@@ -33,6 +45,7 @@ export default {
     hostToServerRemotes,
     serverToHostRemotes, 
     serverToClientRemotes,
+    serverToStationRemotes,
     portServer, 
     connValidatorErrors, 
     gameRoles
