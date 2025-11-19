@@ -1,13 +1,12 @@
 <template>
-  <router-view />
+    <div>
+
+    </div>
 </template>
 
 <script setup lang="ts">
-import { io } from 'socket.io-client';
 
 </script>
-
-
 
 <style scoped>
 

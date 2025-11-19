@@ -1,6 +1,6 @@
 <template>
     <div>
-
+        
     </div>
 </template>
 
@@ -22,12 +22,14 @@ function select_terminal_type() {
     //get the terminal type
     let test:TerminalType = {
         terminal_name:"slice",
-        terminal_path:"/terminal/fry"
+        terminal_path:"/terminal/keymash"
     }
     router.push(test.terminal_path);
     //load the component at that path
     //
 }
+
+
 onMounted(()=> {
     select_terminal_type();
     //loads everything from here 

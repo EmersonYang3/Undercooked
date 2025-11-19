@@ -1,4 +1,12 @@
 {
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "shared/*": [
+        "../shared/src/*"
+      ],
+    }
+  },
   "files": [],
   "references": [
     {

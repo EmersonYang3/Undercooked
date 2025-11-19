@@ -1,6 +1,6 @@
 <template>
     <!-- start screen where the player clicsk to start the game -->
-    <div v-show="showStart" class="bg-black h-screen w-screen flex justify-center flex-column items-center absolute z-10">
+    <div v-show="showStart" class="bg-black h-screen w-screen flex justify-center flex-column items-center absolute z-1">
         <div @click="quickset" class="rounded-full bg-yellow-500 w-64 h-64 flex items-center justify-center text-center">
             <div class="text-red-500 text-4xl">Start!!</div>
         </div>
@@ -10,17 +10,20 @@
 
 
     <!-- actual gameplay area make it so until the player actually clicks start does it start -->
-    <div v-show="timer" class="w-screen h-screen bg-black text-white text-center items-center flex justify-center text-9xl">
-        {{ time }}
+    <div v-show="timer" class="absolute z-1 w-screen h-screen bg-black text-white text-center items-center flex justify-center text-9xl">
+        {{ time }} 
     </div>
-    <div class="relative w-screen h-screen text-center overflow-hidden" 
-    :style="{ cursor: `url(${knife}) 16 16, auto`}"
-    >
-    <div class="absolute w-screen h-12 z-1 bg-green-400 rounded-lg=full"> Score: {{ score }}</div>
+    <div class="relative w-screen h-screen text-center overflow-hidden" >
+    <div class="absolute w-screen h-12 z-1 bg-green-400 rounded-lg=full"> 
+        Timer: {{ Math.round(Math.round(game_timer)/1000) }}
+        Score: {{ score }}</div>
         <div
             class="w-screen h-screen bg-center bg-cover absolute"
             :style="{ backgroundImage: `url(${'placeholder'})` }"
-        ></div>
+        >
+        
+    </div>
+            <img :src="ImageLut['chop_board']" class="w-full h-full absolute z-0">
             <div
                 v-for="fruit in fruits"
                 :key="fruit.id"
@@ -34,9 +37,6 @@
             
             </div>
     </div>
-    <div :style="{ cursor: `url(${knife})`}"></div>
-    <div></div>
-
 
 </template>
 
@@ -54,6 +54,7 @@ import { onUnmounted, reactive, ref } from 'vue'
 //really minor tho considering it barely takes up any space
 const time = ref(3);
 const timer = ref(false);
+const game_timer = ref(10000);
 async function quickset() { 
     showStart.value = false;
     timer.value = true;
@@ -76,6 +77,10 @@ let start_time = 0;
 
 //add an asset field later on for assets for specific fruits
 //use a look up table or smth for file paths to fruit
+
+//have a finishing screen where the user can be shown the results of the game
+//
+
 
 interface Fruit {
     id: number, 
@@ -130,8 +135,16 @@ function makeFruit(id:number): Fruit {
 const fruits = reactive(Array.from({length: 6}, (_, i)=> makeFruit(i)));
 const gravity = 0.22;
 let animationFrame:number;
-function update() {
-    
+//convert to 0.1 seconds
+let currentTime = performance.now();
+function update() { 
+    const elapsed_time = performance.now() - currentTime;
+    currentTime = performance.now();
+    game_timer.value -= elapsed_time;
+    if (game_timer.value <= 0) {
+        //end the game here
+        return;
+    }
     fruits.forEach(fruit=> {
         if(!fruit.active) return
         fruit.x += fruit.vx;
@@ -146,20 +159,20 @@ function update() {
             resetFruit(fruit);
         }
     })
-    if((performance.now() - start_time) >= 10*1000) {
-        console.log("game finished")
-        //handle the exit logic here
-        const score_number = calculate_reward();
-        const test:ingredient_info = {
-            ingredientName:"fruits",
-            methods:[""],
-            quality:score_number
-        }
-        //do some item logic here 
-        return test; 
-        //use an emit or call the backend and tell it that the player has gained an item in their inventory
+    // if((performance.now() - start_time) >= 10*1000) {
+    //     console.log("game finished")
+    //     //handle the exit logic here
+    //     const score_number = calculate_reward();
+    //     const test:ingredient_info = {
+    //         ingredientName:"fruits",
+    //         methods:[""],
+    //         quality:score_number
+    //     }
+    //     //do some item logic here 
+    //     return test; 
+    //     //use an emit or call the backend and tell it that the player has gained an item in their inventory
 
-    }
+    // }
     requestAnimationFrame(update)
 }
 
