@@ -8,9 +8,8 @@ import { Socket } from "socket.io-client";
 //allows easy reusuability of stores based off the type of store requested
 
 
-export const clientEventTable: Record<string, (...args: any[]) => void> = {
+export const playerEvents: Record<string, (...args: any[]) => void> = {
     "start": () => {
 
     },
-
 }

@@ -3,7 +3,7 @@ import { Socket } from "socket.io-client";
 
 //both clients and terminal will have the start event as they will both be in a a waiting area/room prior
 
-const terminalEventTable: Record<string, (...args: any[]) => void> = {
+export const stationEvents: Record<string, (...args: any[]) => void> = {
     "start": () => {
 
     },

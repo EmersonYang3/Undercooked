@@ -35,14 +35,14 @@ function formatHandshakeData(data: any): handshakeData {
 function validateHost(data: handshakeData, socket: Socket): boolean {
     let targetLobbyCode = ""
 
-    if (!data.lobbyCode) { 
-        targetLobbyCode = lobbyService.generateLobbyCode() 
+    if (!data.lobbyCode) {
+        targetLobbyCode = lobbyService.generateLobbyCode()
     } else {
         targetLobbyCode = data.lobbyCode.toUpperCase()
     }
 
     const isHostingAlready = lobbyService.lobbyExists(targetLobbyCode)
-    
+
     if (isHostingAlready) { return false }
 
     socket.data = { ...data, lobbyCode: targetLobbyCode }
@@ -62,7 +62,6 @@ function validateOthers(data: handshakeData, socket: Socket): boolean {
 function validateConnection(socket: Socket, next: (err?: ExtendedError) => void) {
     const handshakeAuthData = socket.handshake.auth
     if (!handshakeAuthData) { return next(throwError(connValidatorErr.noHandshakeData)) }
-
     const isHandshakeDataValid = ensureHandshakeData(handshakeAuthData)
     if (!isHandshakeDataValid) { return next(throwError(connValidatorErr.invalidHandshakeData)) }
 
