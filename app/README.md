@@ -20,6 +20,23 @@ See [Vite Configuration Reference](https://vite.dev/config/).
 npm install
 ```
 
+## Important folders
+
+| Path                   | Purpose                                                                      |
+| ---------------------- | ---------------------------------------------------------------------------- |
+| `app/src/main.ts`      | Bootstraps Vue, registers router/store, and mounts the root component.       |
+| `app/src/App.vue`      | The top-level layout component rendered by Vite.                             |
+| `app/src/components/`  | Reusable UI building blocks like terminals, timers, and selectors.           |
+| `app/src/views/`       | Route-level screens (client, host, splash, terminal) consumed by the router. |
+| `app/src/router/`      | Vue Router setup plus the route table for all major views.                   |
+| `app/src/stores/`      | Pinia stores such as `counter` and `sockets` that manage shared state.       |
+| `app/src/utils/`       | Utility helpers (`lut.ts`, general helpers) used across components.          |
+| `app/src/connections/` | Connection/client-handshake logic for host and player networking.            |
+| `app/src/services/`    | Service layer placeholder for API/SDK abstractions.                          |
+| `app/public/`          | Static assets served as-is (base styles, images, HTML shell).                |
+| `app/src/assets/`      | Bundled assets (e.g., `main.css`) imported into Vue components.              |
+| `shared/*`             | Alias to `../shared/src/*` for shared enums/types imported on the frontend.  |
+
 ### Compile and Hot-Reload for Development
 
 ```sh

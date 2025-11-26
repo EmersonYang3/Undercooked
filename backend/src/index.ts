@@ -6,7 +6,7 @@ import connectionRouter from "services/connRouter"
 import { createServer } from "http"
 import { Server } from "socket.io"
 
-import sharedEnums from "/enums"
+import sharedEnums from "shared/enums"
 
 const app = express()
 const httpServer = createServer(app)
