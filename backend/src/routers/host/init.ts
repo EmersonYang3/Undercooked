@@ -12,7 +12,7 @@ const serverToHostRemotes = sharedEnums.serverToHostRemotes
 function initHostSocket(socket: Socket) {
     const socketConnection = socketRegistry.registerSocketConnection(socket)
     const lobbyCode = lobbyService.createLobby(socketConnection)
-
+    console.log("lobby code recieved", lobbyCode);
     socket.emit(serverToHostRemotes.lobbyStarted, { lobbyCode })
     hookEvents(socket, events)
 }

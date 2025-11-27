@@ -36,7 +36,7 @@ function getKeyByConnection(socket: socketConnection): string | null {
             return key;
         }
     }
-    
+
     return null;
 }
 

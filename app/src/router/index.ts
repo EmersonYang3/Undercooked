@@ -4,13 +4,16 @@ import TerminalView from '@/views/TerminalView.vue'
 import TerminalDropdown from '@/components/TerminalDropdown.vue'
 import OvenTerminal from '@/components/OvenTerminal.vue'
 import PlayerView from '@/views/PlayerView.vue'
+import TestView from '@/views/TestView.vue'
+import HostView from '@/views/HostView.vue'
 const prefix = '/terminal'
 
 const routes = [
-  { path: '/', name: "Splash", component: SplashView },
-  { path: '/host', name: 'Host', component: TerminalDropdown },
+  { path: '/', name: "Main", component: TestView },
+  { path: '/join', name: "Join", component: SplashView },
+  { path: '/host', name: 'Host', component: HostView },
   { path: '/terminal', name: 'Terminal', component: TerminalView },
-  { path: '/client', name: 'Client', component: PlayerView },
+  { path: '/player', name: 'Client', component: PlayerView },
   { path: `${prefix}/slice`, name: 'Slice Terminal', component: PlayerView },
   { path: `${prefix}/keymash`, name: 'Mash Key', component: OvenTerminal },
 ]

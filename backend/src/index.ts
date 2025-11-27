@@ -22,21 +22,21 @@ httpServer.listen(sharedEnums.portServer.port, () => {
 })
 
 // For testing purposes only
-import { io } from "socket.io-client"
+// import { io } from "socket.io-client"
 
-const authData = { auth: { intendedRole: 'host', lobbyCode: "ABCDEF" } }
-const clientSocketHost = io(`http://localhost:${sharedEnums.portServer.port}`, authData)
+// const authData = { auth: { intendedRole: 'host', lobbyCode: "ABCDEF" } }
+// const clientSocketHost = io(`http://localhost:${sharedEnums.portServer.port}`, authData)
 
-clientSocketHost.on("connect_error", (err) => {
-    console.log(`Connection error: ${err.message}`)
-})
+// clientSocketHost.on("connect_error", (err) => {
+//     console.log(`Connection error: ${err.message}`)
+// })
 
-const clientSocketClient = io(`http://localhost:${sharedEnums.portServer.port}`, { auth: { intendedRole: 'client', lobbyCode: "ABCDEF" } })
+// const clientSocketClient = io(`http://localhost:${sharedEnums.portServer.port}`, { auth: { intendedRole: 'client', lobbyCode: "ABCDEF" } })
 
-clientSocketHost.on(sharedEnums.serverToHostRemotes.clientPendingJoin, (data: any) => {
-    clientSocketHost.emit(sharedEnums.hostToServerRemotes.acceptClientJoin, data.identifier)
-})
+// clientSocketHost.on(sharedEnums.serverToHostRemotes.clientPendingJoin, (data: any) => {
+//     clientSocketHost.emit(sharedEnums.hostToServerRemotes.acceptClientJoin, data.identifier)
+// })
 
-clientSocketClient.on(sharedEnums.serverToClientRemotes.clientAccepted, (specialKey: string) => {
-    console.log(`Client accepted with special key: ${specialKey}`)
-})  
+// clientSocketClient.on(sharedEnums.serverToClientRemotes.clientAccepted, (specialKey: string) => {
+//     console.log(`Client accepted with special key: ${specialKey}`)
+// })  
