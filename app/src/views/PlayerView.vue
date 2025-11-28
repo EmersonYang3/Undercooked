@@ -41,61 +41,37 @@
 </template>
 
 <script setup lang="ts">
-import { PlayerStore, usePlayerStore } from '@/stores/sockets';
-import { io, Socket } from 'socket.io-client';
+import { PlayerStore, usePlayerStore } from '@/stores/roleStores';
+import { Socket } from 'socket.io-client';
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
-import { onEvents } from '@/utils/utils';
-import { playerEventFactory } from '@/connections/player/playerEvents';
-let player:null | PlayerStore = usePlayerStore();
-let socket: Socket | null = null;
-
+import { AuthData, useSocketStore } from '@/stores/sockets';
+let playerStore = usePlayerStore();
+let socketStore = useSocketStore();
+let socket: null | Socket = null;
 const code = ref("");
 const isJoining = ref(false);
 function handleJoin() {
     if (!code.value.trim()) return;
-    joinLobby(code.value);
-
-
-    isJoining.value = true;
-}
-function joinLobby(code: string) {
-    
-    console.log("Joining lobby:", code);
-}
-
-//put the waiting screen
-function startGame() {
-    if (socket) {
-        socket.disconnect();
-        socket.removeAllListeners();
+    let success = joinLobby(code.value);
+    if(success) {
+      isJoining.value = success;
+    } else {
+      failedToJoin();
     }
-
-    const authData = { auth: { intendedRole: 'host', lobbyCode: "ABCDEF" } }
-    socket = io(`http://localhost:3000`, {
-        ...authData,
-        autoConnect: false,
-    });
-
-    const playerEvents = playerEventFactory(player);
-    onEvents(socket, playerEvents);
-    socket.connect();
 }
-onMounted(() => {
-    startGame();
-})
-function endGame() {
-    player = usePlayerStore();
-    //unsure if i should reset the store entirely or keep reusing it
-
-    //reset the player store state here
+function failedToJoin() {
+  console.log("failed to join?")
+  //modifies the v-if div portion to show a failure message or smth
 }
-watch(() => player.isPlaying, (playing) => {
-    if (playing) startGame();
-    else endGame();
-});
-onBeforeUnmount(() => {
-    socket?.disconnect();
-})
+function joinLobby(code: string):boolean {
+    console.log(code);
+    let auth:AuthData = {
+      intendedRole: "client",
+      lobbyCode: code,
+    }
+    socket = socketStore.createSocket(auth, playerStore);
+    return playerStore.isReady;
+}
 </script>
 
 <style scoped>

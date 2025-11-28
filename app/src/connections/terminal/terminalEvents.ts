@@ -1,18 +1,16 @@
-import { TerminalStore } from "@/stores/sockets";
+import { TerminalStore } from "@/stores/roleStores";
 
-export function stationEventFactory(store: TerminalStore): Record<string, (...args: any[]) => void> {
+export function terminalEvents(store: TerminalStore): Record<string, (...args: any[]) => void> {
     return {
-        "reject": () => {
 
-        },
-        "connect": () => {
-            store.startGame();
-        },
-        "": () => {
-            store
-        },
-        "disconnect": () => {
-            store.endGame();
-        }
     }
 }
+export const initialTerminalEvents = (store: TerminalStore): Record<string, (...args: any[]) => void> => ({
+    "pendingJoin": (identifierObj: { identifier: number }) => {
+        console.log("Identifier set in store:", identifierObj.identifier);
+    },
+    "stationAssigned": (stationName: string) => {
+        store.setStationType(1, stationName as any); // example usage
+        console.log("Station assigned in store:", stationName);
+    },
+});

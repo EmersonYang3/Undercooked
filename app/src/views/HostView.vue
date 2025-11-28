@@ -40,7 +40,7 @@
       <p class="text-gray-600">Share this code with players to join.</p>
 
       <div>
-        <h3 class="text-lg font-semibold text-gray-700">Players Joined: {{ players.length }}</h3>
+        <h3 class="text-lg font-semibold text-gray-700">Players Joined: {{ hostStore.players.length + hostStore.stations.length }}</h3>
         <ul class="mt-2 space-y-1">
           <li
             v-for="player in players"
@@ -60,57 +60,48 @@
         Start Game
       </button>
     </div>
-
+    <RequestNotif></RequestNotif>
   </div>
 </template>
 
 <script setup lang="ts">
-import { AuthData, socketStore } from "@/stores/sockets";
+import { AuthData, useSocketStore } from "@/stores/sockets";
+import { useHostStore } from "@/stores/roleStores";
 import { ref } from "vue";
-
-// Reactive State
+import RequestNotif from "@/components/RequestNotif.vue";
 const customCode = ref("");
 const roomCode = ref("");
 const isHosting = ref(false);
 
-// Fake player list (replace with your real data source)
 const players = ref([]);
-let hostSocket = socketStore();
-// Generate a random 5-letter code
+let socketStore = useSocketStore();
+let hostStore = useHostStore();
+
 function generateRandomCode(): string {
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   let code = "";
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 6; i++) {
     code += letters[Math.floor(Math.random() * letters.length)];
   }
   return code;
 }
-
-// Placeholder navigation for waiting room
 function goToWaitingRoom(room: string) {
   console.log("Navigating to waiting room:", room);
-  // Replace with:
-  // router.push(`/lobby/${room}`);
 }
-function connect() {
-  
+enum gameRoles {
+    host = 'host',
+    client = 'client',
+    station = 'station'
 }
-
-// Host game and enter waiting room
 function startHosting() {
   roomCode.value = customCode.value.trim() || roomCode.value || generateRandomCode();
   let auth:AuthData = {
-    intendedRole: "host",
+    intendedRole: gameRoles.host,
     lobbyCode: roomCode.value,
   }
-  hostSocket.createSocket(auth);
-  
+  socketStore.createSocket(auth, hostStore);
   isHosting.value = true;
-
-  // Placeholder navigation
   goToWaitingRoom(roomCode.value);
-  // In a real implementation:
-  // createRoom(roomCode.value);
 }
 
 // When host starts the game

@@ -1,21 +1,20 @@
-import { Socket } from "socket.io-client";
-import type { PlayerStore } from "@/stores/sockets";
-
-export function playerEventFactory(store: PlayerStore): Record<string, (...args: any[]) => void> {
+import enums from "@/enums";
+import type { PlayerStore } from "@/stores/roleStores";
+export function playerEvents(store: PlayerStore): Record<string, (...args: any[]) => void> {
     return {
-        "reject": () => {
 
-        },
-        "update": (item: string | null) => {
-            if (item) {
-                store.updateInventory(item)
-            }
-            else {
-                store.clearInventory();
-            }
-        },
-        "disconnect": () => {
-            store.endGame();
-        }
     }
 }
+//these are always bound to the socket as it allows for picking up of the inital events 
+
+
+export const initialPlayerEvents = (store: PlayerStore): Record<string, (...args: any[]) => void> => ({
+    [enums.serverToClientRemotes.pendingJoin]: (identifier: { identifier: number }) => {
+        console.log("Identifier for Client : ", identifier.identifier);
+    },
+    [enums.serverToClientRemotes.clientAccepted]: (clientSpecialKey: string) => {
+        console.log("Successfully joined the server");
+        console.log("Client Special Key : ", clientSpecialKey);
+        store.setId(clientSpecialKey);
+    },
+});
