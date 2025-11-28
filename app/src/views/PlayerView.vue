@@ -44,7 +44,8 @@
 import { PlayerStore, usePlayerStore } from '@/stores/roleStores';
 import { Socket } from 'socket.io-client';
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
-import { AuthData, useSocketStore } from '@/stores/sockets';
+import { useSocketStore } from '@/stores/sockets';
+import { handshakeData } from '@shared/types';
 let playerStore = usePlayerStore();
 let socketStore = useSocketStore();
 let socket: null | Socket = null;
@@ -65,7 +66,7 @@ function failedToJoin() {
 }
 function joinLobby(code: string):boolean {
     console.log(code);
-    let auth:AuthData = {
+    let auth:handshakeData = {
       intendedRole: "client",
       lobbyCode: code,
     }

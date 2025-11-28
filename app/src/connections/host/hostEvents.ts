@@ -1,4 +1,4 @@
-import enums from "@/enums"
+import enums from "@shared/enums"
 import { useRequestNotifStore } from "@/stores/messageStore";
 import { HostStore } from "@/stores/roleStores";
 //operates on the assumption that the notifStore instace has been constructed or smth

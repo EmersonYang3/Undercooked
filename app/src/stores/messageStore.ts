@@ -54,12 +54,10 @@ export const useRequestNotifStore = defineStore("requestNotif", () => {
     }
 
     function accept(id: number) {
-        // send accept to backend later
         removeRequest(id);
     }
 
     function reject(id: number) {
-        // send reject to backend later
         removeRequest(id);
     }
 

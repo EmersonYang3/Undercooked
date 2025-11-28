@@ -1,4 +1,4 @@
-import enums from "@/enums"
+import enums from "@shared/enums"
 import { initialPlayerEvents, playerEvents } from "./player/playerEvents"
 import { initialTerminalEvents, terminalEvents } from "./terminal/terminalEvents"
 import { initialHostEvents, hostEvents } from "./host/hostEvents"

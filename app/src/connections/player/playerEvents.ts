@@ -1,4 +1,4 @@
-import enums from "@/enums";
+import enums from "@shared/enums";
 import type { PlayerStore } from "@/stores/roleStores";
 export function playerEvents(store: PlayerStore): Record<string, (...args: any[]) => void> {
     return {

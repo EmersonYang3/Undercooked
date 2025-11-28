@@ -1,8 +1,9 @@
 import { defineStore } from "pinia";
 import { ref, Ref } from "vue";
+import enums from "@shared/enums";
 type Item = string;
 type StationType = "stove" | "oven" | "placeholder";
-export const useHostStore = defineStore("host", () => {
+export const useHostStore = defineStore(enums.gameRoles.host, () => {
     const id: Ref<null | string> = ref(null);
     let isReady: boolean = false;
     const players: Ref<Array<number>> = ref([]);
@@ -11,7 +12,7 @@ export const useHostStore = defineStore("host", () => {
         id, isReady, players, stations
     }
 })
-export const useTerminalStore = defineStore('terminal', () => {
+export const useTerminalStore = defineStore(enums.gameRoles.station, () => {
     const heldItems: Ref<Array<Item | null>> = ref([null]);
     const id: Ref<null | string> = ref(null);
     const isPlaying: Ref<boolean> = ref(false);
@@ -82,7 +83,7 @@ export const useTerminalStore = defineStore('terminal', () => {
         isReady
     }
 })
-export const usePlayerStore = defineStore('player', () => {
+export const usePlayerStore = defineStore(enums.gameRoles.client, () => {
     const inventory: Ref<null | string> = ref(null);
     const id: Ref<null | string> = ref(null);
     const isPlaying: Ref<boolean> = ref(false);

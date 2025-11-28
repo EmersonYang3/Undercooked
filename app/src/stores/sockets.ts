@@ -6,29 +6,24 @@ import { io } from "socket.io-client";
 import { initialRoleEvents, RoleEvents } from "@/connections/table";
 import { RoleStore } from "./roleStores";
 import { onEvents } from "@/utils/utils";
-//these must come from the shared folder
-export type uniqueIdentifier = number
+import type { uniqueIdentifier, handshakeData } from '@shared/types';
 export type socketConnection = {
     socket: Socket,
     identifier: uniqueIdentifier
-}
-export type AuthData = {
-    intendedRole: string,
-    lobbyCode: string,
 }
 
 export const useSocketStore = defineStore("socket", () => {
     let socket: Socket | null = null;
     //if u ever need reactive state for the socket for whatever reason use identifier for
     let identifier: Ref<string | null> = ref(null);
-    function createSocket(authData: AuthData, store: RoleStore): Socket {
+    function createSocket(handshakeData: handshakeData, store: RoleStore): Socket {
         console.log("attempting to create socket")
         if (socket) return socket;
         socket = io("http://localhost:3000", {
             autoConnect: false,
-            auth: authData,
+            auth: handshakeData,
         }) as Socket;
-        const initialEventBinder = initialRoleEvents[authData.intendedRole];
+        const initialEventBinder = initialRoleEvents[handshakeData.intendedRole];
         const initialEvents = initialEventBinder(store);
         onEvents(socket, initialEvents);
         socket.connect();
@@ -36,7 +31,7 @@ export const useSocketStore = defineStore("socket", () => {
         //if wanna seperate the gameEvents from the initiationEvents
         //write some external logic for that
         //too lazy to do it rn and it does seem to run so
-        const eventBinder = RoleEvents[authData.intendedRole];
+        const eventBinder = RoleEvents[handshakeData.intendedRole];
         const eventMap = eventBinder(store);
         onEvents(socket, eventMap);
         return socket;

@@ -65,10 +65,11 @@
 </template>
 
 <script setup lang="ts">
-import { AuthData, useSocketStore } from "@/stores/sockets";
+import { useSocketStore } from "@/stores/sockets";
 import { useHostStore } from "@/stores/roleStores";
 import { ref } from "vue";
 import RequestNotif from "@/components/RequestNotif.vue";
+import type { handshakeData } from "@shared/types";
 const customCode = ref("");
 const roomCode = ref("");
 const isHosting = ref(false);
@@ -95,7 +96,7 @@ enum gameRoles {
 }
 function startHosting() {
   roomCode.value = customCode.value.trim() || roomCode.value || generateRandomCode();
-  let auth:AuthData = {
+  let auth:handshakeData = {
     intendedRole: gameRoles.host,
     lobbyCode: roomCode.value,
   }
