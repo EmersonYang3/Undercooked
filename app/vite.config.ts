@@ -1,6 +1,11 @@
 import { fileURLToPath, URL } from 'node:url'
+<<<<<<< Updated upstream
 
 import { defineConfig, searchForWorkspaceRoot } from 'vite';
+=======
+import path from 'path'
+import { defineConfig } from 'vite';
+>>>>>>> Stashed changes
 import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
 
@@ -17,6 +22,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
+<<<<<<< Updated upstream
       '@': resolveSrc(),
       'shared': sharedDir,
       'assets': resolveSrc('assets'),
@@ -35,6 +41,11 @@ export default defineConfig({
         searchForWorkspaceRoot(fileURLToPath(new URL('.', import.meta.url))),
         sharedDir,
       ],
+=======
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      '@shared': path.resolve(__dirname, '../shared/src'),
+
+>>>>>>> Stashed changes
     },
   },
 })
