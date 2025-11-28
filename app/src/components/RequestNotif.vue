@@ -37,6 +37,7 @@
 
 <script setup lang="ts">
 import { useRequestNotifStore } from '@/stores/messageStore';
+import { useHostStore } from '@/stores/roleStores';
 import { useSocketStore } from '@/stores/sockets';
 
 //make sure to change this to account for both station and player joins
@@ -47,7 +48,6 @@ const notifStore = useRequestNotifStore();
 const socketStore = useSocketStore();
 const socket = socketStore.getSocket();
 function acceptMessage(id: number) {
-
   socket.emit("acceptClientJoin", id);
   notifStore.accept(id);
 }
