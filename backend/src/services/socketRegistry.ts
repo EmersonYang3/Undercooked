@@ -17,4 +17,12 @@ function getSocketConnectionById(identifier: uniqueIdentifier): socketConnection
     return registry[identifier] || null
 }
 
-export default { registerSocketConnection, getSocketConnectionById }
+function doesSocketConnectionIdExist(identifier: uniqueIdentifier): boolean {
+    return Boolean(registry[identifier])
+}
+
+function removeSocketConnectionById(identifier: uniqueIdentifier): void {
+    delete registry[identifier]
+}
+
+export default { registerSocketConnection, getSocketConnectionById, removeSocketConnectionById, doesSocketConnectionIdExist }
