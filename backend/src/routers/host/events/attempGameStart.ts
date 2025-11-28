@@ -6,7 +6,8 @@ import specialKey from "services/specialKey";
 
 import sharedEnums from "shared/enums";
 
-const serverTSRemotes = sharedEnums.serverToStationRemotes;
+const serverTSRemotes = sharedEnums.serverToStationRemotes
+const serverTCRemotes = sharedEnums.serverToClientRemotes
 
 function getAllRegisteredKeys(lobbyData: lobbyData) {
     let allRegisteredKeys = [];
@@ -24,7 +25,7 @@ function alertAllStationsGameStarting(availableKeys: string[]) {
 }
 
 function alertAllClientGameStarting() {
-    // Currently no action needed for clients when game starts
+    lobbyService.emitToAllClients(serverTCRemotes.gameStarted)
 }
 
 function attemptGameStart(hostSocket: Socket) {
