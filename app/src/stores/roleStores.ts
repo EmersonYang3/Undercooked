@@ -1,8 +1,8 @@
 import { defineStore } from "pinia";
 import { ref, Ref } from "vue";
 import enums from "@shared/enums";
-type Item = string;
-type StationType = "stove" | "oven" | "placeholder";
+export type Item = string;
+export type StationType = "stove" | "oven" | "toaster" | "boiler" | "mixer" | "brewer" | "assembler" | "dispenser";
 export const useHostStore = defineStore(enums.gameRoles.host, () => {
     const id: Ref<null | string> = ref(null);
     let isReady: boolean = false;
@@ -12,13 +12,15 @@ export const useHostStore = defineStore(enums.gameRoles.host, () => {
         id, isReady, players, stations
     }
 })
+
 export const useTerminalStore = defineStore(enums.gameRoles.station, () => {
     const heldItems: Ref<Array<Item | null>> = ref([null]);
     const id: Ref<null | string> = ref(null);
     const isPlaying: Ref<boolean> = ref(false);
+    let clientsKeys: Array<string> = [];
     let isReady: boolean = false;
     let maxItems = 1;
-    let station = null;
+    let station: null | StationType = null;
     function startGame() {
         isPlaying.value = true;
     }
@@ -62,6 +64,8 @@ export const useTerminalStore = defineStore(enums.gameRoles.station, () => {
             console.log("terminal has no space");
             return;
         }
+        //add emits to this here
+        
         heldItems.value[emptyIndex] = item;
         player.clearInventory();
     }
@@ -71,6 +75,7 @@ export const useTerminalStore = defineStore(enums.gameRoles.station, () => {
         return true;
     }
     return {
+        clientsKeys,
         startGame,
         endGame,
         heldItems,
@@ -80,7 +85,8 @@ export const useTerminalStore = defineStore(enums.gameRoles.station, () => {
         setStationType,
         takeItem,
         placeItem,
-        isReady
+        isReady,
+        station
     }
 })
 export const usePlayerStore = defineStore(enums.gameRoles.client, () => {

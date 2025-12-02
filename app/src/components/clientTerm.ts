@@ -5,7 +5,6 @@ enum TerminalState {
     connected,
     running,
 }
-//should 100% use a set wtf 
 export function useClientConnection(clientKeys: Map<string, boolean>) {
     const keyClient = ref<string | null>(null);
     function listener(event: KeyboardEvent) {
@@ -27,5 +26,28 @@ export function useClientConnection(clientKeys: Map<string, boolean>) {
         keyClient,
         startListening,
         stopListening
+    };
+}
+export function pollForClient(clientKeys: Set<string>) {
+    const clientKey = ref<string | null>(null);
+    function listener(event: KeyboardEvent) {
+        const key = event.key.toLowerCase();
+        if (clientKeys.has(key)) {
+            clientKey.value = key;
+            document.removeEventListener("keydown", listener);
+        }
+    }
+    function startListening() {
+        document.addEventListener("keydown", listener);
+    }
+    function stopListening() {
+        document.removeEventListener("keydown", listener);
+    }
+    startListening();
+    onUnmounted(stopListening);
+    return {
+        clientKey,
+        startListening,
+        stopListening,
     };
 }
