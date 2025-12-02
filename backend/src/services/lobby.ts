@@ -4,7 +4,7 @@ let currentLobbyData: lobbyData = { host: { socket: null, identifier: 0 }, clien
 let currentLobbyCode = ''
 
 function generateLobbyCode(): string {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
     const charactersLength = characters.length;
 
     let result = '';

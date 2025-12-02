@@ -1,4 +1,4 @@
-import type { intendedRoles, uniqueIdentifier } from "shared/types"
+import type { intendedRoles, uniqueIdentifier, activeRecipe, playerData, stationData } from "shared/types"
 import type { Socket } from "socket.io"
 
 export type socketConnection = {
@@ -13,8 +13,13 @@ export type fixedSocketData = {
 
 export type lobbyData = {
     host: socketConnection,
+
     clients: socketConnection[],
-    stations: socketConnection[]
+    stations: socketConnection[],
+
+    recipesInProgress?: activeRecipe[],
+    playerData?: Record<uniqueIdentifier, playerData>,
+    stationData?: Record<uniqueIdentifier, stationData>
 }
 
 export type eventsRegistering = Record<string, (...args: any[]) => void>
