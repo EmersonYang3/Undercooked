@@ -1,5 +1,4 @@
 import type { Socket } from "socket.io";
-import type { lobbyData } from "utils/types";
 
 import lobbyService from "services/lobby";
 import specialKey from "services/specialKey";
@@ -9,31 +8,22 @@ import sharedEnums from "shared/enums";
 const serverTSRemotes = sharedEnums.serverToStationRemotes
 const serverTCRemotes = sharedEnums.serverToClientRemotes
 
-function getAllRegisteredKeys(lobbyData: lobbyData) {
+function alertAllGameStarting() {
     let allRegisteredKeys = [];
 
-    for (const client of lobbyData.clients) {
-        const clientKey = specialKey.getKeyByConnection(client);
+    lobbyService.loopThroughClients((client) => {
+        const clientKey = specialKey.getKeyByConnection(client)
+        if (!clientKey) return
+
+        client.socket.emit(serverTCRemotes.gameStarted, clientKey)
         allRegisteredKeys.push(clientKey);
-    }
+    })
 
-    return allRegisteredKeys;
-}
-
-function alertAllStationsGameStarting(availableKeys: string[]) {
-    lobbyService.emitToAllStations(serverTSRemotes.gameStarted, availableKeys)
-}
-
-function alertAllClientGameStarting() {
-    lobbyService.emitToAllClients(serverTCRemotes.gameStarted)
+    lobbyService.emitToAllStations(serverTSRemotes.gameStarted, allRegisteredKeys)
 }
 
 function attemptGameStart(hostSocket: Socket) {
-    const lobbyData = lobbyService.getLobbyData()
-    const registeredKeys = getAllRegisteredKeys(lobbyData)
-
-    alertAllStationsGameStarting(registeredKeys)
-    alertAllClientGameStarting()
+    alertAllGameStarting()
 }
 
 export default attemptGameStart
