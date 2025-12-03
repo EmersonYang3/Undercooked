@@ -49,7 +49,7 @@
 import { PlayerStore, usePlayerStore, useTerminalStore } from '@/stores/roleStores';
 import { Socket } from 'socket.io-client';
 import { ref } from 'vue';
-import { AuthData, useSocketStore } from '@/stores/sockets';
+import { useSocketStore } from '@/stores/sockets';
 
 const props = defineProps<{
   role: "client" | "station"

@@ -13,6 +13,11 @@ export const useHostStore = defineStore(enums.gameRoles.host, () => {
     }
 })
 
+
+
+
+
+
 export const useTerminalStore = defineStore(enums.gameRoles.station, () => {
     const heldItems: Ref<Array<Item | null>> = ref([null]);
     const id: Ref<null | string> = ref(null);
@@ -65,13 +70,14 @@ export const useTerminalStore = defineStore(enums.gameRoles.station, () => {
             return;
         }
         //add emits to this here
-        
+
         heldItems.value[emptyIndex] = item;
         player.clearInventory();
     }
     function checkValidity(item: string) {
-        //this section checks based off of some lut specified by station type
-        //placeholder for now
+        //import the sets and lookup the proper items;
+
+
         return true;
     }
     return {

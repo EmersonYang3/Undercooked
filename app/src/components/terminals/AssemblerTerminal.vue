@@ -10,7 +10,9 @@ import { onMounted, onUnmounted, ref, watch } from 'vue';
 import { pollForClient } from '../clientTerm';
 import { useSocketStore } from '@/stores/sockets';
 import { Socket } from 'socket.io-client';
+import { assemblerSet } from '@/utils/lut';
 
+//get the set based off of the socket store
 
 
 const socketStore = useSocketStore();
@@ -30,9 +32,16 @@ function initialize() {
     })
     //fetch the client keys from the    
 }
+function valid_item(item:string) {
+    //match the item
+    assemblerSet.has(item);
+}
+
+
 function start(key: string) {
     let info = socket.emit("requestPlayerInfo", key);
-    if(info == null) { 
+    //hook on the event
+    if(info) { 
         //return that the player doesnt have any items
         //rearm the listener 
         endGame();
@@ -58,6 +67,7 @@ function update() {
     if(endCondition()) {
         endGame();
     }
+    
 //calculate delta values here
 //use delta values for the game 
     rafhandle = requestAnimationFrame(update);

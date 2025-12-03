@@ -164,6 +164,9 @@ const Assembler = [
   { raw: "Strawberries", produces: "Strawberries", time: 2 },
   { raw: "Sugar", produces: "Frosting base", time: 10 }
 ];
+export const assemblerSet = new Set(["Avocado", "Strawberries", "Sugar"]);
+
+
 const preparationStations = {
   Toaster,
   StovePan,
