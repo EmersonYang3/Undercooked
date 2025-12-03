@@ -18,3 +18,6 @@ function onAnyEvent(socket: Socket, eventMap: Record<string, (event, ...args: an
         });
     })
 }
+function checkValidity(item: string) {
+    
+}

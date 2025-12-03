@@ -14,8 +14,6 @@
 <script setup lang="ts">
 import { reactive, ref, computed } from 'vue';
 import { getRandomFloat } from '@/utils/utils';
-import StartScreen from './StartScreen.vue';
-import SuccessScreen from './SuccessScreen.vue';
 const start_screen = ref(true);
 const start_screen_key = ref(0);
 const success = ref(false);

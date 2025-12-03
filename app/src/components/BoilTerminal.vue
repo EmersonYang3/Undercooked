@@ -7,7 +7,6 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import SuccessScreen from './SuccessScreen.vue';
 const emits = defineEmits(['items', 'quality']);
 
 //determine the best radial circle for tracing

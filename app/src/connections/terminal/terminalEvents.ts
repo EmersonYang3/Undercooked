@@ -1,8 +1,14 @@
 import { TerminalStore } from "@/stores/roleStores";
+//new event -  Clientkey send
+//this sets the terminalstores clientKey variable to an array containing the clientKeys.
+
 
 export function terminalEvents(store: TerminalStore): Record<string, (...args: any[]) => void> {
     return {
-
+        "clientKeys": (clientKeys: Array<string>) => {
+            store.clientsKeys = clientKeys;
+            //temporary
+        }
     }
 }
 export const initialTerminalEvents = (store: TerminalStore): Record<string, (...args: any[]) => void> => ({
