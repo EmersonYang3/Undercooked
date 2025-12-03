@@ -46,13 +46,13 @@ enum connValidatorErrors {
     otherConnectionsFailed = "No lobby with provided code exists."
 }
 
-export default { 
+export default {
     hostToServerRemotes,
-    serverToHostRemotes, 
+    serverToHostRemotes,
     serverToClientRemotes,
     serverToStationRemotes,
     sharedRemotes,
-    portServer, 
-    connValidatorErrors, 
+    portServer,
+    connValidatorErrors,
     gameRoles
 }

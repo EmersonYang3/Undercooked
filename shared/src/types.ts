@@ -32,5 +32,5 @@ export type stationData = {
 
 export type playerData = {
     currentPoints: number,
-    currentlyHeldItem?: foodItem 
+    currentlyHeldItem?: foodItem
 }
