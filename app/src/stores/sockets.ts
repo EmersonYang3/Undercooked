@@ -55,4 +55,5 @@ export const useSocketStore = defineStore("socket", () => {
         disconnect,
     }
 })
+
 export type SocketStore = ReturnType<typeof useSocketStore>;

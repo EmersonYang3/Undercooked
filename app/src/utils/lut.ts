@@ -128,6 +128,7 @@ const rawIngredients = [
   "Jam ingredients (fruit + sugar)",
   "Pistachios"
 ];
+
 const Toaster = [
   { raw: "Bread slice", produces: "Toast", time: 10 }
 ];
@@ -164,9 +165,38 @@ const Assembler = [
   { raw: "Strawberries", produces: "Strawberries", time: 2 },
   { raw: "Sugar", produces: "Frosting base", time: 10 }
 ];
-export const assemblerSet = new Set(["Avocado", "Strawberries", "Sugar"]);
+const makeSet = (list: { raw: string }[]) =>
+  new Set(list.map(item => item.raw));
 
+// Generated sets
+const toasterSet = makeSet(Toaster);
+const stovePanSet = makeSet(StovePan);
+const ovenBakerySet = makeSet(OvenBakery);
+const boilerPotSet = makeSet(BoilerPot);
+const grinderMixerSet = makeSet(GrinderMixer);
+const brewerSet = makeSet(Brewer);
+const assemblerSet = makeSet(Assembler);
 
+// Example export
+export type StationType =
+  | "stove"
+  | "oven"
+  | "toaster"
+  | "boiler"
+  | "mixer"
+  | "brewer"
+  | "assembler"
+  | "dispenser";
+export const stationRawMap: Record<StationType, Set<string>> = {
+  stove: stovePanSet,
+  oven: ovenBakerySet,
+  toaster: toasterSet,
+  boiler: boilerPotSet,
+  mixer: grinderMixerSet,
+  brewer: brewerSet,
+  assembler: assemblerSet,
+  dispenser: new Set(), // no raw ingredients
+};
 const preparationStations = {
   Toaster,
   StovePan,
