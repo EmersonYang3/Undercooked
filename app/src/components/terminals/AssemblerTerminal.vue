@@ -1,6 +1,6 @@
 <template>
-    <div>
-
+    <div v-if="!startScreen">
+    
     </div>
 </template>
 
@@ -10,12 +10,12 @@ import { onMounted, onUnmounted, ref, watch } from 'vue';
 import { pollForClient } from '../clientTerm';
 import { useSocketStore } from '@/stores/sockets';
 import { Socket } from 'socket.io-client';
-import { assemblerSet } from '@/utils/lut';
 
 //get the set based off of the socket store
 
 
 const socketStore = useSocketStore();
+const startScreen= ref(false);
 let socket: null | Socket = null;
 let rafhandle: number | null = null;
 const terminalStore = useTerminalStore();
@@ -32,23 +32,26 @@ function initialize() {
     })
     //fetch the client keys from the    
 }
-function valid_item(item:string) {
-    //match the item
-    assemblerSet.has(item);
-}
-
 
 function start(key: string) {
-    let info = socket.emit("requestPlayerInfo", key);
-    //hook on the event
-    if(info) { 
-        //return that the player doesnt have any items
-        //rearm the listener 
-        endGame();
+    let priorSize = terminalStore.heldItems.length;
+    socket.emit("attemptPlace", key); 
+    if (priorSize != terminalStore.heldItems.length) {
+        console.log("item could not be placed here or empty inve")
     } else {
-        rafhandle = requestAnimationFrame(update);        
+        startGame();
     }
 }
+watch(terminalStore.heldItems, () => {    
+    requestAnimationFrame(update);
+    startGame(); 
+    //start the game as the heldItems have changed
+})
+function startGame() {
+    //add the game logic here
+    
+}
+
 
 function endGame() {
     //reset game state
@@ -63,7 +66,6 @@ function endCondition(): boolean {
 }
 
 function update() {
-
     if(endCondition()) {
         endGame();
     }

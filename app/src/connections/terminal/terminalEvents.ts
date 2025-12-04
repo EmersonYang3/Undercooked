@@ -8,6 +8,9 @@ export function terminalEvents(store: TerminalStore): Record<string, (...args: a
         "clientKeys": (clientKeys: Array<string>) => {
             store.clientsKeys = clientKeys;
             //temporary
+        },
+        "placedItem": (item: null | string) => {
+            store.placeItem(item);
         }
     }
 }

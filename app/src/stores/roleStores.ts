@@ -1,6 +1,8 @@
 import { defineStore } from "pinia";
 import { ref, Ref } from "vue";
 import enums from "@shared/enums";
+import { stationRawMap } from "@/utils/lut";
+import { Socket } from "socket.io-client";
 export type Item = string;
 export type StationType = "stove" | "oven" | "toaster" | "boiler" | "mixer" | "brewer" | "assembler" | "dispenser";
 export const useHostStore = defineStore(enums.gameRoles.host, () => {
@@ -12,11 +14,6 @@ export const useHostStore = defineStore(enums.gameRoles.host, () => {
         id, isReady, players, stations
     }
 })
-
-
-
-
-
 
 export const useTerminalStore = defineStore(enums.gameRoles.station, () => {
     const heldItems: Ref<Array<Item | null>> = ref([null]);
@@ -54,14 +51,9 @@ export const useTerminalStore = defineStore(enums.gameRoles.station, () => {
         player.inventory = item;
         heldItems.value[itemIndex] = null;
     }
-    function placeItem(player: PlayerStore) {
-        const item = player.inventory;
+    function placeItem(item: string,) {
         if (!item) {
             console.log("player has no item");
-            return;
-        }
-        if (!checkValidity(item)) {
-            console.log("item cannot be placed here");
             return;
         }
         const emptyIndex = heldItems.value.findIndex(i => i === null);
@@ -70,15 +62,19 @@ export const useTerminalStore = defineStore(enums.gameRoles.station, () => {
             return;
         }
         //add emits to this here
-
         heldItems.value[emptyIndex] = item;
-        player.clearInventory();
+        //backend removes the item from the player inventory if possible to be used
     }
     function checkValidity(item: string) {
         //import the sets and lookup the proper items;
-
-
-        return true;
+        if (!station) {
+            //throw an error/panic
+        }
+        if (stationRawMap[station].has(item)) {
+            return true;
+        }
+        //return an error otherwise
+        return false;
     }
     return {
         clientsKeys,
