@@ -30,7 +30,7 @@ const routes = [
   { path: '/', name: "Main", component: TestView },
   { path: '/join', name: "Join", component: SplashView },
   { path: '/host', name: 'Host', component: HostView },
-  { path: '/terminal', name: 'Terminal', component: TerminalView },
+  { path: '/terminal', name: 'Terminal', component: AssemblerTerminal },
   { path: '/player', name: 'Client', component: PlayerView },
 ]
 function capitalize(str: string) {

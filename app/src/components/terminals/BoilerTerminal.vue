@@ -1,6 +1,8 @@
 <template>
-    <div>
-        {{ Math.floor(timer / 1000) }} s
+    <div class="width-screen height-screen bg-black font-white">
+        <div>
+            {{ Math.floor(timer / 1000) }} s
+        </div>
     </div>
 </template>
 
@@ -14,7 +16,6 @@ let elapsedTime = 0;
 //the terminal store items field is only for referencing and looking up 
 //each terminal has to maintain their own unique item state due to how the terminals behave
 const acceleration =  9.81;
-
 function endGame() {
     cancelAnimationFrame(rafhandle);
 }
@@ -35,7 +36,6 @@ function update() {
     if (endCondition()) {
         endGame();
     }
-
     //trigger endGame here for 
     rafhandle = requestAnimationFrame(update);
 }

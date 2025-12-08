@@ -7,7 +7,7 @@ export type Item = string;
 export type StationType = "stove" | "oven" | "toaster" | "boiler" | "mixer" | "brewer" | "assembler" | "dispenser";
 export const useHostStore = defineStore(enums.gameRoles.host, () => {
     const id: Ref<null | string> = ref(null);
-    let isReady: boolean = false;
+    let isReady: Ref<boolean> = ref(false);
     const players: Ref<Array<number>> = ref([]);
     const stations: Ref<Array<number>> = ref([]);
     return {
@@ -20,7 +20,7 @@ export const useTerminalStore = defineStore(enums.gameRoles.station, () => {
     const id: Ref<null | string> = ref(null);
     const isPlaying: Ref<boolean> = ref(false);
     let clientsKeys: Array<string> = [];
-    let isReady: boolean = false;
+    let isReady: Ref<boolean> = ref(false);
     let maxItems = 1;
     let station: null | StationType = null;
     function startGame() {
@@ -95,7 +95,7 @@ export const usePlayerStore = defineStore(enums.gameRoles.client, () => {
     const inventory: Ref<null | string> = ref(null);
     const id: Ref<null | string> = ref(null);
     const isPlaying: Ref<boolean> = ref(false);
-    let isReady: boolean = false;
+    let isReady: Ref<boolean> = ref(false);
     function updateInventory(item: string) {
         inventory.value = item;
     }

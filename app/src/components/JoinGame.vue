@@ -48,8 +48,10 @@
 <script setup lang="ts">
 import { PlayerStore, usePlayerStore, useTerminalStore } from '@/stores/roleStores';
 import { Socket } from 'socket.io-client';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useSocketStore } from '@/stores/sockets';
+
+const emit = defineEmits(["start"]);
 
 const props = defineProps<{
   role: "client" | "station"
@@ -72,22 +74,22 @@ function formatCode() {
     .replace(/[^A-Z0-9]/g, "")
     .slice(0, 6);
 }
-
 function handleJoin() {
   if (code.value.length !== 6) return;
   isJoining.value = true;
   joinLobby(code.value);
 }
-
-function joinLobby(lobbyCode: string): boolean {
-  const auth: AuthData = {
+function joinLobby(lobbyCode: string) {
+  const auth = {
     intendedRole: props.role,
     lobbyCode,
   };
-
   socket = socketStore.createSocket(auth, store);
-  return store.isReady;
 }
+watch(() => store.isReady, (ready) => {
+  console.log("isReady changed:", ready)
+  emit("start");
+})
 </script>
 
 <style scoped></style>
