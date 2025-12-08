@@ -2,14 +2,7 @@ import { useTerminalStore } from "@/stores/roleStores";
 import { useSocketStore } from "@/stores/sockets";
 import { watch } from "vue";
 import { Socket } from "socket.io-client";
-import { CompletionTriggerKind } from "typescript";
-import { ref, onMounted, onUnmounted, Ref } from "vue";
-enum TerminalState {
-    idle,
-    waiting,
-    connected,
-    running,
-}
+import { ref, onMounted, onUnmounted } from "vue";
 export function useClientConnection(clientKeys: Map<string, boolean>) {
     const keyClient = ref<string | null>(null);
     function listener(event: KeyboardEvent) {
