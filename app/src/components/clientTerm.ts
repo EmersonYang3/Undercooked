@@ -57,12 +57,27 @@ export function createStationGame(
     endGame: () => void,
     startGame: () => void,
 
-): () => void {
+) {
     const socketStore = useSocketStore();
     const terminalStore = useTerminalStore();
     let clientKeys: null | Set<string> = null;
     let socket: Socket | null = null;
-    const { clientKey, startListening } = pollForClient(clientKeys);
+    const clientKey = ref<string | null>(null);
+    function listener(event: KeyboardEvent) {
+        const key = event.key.toLowerCase();
+        if (clientKeys.has(key)) {
+            clientKey.value = key;
+            stopListening();
+        }
+    }
+    function startListening() {
+        document.addEventListener("keydown", listener);
+    }
+    function stopListening() {
+        document.removeEventListener("keydown", listener);
+    }
+    startListening();
+    onUnmounted(stopListening);
     //this is the function that gets called first 
     function initialize() {
         if (terminalStore.clientsKeys == null || terminalStore.clientsKeys.length == 0) {
@@ -79,9 +94,12 @@ export function createStationGame(
         socket.emit("attemptPlace", key);
         if (priorSize != terminalStore.heldItems.length) {
             console.log("item couldnt be placed here or empty inventory")
+            startListening();
         } else {
             startGame();
         }
     }
-    return initialize;
+    return {
+        initialize, startListening, stopListening,
+    };
 }

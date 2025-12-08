@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import { useTerminalStore } from '@/stores/roleStores';
 import { onMounted, onUnmounted, ref, watch } from 'vue';
-import { pollForClient } from '../clientTerm';
+import { createStationGame, pollForClient } from '../clientTerm';
 import { useSocketStore } from '@/stores/sockets';
 import { Socket } from 'socket.io-client';
 
@@ -20,28 +20,8 @@ let socket: null | Socket = null;
 let rafhandle: number | null = null;
 const terminalStore = useTerminalStore();
 let clientKeys:null | Set<string> = null;
-const { clientKey , startListening } = pollForClient(clientKeys);
-function initialize() {
-    if (terminalStore.clientsKeys != null || terminalStore.clientsKeys.length == 0) {
-        console.log("could not find client keys or client keys length was 0")
-    }
-    clientKeys =  new Set(terminalStore.clientsKeys);
-    socket = socketStore.getSocket();
-    watch(clientKey, (key) => {
-        if (key) start(key);
-    })
-    //fetch the client keys from the    
-}
-
-function start(key: string) {
-    let priorSize = terminalStore.heldItems.length;
-    socket.emit("attemptPlace", key); 
-    if (priorSize != terminalStore.heldItems.length) {
-        console.log("item could not be placed here or empty inve")
-    } else {
-        startGame();
-    }
-}
+const { initialize, startListening, stopListening} = createStationGame(endGame, startGame);
+initialize();
 watch(terminalStore.heldItems, () => {    
     requestAnimationFrame(update);
     startGame(); 
