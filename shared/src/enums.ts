@@ -26,6 +26,8 @@ enum serverToStationRemotes {
 }
 
 enum sharedRemotes {
+    connect = "connect",
+    connectError = "connect_error",
     hostRejectedConnection = "hostRejectedConnection"
 }
 
@@ -46,13 +48,32 @@ enum connValidatorErrors {
     otherConnectionsFailed = "No lobby with provided code exists."
 }
 
+enum stationTypes {
+    empty = "empty",
+    boilingStation = "boilingStation"
+}
+
+enum foods {
+    uncookedEgg = "uncookedEgg",
+    boiledEgg = "boiledEgg"
+}
+
+enum methods {
+    boil = "boil"
+}
+
 export default {
     hostToServerRemotes,
     serverToHostRemotes,
     serverToClientRemotes,
     serverToStationRemotes,
+    connValidatorErrors,
+
     sharedRemotes,
     portServer,
-    connValidatorErrors,
-    gameRoles
+    gameRoles,
+
+    stationTypes,
+    methods,
+    foods
 }

@@ -1,23 +1,27 @@
 export type uniqueIdentifier = number
 
 export type intendedRoles = 'host' | 'client' | 'station'
-export type availableStations = 'empty'
 
 export type handshakeData = {
     intendedRole: intendedRoles,
     lobbyCode?: string
 }
 
-export type availableMethods = 'boil'
-
-export type foodItem = {
+export type internalFoodData = {
     name: string,
-    quality: number,
 
-    methods: Record<availableMethods, string>,
+    methods: Record<string, string>,
     combinations: Record<string, string>,
+    couldBeActiveRecipe: boolean,
+}
 
+export type foodItem = internalFoodData & {
+    quality: number,
     id: uniqueIdentifier,
+}
+
+export type internalStationData = {
+    method: string
 }
 
 export type activeRecipe = {
@@ -26,7 +30,7 @@ export type activeRecipe = {
 }
 
 export type stationData = {
-    stationType: availableStations,
+    stationType: string,
     currentFoodItem?: foodItem
 }
 
