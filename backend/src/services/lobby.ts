@@ -34,6 +34,10 @@ function getLobbyData(): lobbyData {
     return currentLobbyData
 }
 
+function transformLobbyData(callback: (data: lobbyData) => lobbyData) {
+    currentLobbyData = callback(currentLobbyData)
+}
+
 function getLobbyCode(): string {
     return currentLobbyCode
 }
@@ -58,14 +62,6 @@ function isConnectionRegistered(connection: socketConnection): boolean {
     return false
 }
 
-function connectClientToLobby(clientConnection: socketConnection): void {
-    currentLobbyData.clients.push(clientConnection)
-}
-
-function connectStationToLobby(stationConnection: socketConnection): void {
-    currentLobbyData.stations.push(stationConnection)
-}
-
 function loopThroughClients(callback: (client: socketConnection) => void) {
     for (const client of currentLobbyData.clients) {
         callback(client)
@@ -81,7 +77,7 @@ function emitToAllClients(eventName: string, ...args: any[]): void {
 function emitToAllStations(eventName: string, ...args: any[]): void {
     for (const station of currentLobbyData.stations) {
         station.socket.emit(eventName, ...args)
-    }  
+    }
 }
 
-export default { generateLobbyCode, lobbyExists, createLobby, getLobbyData, isConnectionRegistered, getLobbyCode, connectClientToLobby, connectStationToLobby, emitToAllClients, emitToAllStations, loopThroughClients }
+export default { generateLobbyCode, lobbyExists, createLobby, getLobbyData, transformLobbyData, isConnectionRegistered, getLobbyCode, emitToAllClients, emitToAllStations, loopThroughClients }

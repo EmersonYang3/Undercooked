@@ -1,14 +1,23 @@
-import type { uniqueIdentifier } from "shared/types"
+import type { uniqueIdentifier, stationData } from "shared/types"
+import type { lobbyData, socketConnection } from "utils/types"
 import type { Socket } from "socket.io"
 
 import socketRegistry from "services/socketRegistry"
 import lobbyService from "services/lobby"
 import sharedEnums from "shared/enums"
 
-import singletons from "utils/singletons"
-
 const serverToHostRemotes = sharedEnums.serverToHostRemotes
 const serverToStationRemotes = sharedEnums.serverToStationRemotes
+
+function pushStationToLobby(stationConnection: socketConnection, stationName: string, identifier: uniqueIdentifier) {
+    lobbyService.transformLobbyData((lobbyData: lobbyData) => {
+        const stationData: stationData = { stationType: stationName, isHoldingPlate: false, currentFoodItem: null }
+        lobbyData.stationData[identifier] = stationData
+        lobbyData.stations.push(stationConnection)
+
+        return lobbyData
+    })
+}
 
 function onAcceptStation(hostSocket: Socket, identifier: uniqueIdentifier, stationName: string) {
     const stationConnection = socketRegistry.getSocketConnectionById(identifier)
@@ -17,11 +26,10 @@ function onAcceptStation(hostSocket: Socket, identifier: uniqueIdentifier, stati
     const isStationInLobby = lobbyService.isConnectionRegistered(stationConnection)
     if (!isStationInLobby) { console.log("Station not in lobby"); return }
 
-    lobbyService.connectStationToLobby(stationConnection)
+    pushStationToLobby(stationConnection, stationName, identifier)
+
     hostSocket.emit(serverToHostRemotes.newStationJoined, identifier)
     stationConnection.socket.emit(serverToStationRemotes.stationAssigned, stationName)
-
-    singletons.recipeGenerator.RefreshMethods()
 }
 
 export default onAcceptStation
