@@ -60,10 +60,12 @@ function isConnectionRegistered(connection: socketConnection): boolean {
 
 function connectClientToLobby(clientConnection: socketConnection): void {
     currentLobbyData.clients.push(clientConnection)
+    console.log("player joined", currentLobbyData.clients.length);
 }
 
 function connectStationToLobby(stationConnection: socketConnection): void {
     currentLobbyData.stations.push(stationConnection)
+    console.log("station joined", currentLobbyData.stations.length);
 }
 
 function loopThroughClients(callback: (client: socketConnection) => void) {
@@ -81,7 +83,7 @@ function emitToAllClients(eventName: string, ...args: any[]): void {
 function emitToAllStations(eventName: string, ...args: any[]): void {
     for (const station of currentLobbyData.stations) {
         station.socket.emit(eventName, ...args)
-    }  
+    }
 }
 
 export default { generateLobbyCode, lobbyExists, createLobby, getLobbyData, isConnectionRegistered, getLobbyCode, connectClientToLobby, connectStationToLobby, emitToAllClients, emitToAllStations, loopThroughClients }

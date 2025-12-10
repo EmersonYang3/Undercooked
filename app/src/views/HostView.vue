@@ -91,8 +91,7 @@
           </button>
         </div>
       </div>
-
-      <RequestNotif />
+      <RequestNotif></RequestNotif>
     </div>
   </div>
 </template>

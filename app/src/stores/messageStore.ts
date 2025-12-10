@@ -68,3 +68,4 @@ export const useRequestNotifStore = defineStore("requestNotif", () => {
         reject,
     };
 });
+export type MessageStore = ReturnType<typeof useRequestNotifStore>; 
