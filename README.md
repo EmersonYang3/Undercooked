@@ -1,17 +1,7 @@
-# How to set up!
+Project Details:
 
-1. Run `npm install` on app, shared, and backend folders.
+Project Name: Undercooked
 
-# Front end
+Project Description (simplified): A website rendition of the popular game "Overcooked" but in real life.
 
-1. | Johnny Input |
-
-# Backend
-
-1. Run `npm run dev` in the backend folder to kick start the backend server.
-
-# Shared
-
-1. There is no need to run anything in the shared folder. It is just for shared types and enums.
-
-# Extra
+Project Description (detailed): The website rendition of the popular game "Overcooked" but in real life. The host can create a game room and players and stations can join the game. Players have to run around in real life to different computers to use the stations to prepare food. There are 3 types of connections: Host, Player/Client, and Station. Host hosts the game, decides who gets to join, and starts the game. Player/Client joins the game and interacts with the stations to prepare food. Station could be a dispenser and other.
