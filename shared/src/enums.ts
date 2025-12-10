@@ -19,6 +19,7 @@ enum serverToClientRemotes {
     gameStarted = "gameStarted"
 }
 
+
 enum serverToStationRemotes {
     pendingJoin = "pendingJoin",
     stationAssigned = "stationAssigned",

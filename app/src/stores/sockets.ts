@@ -27,10 +27,18 @@ export const useSocketStore = defineStore("socket", () => {
         const initialEvents = initialEventBinder(store);
         onEvents(socket, initialEvents);
         socket.connect();
+        console.log("attempting to connect")
+        socket.on("connect_error", () => {
+            console.log("failed to connect");
+            return
+        });
+        socket.on("connect", () => {
+            store.isReady = true;
+        })
         //just bind everything i think
         //if wanna seperate the gameEvents from the initiationEvents
-        //write some external logic for that
-        //too lazy to do it rn and it does seem to run so
+        // write some exterserverToClientRemotesunal logic for that
+        // too lazy to do it rn and it does seem to run so
         const eventBinder = RoleEvents[handshakeData.intendedRole];
         const eventMap = eventBinder(store);
         onEvents(socket, eventMap);
