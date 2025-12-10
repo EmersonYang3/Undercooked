@@ -1,20 +1,31 @@
 {
     "compilerOptions": {
         "baseUrl": ".",
-
         "paths": {
-            "shared/*": ["../shared/src/*"],
-            "services/*": ["./src/services/*"],
-            "routers/*": ["./src/routers/*"],
-            "utils/*": ["./src/utils/*"]
+            "shared/*": [
+                "../shared/src/*"
+            ],
+            "services/*": [
+                "./src/services/*"
+            ],
+            "routers/*": [
+                "./src/routers/*"
+            ],
+            "utils/*": [
+                "./src/utils/*"
+            ]
         },
-
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
-        "moduleResolution": "node"
+        "moduleResolution": "node",
+        "lib": [
+            "ES2017",
+            "DOM"
+        ]
     },
-
     "ts-node": {
-        "require": ["tsconfig-paths/register"]
+        "require": [
+            "tsconfig-paths/register"
+        ]
     },
 }
