@@ -2,7 +2,7 @@ import type { uniqueIdentifier } from "shared/types"
 import type { Socket } from "socket.io"
 
 import socketRegistry from "services/socketRegistry"
-import specialKey from "services/specialKey"    
+import specialKey from "services/specialKey"
 import sharedEnums from "shared/enums"
 import lobbyService from "services/lobby"
 
@@ -18,7 +18,7 @@ function onAcceptClient(hostSocket: Socket, identifier: uniqueIdentifier) {
 
     const clientSpecialKey = specialKey.generateSpecialKey()
     specialKey.registerSocketConnection(clientConnection, clientSpecialKey)
-    
+    console.log("Client connecting to lobby")
     lobbyService.connectClientToLobby(clientConnection)
     hostSocket.emit(serverToHostRemotes.newClientJoined, identifier)
     clientConnection.socket.emit(serverToClientRemotes.clientAccepted, clientSpecialKey)

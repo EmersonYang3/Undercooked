@@ -11,7 +11,7 @@
           >
             <div class="flex-1 pr-2">
               <div class="font-semibold text-sm text-gray-200">{{ message.client_name }}</div>
-              <div class="text-gray-300 text-xs mt-1 break-words">
+              <div class="text-gray-300 text-xs mt-1">
                 {{ message.message }}
               </div>
             </div>
@@ -46,15 +46,17 @@ import { useSocketStore } from '@/stores/sockets';
 //might try and refine this partt
 const notifStore = useRequestNotifStore();
 const socketStore = useSocketStore();
-const socket = socketStore.getSocket();
+import { computed } from "vue";
+
+const socket = computed(() => socketStore.socket);
 function acceptMessage(id: number) {
-  socket.emit("acceptClientJoin", id);
+  socket.value.emit("acceptClientJoin", id);
   notifStore.accept(id);
 }
 function rejectMessage(id: number) {
   //this hasnt been implemented on backend yet
   //!!!  
-  socket.emit("rejectClientJoin", id);
+  socket.value.emit("rejectClientJoin", id);
   notifStore.reject(id);
 }
 </script>

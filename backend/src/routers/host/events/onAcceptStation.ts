@@ -16,7 +16,7 @@ function onAcceptStation(hostSocket: Socket, identifier: uniqueIdentifier, stati
 
     const isStationInLobby = lobbyService.isConnectionRegistered(stationConnection)
     if (!isStationInLobby) { console.log("Station not in lobby"); return }
-
+    console.log("Connecting station to lobby")
     lobbyService.connectStationToLobby(stationConnection)
     hostSocket.emit(serverToHostRemotes.newStationJoined, identifier)
     stationConnection.socket.emit(serverToStationRemotes.stationAssigned, stationName)

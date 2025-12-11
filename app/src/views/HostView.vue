@@ -139,6 +139,8 @@ function startHosting() {
   };
 
   socketStore.createSocket(auth, hostStore);
+
+  console.log(socketStore.socket);
   isHosting.value = true;
   goToWaitingRoom(roomCode.value);
 }

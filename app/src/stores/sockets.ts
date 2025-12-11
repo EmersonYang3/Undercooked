@@ -1,67 +1,72 @@
 import { defineStore } from "pinia";
-import { Ref, ref } from "vue";
-
-import type { Socket } from "socket.io-client";
-import { io } from "socket.io-client";
+import { ref } from "vue";
+import { io, type Socket } from "socket.io-client";
 import { initialRoleEvents, RoleEvents } from "@/connections/table";
-import { RoleStore } from "./roleStores";
 import { onEvents } from "@/utils/utils";
-import type { uniqueIdentifier, handshakeData } from '@shared/types';
-export type socketConnection = {
-    socket: Socket,
-    identifier: uniqueIdentifier
-}
+import type { handshakeData } from "@shared/types";
 
 export const useSocketStore = defineStore("socket", () => {
-    let socket: Socket | null = null;
-    //if u ever need reactive state for the socket for whatever reason use identifier for
-    let identifier: Ref<string | null> = ref(null);
-    function createSocket(handshakeData: handshakeData, store: RoleStore): Socket {
-        console.log("attempting to create socket")
-        if (socket) return socket;
-        socket = io("http://localhost:3000", {
-            autoConnect: false,
-            auth: handshakeData,
-        }) as Socket;
-        const initialEventBinder = initialRoleEvents[handshakeData.intendedRole];
-        const initialEvents = initialEventBinder(store);
-        onEvents(socket, initialEvents);
-        socket.connect();
-        console.log("attempting to connect")
-        socket.on("connect_error", () => {
-            console.log("failed to connect");
-            return
-        });
-        socket.on("connect", () => {
-            store.isReady = true;
-        })
-        //just bind everything i think
-        //if wanna seperate the gameEvents from the initiationEvents
-        // write some exterserverToClientRemotesunal logic for that
-        // too lazy to do it rn and it does seem to run so
-        const eventBinder = RoleEvents[handshakeData.intendedRole];
-        const eventMap = eventBinder(store);
-        onEvents(socket, eventMap);
-        return socket;
-    }
-    function getSocket(): Socket | null {
-        return socket;
-    }
-    function disconnect() {
-        if (!socket) return;
+    const socket = ref<Socket | null>(null);    // kept in a ref so the store retains it
+    const identifier = ref<string | null>(null);
+    function createSocket(handshake: handshakeData, roleStore: any): Socket {
+        console.log("attempting to create socket");
 
-        socket.disconnect();
-        socket.removeAllListeners();
-        socket = null;
+        // Already created? Return the same one
+        if (socket.value) return socket.value;
+
+        // Create the socket
+        const s = io("http://localhost:3000", {
+            autoConnect: false,
+            auth: handshake,
+        }) as Socket;
+
+        socket.value = s;
+
+        // Bind initial role-specific events
+        const initBinder = initialRoleEvents[handshake.intendedRole];
+        const initEvents = initBinder(roleStore);
+        onEvents(s, initEvents);
+
+        // Connect
+        s.connect();
+        console.log("attempting to connect");
+
+        s.on("connect_error", () => {
+            console.log("failed to connect");
+        });
+
+        s.on("connect", () => {
+            roleStore.isReady = true;
+            console.log("connected");
+        });
+
+        // Bind all other role events
+        const binder = RoleEvents[handshake.intendedRole];
+        const events = binder(roleStore);
+        onEvents(s, events);
+
+        return s;
+    }
+
+    function getSocket(): Socket | null {
+        return socket.value;
+    }
+
+    function disconnect() {
+        if (!socket.value) return;
+
+        socket.value.disconnect();
+        socket.value.removeAllListeners();
+        socket.value = null;
+
         identifier.value = null;
     }
+
     return {
         socket,
         identifier,
         createSocket,
         getSocket,
         disconnect,
-    }
-})
-
-export type SocketStore = ReturnType<typeof useSocketStore>;
+    };
+});

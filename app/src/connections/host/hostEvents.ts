@@ -36,7 +36,4 @@ export const initialHostEvents = (store: HostStore): Record<string, (...args: an
         console.log("Lobby code received : ", lobbyCode);
     },
     //fix this thing
-    "some_replacer": (id: number) => {
-        store.joinRequest(id);
-    }
 });

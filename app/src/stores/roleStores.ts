@@ -3,8 +3,7 @@ import { ref, Ref } from "vue";
 import enums from "@shared/enums";
 import { stationRawMap } from "@/utils/lut";
 import { Socket } from "socket.io-client";
-import { MessageStore, useRequestNotifStore, JoinRequest } from "./messageStore";
-const messageStore = useRequestNotifStore();
+import { MessageStore, JoinRequest } from "./messageStore";
 export type Item = string;
 export type StationType = "stove" | "oven" | "toaster" | "boiler" | "mixer" | "brewer" | "assembler" | "dispenser";
 export const useHostStore = defineStore(enums.gameRoles.host, () => {
@@ -13,7 +12,7 @@ export const useHostStore = defineStore(enums.gameRoles.host, () => {
     const players: Ref<Array<number>> = ref([]);
     const stations: Ref<Array<number>> = ref([]);
     //fix this thing
-    function joinRequest(id: number) {
+    function joinRequest(id: number, messageStore: MessageStore) {
         let joinReq: JoinRequest = {
             expiry: 10,
             client_name: id.toString(),
