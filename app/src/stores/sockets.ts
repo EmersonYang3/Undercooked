@@ -4,25 +4,20 @@ import { io, type Socket } from "socket.io-client";
 import { initialRoleEvents, RoleEvents } from "@/connections/table";
 import { onEvents } from "@/utils/utils";
 import type { handshakeData } from "@shared/types";
+import { RoleStore } from "./roleStores";
 
 export const useSocketStore = defineStore("socket", () => {
     const socket = ref<Socket | null>(null);    // kept in a ref so the store retains it
     const identifier = ref<string | null>(null);
-    function createSocket(handshake: handshakeData, roleStore: any): Socket {
+    function createSocket(handshake: handshakeData, roleStore: RoleStore): Socket {
         console.log("attempting to create socket");
-
-        // Already created? Return the same one
-        if (socket.value) return socket.value;
-
-        // Create the socket
+        if (socket.value) return socket.value as Socket;
         const s = io("http://localhost:3000", {
             autoConnect: false,
             auth: handshake,
         }) as Socket;
-
         socket.value = s;
 
-        // Bind initial role-specific events
         const initBinder = initialRoleEvents[handshake.intendedRole];
         const initEvents = initBinder(roleStore);
         onEvents(s, initEvents);
@@ -36,20 +31,16 @@ export const useSocketStore = defineStore("socket", () => {
         });
 
         s.on("connect", () => {
-            roleStore.isReady = true;
             console.log("connected");
         });
-
-        // Bind all other role events
         const binder = RoleEvents[handshake.intendedRole];
         const events = binder(roleStore);
         onEvents(s, events);
-
         return s;
     }
 
     function getSocket(): Socket | null {
-        return socket.value;
+        return socket.value as Socket;
     }
 
     function disconnect() {

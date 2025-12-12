@@ -61,7 +61,7 @@
         <!-- PLAYERS LIST CARD -->
         <div class="bg-gray-100 border border-gray-300 rounded-xl p-6 shadow-inner">
           <h3 class="text-xl font-bold text-gray-700">
-            Players Joined ({{ players.length }})
+            Players Joined ({{ hostStore.players.length }})
           </h3>
 
           <ul class="mt-4 space-y-2">

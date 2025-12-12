@@ -17,13 +17,13 @@
             </div>
             <div class="flex flex-col space-y-1">
               <button
-                @click="acceptMessage(message.id)"
+                @click="acceptMessage(Number(message.client_name), message.id)"
                 class="bg-green-600 hover:bg-green-700 text-white text-xs font-semibold rounded px-2 py-1 transition"
               >
                 ✓
               </button>
               <button
-                @click="rejectMessage(message.id)"
+                @click="rejectMessage(Number(message.client_name), message.id)"
                 class="bg-red-600 hover:bg-red-700 text-white text-xs font-semibold rounded px-2 py-1 transition"
               >
                 ✕
@@ -49,15 +49,16 @@ const socketStore = useSocketStore();
 import { computed } from "vue";
 
 const socket = computed(() => socketStore.socket);
-function acceptMessage(id: number) {
+function acceptMessage(id: number, messageId: number) {
+  console.log("emitting this id message: ",id);
   socket.value.emit("acceptClientJoin", id);
-  notifStore.accept(id);
+  notifStore.accept(messageId);
 }
-function rejectMessage(id: number) {
+function rejectMessage(id: number, messageId: number) {
   //this hasnt been implemented on backend yet
   //!!!  
   socket.value.emit("rejectClientJoin", id);
-  notifStore.reject(id);
+  notifStore.reject(messageId);
 }
 </script>
 

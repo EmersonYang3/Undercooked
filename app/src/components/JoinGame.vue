@@ -61,7 +61,7 @@ const store = props.role === "client"
   ? usePlayerStore()
   : useTerminalStore();
 
-const socketStore = useSocketStore();
+const socketStore = useSocketStore(); 
 let socket: Socket | null = null;
 
 const code = ref("");
