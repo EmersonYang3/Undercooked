@@ -27,6 +27,22 @@ function canPlaceFoodInStation(food: string, stationIdentifier: uniqueIdentifier
     return isMethodValid
 }
 
+function isPlacingOrRemoving(playerIdentifier: uniqueIdentifier, stationIdentifier: uniqueIdentifier): "placing" | "removing" | "none" {
+    const lobbyData = lobbyService.getLobbyData()
+    const playerData = lobbyData.playerData[playerIdentifier]
+    const stationData = lobbyData.stationData[stationIdentifier]
+    if (!playerData || !stationData) { return "none" }
+
+    const isPlayerHoldingItem = playerData.currentlyHeldItem !== undefined
+    const isStationHoldingItem = stationData.currentlyHeldItem !== undefined
+
+    if (isPlayerHoldingItem && !isStationHoldingItem) {
+        return "placing"
+    } else if (!isPlayerHoldingItem && isStationHoldingItem) {
+        return "removing"
+    }
+}
+
 function removePlayerItem(identifier: uniqueIdentifier): foodItem | plate | undefined {
     let playerHeldItem: foodItem | plate | undefined = undefined
 
@@ -66,4 +82,43 @@ function givePlayerItem(identifier: uniqueIdentifier, item: foodItem | plate, is
     })
 }
 
-export default { canPlaceFoodInStation, removePlayerItem, givePlayerItem }
+function removeStationItem(identifier: uniqueIdentifier): foodItem | plate | undefined {
+    let stationHeldItem: foodItem | plate | undefined = undefined
+
+    lobbyService.transformLobbyData((lobbyData) => {
+        const stationData = lobbyData.stationData[identifier]
+        const stationSocketConnection = socketRegistry.getSocketConnectionById(identifier)
+        if (!stationData || !stationSocketConnection) { return lobbyData }
+
+        stationHeldItem = stationData.currentlyHeldItem
+        if (!stationHeldItem) { return lobbyData }
+
+        stationData.currentlyHeldItem = undefined
+        stationData.isHoldingPlate = false
+        lobbyData.stationData[identifier] = stationData
+
+        stationSocketConnection.socket.emit(ServerSharedRemotes.setCurrentItem, null, false)
+
+        return lobbyData
+    })
+
+    return stationHeldItem
+}
+
+function giveStationItem(identifier: uniqueIdentifier, item: foodItem | plate, isRecievingPlate: boolean) {
+    lobbyService.transformLobbyData((lobbyData) => {
+        const stationData = lobbyData.stationData[identifier]
+        const stationSocketConnection = socketRegistry.getSocketConnectionById(identifier)
+        if (!stationData || stationData.currentlyHeldItem || !stationSocketConnection) { return lobbyData }
+
+        stationData.currentlyHeldItem = item
+        stationData.isHoldingPlate = isRecievingPlate
+        lobbyData.stationData[identifier] = stationData
+
+        stationSocketConnection.socket.emit(ServerSharedRemotes.setCurrentItem, item, isRecievingPlate)
+
+        return lobbyData
+    })
+}
+
+export default { canPlaceFoodInStation, removePlayerItem, givePlayerItem, removeStationItem, giveStationItem, isPlacingOrRemoving }

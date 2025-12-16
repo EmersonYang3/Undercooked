@@ -36,7 +36,7 @@ export type plate = {
 export type stationData = {
     stationType: string,
     isHoldingPlate: boolean,
-    currentFoodItem?: foodItem | plate
+    currentlyHeldItem?: foodItem | plate
 }
 
 export type playerData = {
