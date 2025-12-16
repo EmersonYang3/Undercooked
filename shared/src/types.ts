@@ -30,12 +30,18 @@ export type activeRecipe = {
     timeRemaining: number
 }
 
+export type plate = {
+    foodItem: foodItem,
+}
+
 export type stationData = {
     stationType: string,
-    currentFoodItem?: foodItem
+    isHoldingPlate: boolean,
+    currentlyHeldItem?: foodItem | plate
 }
 
 export type playerData = {
     currentPoints: number,
-    currentlyHeldItem?: foodItem
+    isHoldingPlate: boolean,
+    currentlyHeldItem?: foodItem | plate
 }

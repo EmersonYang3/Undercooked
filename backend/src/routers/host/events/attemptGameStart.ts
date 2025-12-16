@@ -4,6 +4,7 @@ import lobbyService from "services/lobby";
 import specialKey from "services/specialKey";
 
 import sharedEnums from "shared/enums";
+import singletons from "utils/singletons";
 
 const serverTSRemotes = sharedEnums.serverToStationRemotes
 const serverTCRemotes = sharedEnums.serverToClientRemotes
@@ -23,6 +24,7 @@ function alertAllGameStarting() {
 }
 
 function attemptGameStart(hostSocket: Socket) {
+    singletons.recipeGenerator.RefreshMethods()
     alertAllGameStarting()
 }
 

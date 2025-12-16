@@ -31,7 +31,8 @@ enum serverToStationRemotes {
 enum sharedRemotes {
     connect = "connect",
     connectError = "connect_error",
-    hostRejectedConnection = "hostRejectedConnection"
+    hostRejectedConnection = "hostRejectedConnection",
+    setCurrentItem = "setCurrentItem"
 }
 
 enum portServer {
