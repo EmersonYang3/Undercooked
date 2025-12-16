@@ -1,7 +1,9 @@
 enum hostToServerRemotes {
     startLobby = "startLobby",
     acceptClientJoin = "acceptClientJoin",
-    acceptStationJoin = "acceptStationJoin"
+    acceptStationJoin = "acceptStationJoin",
+    rejectPlayerJoin = "recjectPlayerJoin",
+    rejectStationJoin = "rejectStationJoin",
 }
 
 enum serverToHostRemotes {
@@ -18,6 +20,7 @@ enum serverToClientRemotes {
     changeCurrentlyHeldItem = "changeCurrentlyHeldItem",
     gameStarted = "gameStarted"
 }
+
 
 enum serverToStationRemotes {
     pendingJoin = "pendingJoin",

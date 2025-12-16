@@ -6,18 +6,19 @@ export type handshakeData = {
     intendedRole: intendedRoles,
     lobbyCode?: string
 }
-
+type Method = string;
+type Food = string;
 export type internalFoodData = {
     name: string,
-
     methods: Record<string, string>,
     combinations: Record<string, string>,
     couldBeActiveRecipe: boolean,
 }
 
-export type foodItem = internalFoodData & {
-    quality: number,
+export type foodItem = {
+    name: string,
     id: uniqueIdentifier,
+    quality: number,
 }
 
 export type internalStationData = {

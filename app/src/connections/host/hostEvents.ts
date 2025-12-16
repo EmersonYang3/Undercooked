@@ -34,5 +34,6 @@ export const hostEvents = (hostStore: HostStore): Record<string, (...args: any[]
 export const initialHostEvents = (store: HostStore): Record<string, (...args: any[]) => void> => ({
     [enums.serverToHostRemotes.lobbyStarted]: (lobbyCode: { lobbyCode: string }) => {
         console.log("Lobby code received : ", lobbyCode);
-    }
+    },
+    //fix this thing
 });

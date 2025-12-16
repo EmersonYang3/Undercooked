@@ -5,6 +5,9 @@ import sharedData from "shared/data"
 
 let availableMethods: Record<string, true> = {}
 
+
+
+
 function RefreshMethods() {
     const lobbyData = lobbyService.getLobbyData()
     if (!lobbyData.stationData) { return }
@@ -52,5 +55,6 @@ function GenerateRecipe(): string {
 
     return randomlyPickedRecipe
 }
+
 
 export default { RefreshMethods, GenerateRecipe }
