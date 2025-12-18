@@ -4,6 +4,9 @@ import sharedEnums from "shared/enums"
 
 import type { Socket } from "socket.io"
 
+import hookEvents from "routers/shared/hookEvents"
+import events from "./events"
+
 const serverTSRemotes = sharedEnums.serverToStationRemotes
 const serverTHRemotes = sharedEnums.serverToHostRemotes
 
@@ -14,6 +17,8 @@ function initStationSocket(socket: Socket) {
 
     hostSocket.emit(serverTHRemotes.stationPendingJoin, { identifier: socketConnection.identifier })
     socket.emit(serverTSRemotes.pendingJoin, { identifier: socketConnection.identifier })
+
+    hookEvents(socket, events)
 }
 
 export default { initStationSocket }

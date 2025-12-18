@@ -28,6 +28,10 @@ enum serverToStationRemotes {
     gameStarted = "gameStarted"
 }
 
+enum stationToServerRemotes {
+    specialKeyPressed = "specialKeyPressed"
+}
+
 enum sharedRemotes {
     connect = "connect",
     connectError = "connect_error",
@@ -68,9 +72,14 @@ enum methods {
 
 export default {
     hostToServerRemotes,
+
     serverToHostRemotes,
+
     serverToClientRemotes,
+
     serverToStationRemotes,
+    stationToServerRemotes,
+
     connValidatorErrors,
 
     sharedRemotes,

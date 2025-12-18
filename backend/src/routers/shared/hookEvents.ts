@@ -4,8 +4,9 @@ import type { eventsRegistering } from "utils/types"
 function hookEvents(socket: Socket, events: eventsRegistering) {
     socket.onAny((eventName, ...args) => {
         const eventHandler = events[eventName]
+        if (!eventHandler) { return }
 
-        if (eventHandler) { eventHandler(socket, ...args) }
+        eventHandler(socket, ...args)
     })
 }
 

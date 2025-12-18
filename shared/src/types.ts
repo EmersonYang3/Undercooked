@@ -8,6 +8,7 @@ export type handshakeData = {
 }
 type Method = string;
 type Food = string;
+
 export type internalFoodData = {
     name: string,
     methods: Record<string, string>,

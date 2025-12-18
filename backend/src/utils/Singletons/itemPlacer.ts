@@ -43,8 +43,9 @@ function isPlacingOrRemoving(playerIdentifier: uniqueIdentifier, stationIdentifi
     }
 }
 
-function removePlayerItem(identifier: uniqueIdentifier): foodItem | plate | undefined {
+function removePlayerItem(identifier: uniqueIdentifier): [foodItem | plate | undefined, boolean] {
     let playerHeldItem: foodItem | plate | undefined = undefined
+    let isItemAPlate = false
 
     lobbyService.transformLobbyData((lobbyData) => {
         const playerData = lobbyData.playerData[identifier]
@@ -53,6 +54,8 @@ function removePlayerItem(identifier: uniqueIdentifier): foodItem | plate | unde
 
         playerHeldItem = playerData.currentlyHeldItem
         if (!playerHeldItem) { return lobbyData }
+
+        isItemAPlate = playerData.isHoldingPlate
 
         playerData.currentlyHeldItem = undefined
         playerData.isHoldingPlate = false
@@ -63,7 +66,7 @@ function removePlayerItem(identifier: uniqueIdentifier): foodItem | plate | unde
         return lobbyData
     })
 
-    return playerHeldItem
+    return [playerHeldItem, isItemAPlate]
 }
 
 function givePlayerItem(identifier: uniqueIdentifier, item: foodItem | plate, isRecievingPlate: boolean) {
@@ -82,8 +85,9 @@ function givePlayerItem(identifier: uniqueIdentifier, item: foodItem | plate, is
     })
 }
 
-function removeStationItem(identifier: uniqueIdentifier): foodItem | plate | undefined {
+function removeStationItem(identifier: uniqueIdentifier): [foodItem | plate | undefined, boolean] {
     let stationHeldItem: foodItem | plate | undefined = undefined
+    let isItemAPlate = false
 
     lobbyService.transformLobbyData((lobbyData) => {
         const stationData = lobbyData.stationData[identifier]
@@ -92,6 +96,8 @@ function removeStationItem(identifier: uniqueIdentifier): foodItem | plate | und
 
         stationHeldItem = stationData.currentlyHeldItem
         if (!stationHeldItem) { return lobbyData }
+
+        isItemAPlate = stationData.isHoldingPlate
 
         stationData.currentlyHeldItem = undefined
         stationData.isHoldingPlate = false
@@ -102,7 +108,7 @@ function removeStationItem(identifier: uniqueIdentifier): foodItem | plate | und
         return lobbyData
     })
 
-    return stationHeldItem
+    return [stationHeldItem, isItemAPlate]
 }
 
 function giveStationItem(identifier: uniqueIdentifier, item: foodItem | plate, isRecievingPlate: boolean) {
@@ -121,4 +127,19 @@ function giveStationItem(identifier: uniqueIdentifier, item: foodItem | plate, i
     })
 }
 
-export default { canPlaceFoodInStation, removePlayerItem, givePlayerItem, removeStationItem, giveStationItem, isPlacingOrRemoving }
+function removeItemAndGiveTo(reciever: "station" | "player", fromIdentifier: uniqueIdentifier, toIdentifier: uniqueIdentifier) {
+    if (reciever === "player") {
+        const [removedStationItem, itemType] = removeStationItem(fromIdentifier)
+        if (!removedStationItem) { return }
+
+        givePlayerItem(toIdentifier, removedStationItem, itemType)
+
+    } else {
+        const [removedPlayerItem, itemType] = removePlayerItem(fromIdentifier)
+        if (!removedPlayerItem) { return }
+
+        giveStationItem(toIdentifier, removedPlayerItem, itemType)
+    }
+}
+
+export default { canPlaceFoodInStation, removePlayerItem, givePlayerItem, removeStationItem, giveStationItem, isPlacingOrRemoving, removeItemAndGiveTo }
