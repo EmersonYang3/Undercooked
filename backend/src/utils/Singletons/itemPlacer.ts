@@ -27,7 +27,7 @@ function canPlaceFoodInStation(food: string, stationIdentifier: uniqueIdentifier
     return isMethodValid
 }
 
-function isPlacingOrRemoving(playerIdentifier: uniqueIdentifier, stationIdentifier: uniqueIdentifier): "placing" | "removing" | "none" {
+function getAction(playerIdentifier: uniqueIdentifier, stationIdentifier: uniqueIdentifier): "placing" | "removing" | "none" | "combining" {
     const lobbyData = lobbyService.getLobbyData()
     const playerData = lobbyData.playerData[playerIdentifier]
     const stationData = lobbyData.stationData[stationIdentifier]
@@ -36,11 +36,31 @@ function isPlacingOrRemoving(playerIdentifier: uniqueIdentifier, stationIdentifi
     const isPlayerHoldingItem = playerData.currentlyHeldItem !== undefined
     const isStationHoldingItem = stationData.currentlyHeldItem !== undefined
 
-    if (isPlayerHoldingItem && !isStationHoldingItem) {
+    if (stationData.isHoldingPlate && isPlayerHoldingItem && !playerData.isHoldingPlate) {
+        return "combining"
+    } else if (isPlayerHoldingItem && !isStationHoldingItem) {
         return "placing"
     } else if (!isPlayerHoldingItem && isStationHoldingItem) {
         return "removing"
     }
+
+    return "none"
+}
+
+function getPlayerHeldItem(identifier: uniqueIdentifier): [foodItem | plate, boolean] | undefined {
+    const lobbyData = lobbyService.getLobbyData()
+    const playerData = lobbyData.playerData[identifier]
+    if (!playerData || playerData.currentlyHeldItem === undefined) { return undefined }
+
+    return [playerData.currentlyHeldItem, playerData.isHoldingPlate]
+}
+
+function getStationHeldItem(identifier: uniqueIdentifier): [foodItem | plate, boolean] | undefined {
+    const lobbyData = lobbyService.getLobbyData()
+    const stationData = lobbyData.stationData[identifier]
+    if (!stationData || stationData.currentlyHeldItem === undefined) { return undefined }
+
+    return [stationData.currentlyHeldItem, stationData.isHoldingPlate]
 }
 
 function removePlayerItem(identifier: uniqueIdentifier): [foodItem | plate | undefined, boolean] {
@@ -142,4 +162,4 @@ function removeItemAndGiveTo(reciever: "station" | "player", fromIdentifier: uni
     }
 }
 
-export default { canPlaceFoodInStation, removePlayerItem, givePlayerItem, removeStationItem, giveStationItem, isPlacingOrRemoving, removeItemAndGiveTo }
+export default { canPlaceFoodInStation, removePlayerItem, givePlayerItem, removeStationItem, giveStationItem, getAction, getPlayerHeldItem, getStationHeldItem, removeItemAndGiveTo }

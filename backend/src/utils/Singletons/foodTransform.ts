@@ -1,4 +1,4 @@
-import type { foodItem } from "shared/types";
+import type { foodItem, plate } from "shared/types";
 import sharedData from "shared/data"
 import unqiService from "services/unqi";
 
@@ -53,4 +53,12 @@ function CombineFoodItems(foodA: foodItem, foodB: foodItem, newId?: number): foo
     return returnData
 }
 
-export default { TransformFoodMethod, CanCombineFoodItems, CombineFoodItems };
+function isPlate(item: foodItem | plate): item is plate {
+    return (item as plate).foodItem !== undefined;
+}
+
+function isFoodItem(item: foodItem | plate): item is foodItem {
+    return (item as foodItem).name !== undefined;
+}
+
+export default { TransformFoodMethod, CanCombineFoodItems, CombineFoodItems, isPlate, isFoodItem };
