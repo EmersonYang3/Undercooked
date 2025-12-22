@@ -9,14 +9,15 @@ const foodData: Record<string, internalFoodData> = {
         name: "Uncooked Egg",
         methods: { [methods.boil]: foods.boiledEgg },
         combinations: {},
-        couldBeActiveRecipe: false
+        couldBeActiveRecipe: false,
     },
 
     [foods.boiledEgg]: {
         name: "Boiled Egg",
         methods: {},
         combinations: {},
-        couldBeActiveRecipe: true
+        couldBeActiveRecipe: true,
+        requiredIngredients: [foods.uncookedEgg]
     }
 }
 

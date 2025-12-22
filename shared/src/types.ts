@@ -14,6 +14,7 @@ export type internalFoodData = {
     methods: Record<string, string>,
     combinations: Record<string, string>,
     couldBeActiveRecipe: boolean,
+    requiredIngredients?: string[]
 }
 
 export type foodItem = {
