@@ -1,10 +1,11 @@
 import { defineStore } from "pinia";
 import { reactive } from "vue";
-
+export type joinRole = "player" | "station";
 export type JoinRequest = {
     id: number;
-    client_name: string;
+    client_name: number;
     message: string;
+    role: joinRole;
     expiry?: number;
 };
 
@@ -53,19 +54,10 @@ export const useRequestNotifStore = defineStore("requestNotif", () => {
         }
     }
 
-    function accept(id: number) {
-        removeRequest(id);
-    }
-
-    function reject(id: number) {
-        removeRequest(id);
-    }
-
     return {
         requests,
         addRequest,
-        accept,
-        reject,
+        removeRequest,
     };
 });
 export type MessageStore = ReturnType<typeof useRequestNotifStore>; 

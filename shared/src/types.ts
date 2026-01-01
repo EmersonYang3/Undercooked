@@ -22,7 +22,7 @@ export type foodItem = {
     id: uniqueIdentifier,
     quality: number,
 }
-
+export type stationTypes = "boilStation" | "none" | "smth else"
 export type internalStationData = {
     method: string
 }

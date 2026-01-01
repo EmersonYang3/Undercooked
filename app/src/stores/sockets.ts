@@ -1,9 +1,9 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { ref, useHost } from "vue";
 import { io, type Socket } from "socket.io-client";
 import { initialRoleEvents, RoleEvents } from "@/connections/table";
 import { onEvents } from "@/utils/utils";
-import type { handshakeData } from "@shared/types";
+import type { handshakeData, intendedRoles } from "@shared/types";
 import { RoleStore } from "./roleStores";
 
 export const useSocketStore = defineStore("socket", () => {
@@ -12,44 +12,34 @@ export const useSocketStore = defineStore("socket", () => {
     function createSocket(handshake: handshakeData, roleStore: RoleStore): Socket {
         console.log("attempting to create socket");
         if (socket.value) return socket.value as Socket;
-        const s = io("http://localhost:3000", {
+        const socketAttempt = io("http://localhost:3000", {
             autoConnect: false,
             auth: handshake,
         }) as Socket;
-        socket.value = s;
-
+        socket.value = socketAttempt;
         const initBinder = initialRoleEvents[handshake.intendedRole];
         const initEvents = initBinder(roleStore);
-        onEvents(s, initEvents);
-
-        // Connect
-        s.connect();
-        console.log("attempting to connect");
-
-        s.on("connect_error", () => {
-            console.log("failed to connect");
+        onEvents(socketAttempt, initEvents);
+        socketAttempt.connect();
+        socketAttempt.on("connect_error", () => {
+            return new Error("failed to connect");
         });
-
-        s.on("connect", () => {
+        socketAttempt.on("connect", () => {
             console.log("connected");
         });
         const binder = RoleEvents[handshake.intendedRole];
         const events = binder(roleStore);
-        onEvents(s, events);
-        return s;
+        onEvents(socketAttempt, events);
+        return socketAttempt;
     }
-
     function getSocket(): Socket | null {
         return socket.value as Socket;
     }
-
     function disconnect() {
         if (!socket.value) return;
-
         socket.value.disconnect();
         socket.value.removeAllListeners();
         socket.value = null;
-
         identifier.value = null;
     }
 
@@ -61,3 +51,4 @@ export const useSocketStore = defineStore("socket", () => {
         disconnect,
     };
 });
+

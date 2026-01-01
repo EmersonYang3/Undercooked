@@ -1,4 +1,5 @@
 import { TerminalStore } from "@/stores/roleStores";
+import { foodItem, plate } from "@shared/types";
 //new event -  Clientkey send
 //this sets the terminalstores clientKey variable to an array containing the clientKeys.
 
@@ -6,12 +7,12 @@ import { TerminalStore } from "@/stores/roleStores";
 export function terminalEvents(store: TerminalStore): Record<string, (...args: any[]) => void> {
     return {
         "clientKeys": (clientKeys: Array<string>) => {
-            store.clientsKeys = clientKeys;
-            //temporary
+            store.clientsKeys = new Set(clientKeys);
         },
-        "placedItem": (item: null | string) => {
-            store.placeItem(item);
-        }
+        "setCurrentItem": (item: foodItem | plate | null, isRecievingPlate: boolean) => {
+            if (!item) { };
+
+        },
     }
 }
 export const initialTerminalEvents = (store: TerminalStore): Record<string, (...args: any[]) => void> => ({

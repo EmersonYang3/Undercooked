@@ -4,6 +4,7 @@ import enums from "@shared/enums";
 import { stationRawMap } from "@/utils/lut";
 import { Socket } from "socket.io-client";
 import { MessageStore, JoinRequest } from "./messageStore";
+import { foodItem, plate } from "@shared/types";
 export type Item = string;
 export type StationType = "stove" | "oven" | "toaster" | "boiler" | "mixer" | "brewer" | "assembler" | "dispenser";
 export const useHostStore = defineStore(enums.gameRoles.host, () => {
@@ -11,26 +12,16 @@ export const useHostStore = defineStore(enums.gameRoles.host, () => {
     let isReady: Ref<boolean> = ref(false);
     const players: Ref<Array<number>> = ref([]);
     const stations: Ref<Array<number>> = ref([]);
-    //fix this thing
-    function joinRequest(id: number, messageStore: MessageStore) {
-        let joinReq: JoinRequest = {
-            expiry: 10,
-            client_name: id.toString(),
-            message: "accept?",
-            id: 10,
-        }
-        messageStore.addRequest(joinReq);
-    }
     return {
-        id, isReady, players, stations, joinRequest
+        id, isReady, players, stations
     }
 })
 
 export const useTerminalStore = defineStore(enums.gameRoles.station, () => {
-    const heldItems: Ref<Array<Item | null>> = ref([null]);
+    const heldItems: Ref<Array<foodItem | plate | null>> = ref([null]);
     const id: Ref<null | string> = ref(null);
     const isPlaying: Ref<boolean> = ref(false);
-    let clientsKeys: Array<string> = [];
+    let clientsKeys: Set<string> = new Set();
     let isReady: Ref<boolean> = ref(false);
     let maxItems = 1;
     let station: null | StationType = null;
@@ -48,21 +39,7 @@ export const useTerminalStore = defineStore(enums.gameRoles.station, () => {
         station = stationType;
         heldItems.value = Array(max).fill(null);
     }
-    function takeItem(player: PlayerStore, itemIndex: number) {
-        if (itemIndex >= maxItems) {
-            console.log("invalid index");
-            return;
-        }
-        const item = heldItems.value[itemIndex];
-        if (!item) return;
-        if (player.inventory) {
-            console.log("player already has an item");
-            return;
-        }
-        player.inventory = item;
-        heldItems.value[itemIndex] = null;
-    }
-    function placeItem(item: string,) {
+    function placeItem(item: foodItem | plate | null,) {
         if (!item) {
             console.log("player has no item");
             return;
@@ -72,20 +49,12 @@ export const useTerminalStore = defineStore(enums.gameRoles.station, () => {
             console.log("terminal has no space");
             return;
         }
-        //add emits to this here
+        //add emits to this here-
         heldItems.value[emptyIndex] = item;
         //backend removes the item from the player inventory if possible to be used
     }
-    function checkValidity(item: string) {
-        //import the sets and lookup the proper items;
-        if (!station) {
-            //throw an error/panic
-        }
-        if (stationRawMap[station].has(item)) {
-            return true;
-        }
-        //return an error otherwise
-        return false;
+    function givePlayerItem() {
+        
     }
     return {
         clientsKeys,
@@ -96,7 +65,6 @@ export const useTerminalStore = defineStore(enums.gameRoles.station, () => {
         isPlaying,
         setId,
         setStationType,
-        takeItem,
         placeItem,
         isReady,
         station

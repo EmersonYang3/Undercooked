@@ -11,7 +11,7 @@ const serverToStationRemotes = sharedEnums.serverToStationRemotes
 
 function pushStationToLobby(stationConnection: socketConnection, stationName: string, identifier: uniqueIdentifier) {
     lobbyService.transformLobbyData((lobbyData: lobbyData) => {
-        const stationData: stationData = { stationType: stationName, isHoldingPlate: false, currentFoodItem: null }
+        const stationData: stationData = { stationType: stationName, isHoldingPlate: false, currentlyHeldItem: null }
         lobbyData.stationData[identifier] = stationData
         lobbyData.stations.push(stationConnection)
 
@@ -30,6 +30,6 @@ function onAcceptStation(hostSocket: Socket, identifier: uniqueIdentifier, stati
 
     hostSocket.emit(serverToHostRemotes.newStationJoined, identifier)
     stationConnection.socket.emit(serverToStationRemotes.stationAssigned, stationName)
-}
+}  
 
 export default onAcceptStation

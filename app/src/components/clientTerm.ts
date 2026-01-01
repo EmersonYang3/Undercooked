@@ -80,7 +80,7 @@ export function createStationGame(
     onUnmounted(stopListening);
     //this is the function that gets called first 
     function initialize() {
-        if (terminalStore.clientsKeys == null || terminalStore.clientsKeys.length == 0) {
+        if (terminalStore.clientsKeys == null || terminalStore.clientsKeys.size == 0) {
             console.log("invalid client keys");
         }
         clientKeys = new Set(terminalStore.clientsKeys);

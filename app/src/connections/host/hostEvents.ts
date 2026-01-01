@@ -5,24 +5,25 @@ import { HostStore } from "@/stores/roleStores";
 export const hostEvents = (hostStore: HostStore): Record<string, (...args: any[]) => void> => {
     const notifStore = useRequestNotifStore();
     return {
-        [enums.serverToHostRemotes.clientPendingJoin]: (identifier: { identifier: string }) => {
+        [enums.serverToHostRemotes.clientPendingJoin]: (identifier: { identifier: number }) => {
             console.log("client requesting to join:", identifier.identifier);
             notifStore.addRequest({
                 client_name: identifier.identifier,
-                message: `Allow ${identifier.identifier} to join?`,
+                message: `Allow client ${identifier.identifier} to join?`,
                 expiry: 10,
+                role: "player"
             });
         },
         [enums.serverToHostRemotes.newClientJoined]: (client: number) => {
             console.log("new client joined", client);
             hostStore.players.push(client);
         },
-
-        [enums.serverToHostRemotes.stationPendingJoin]: (identifier: { identifier: string }) => {
+        [enums.serverToHostRemotes.stationPendingJoin]: (identifier: { identifier: number }) => {
             notifStore.addRequest({
                 client_name: identifier.identifier,
                 message: `Allow station ${identifier.identifier} to join?`,
                 expiry: 10,
+                role: "station"
             });
         },
         [enums.serverToHostRemotes.newStationJoined]: (station: number) => {
@@ -35,5 +36,4 @@ export const initialHostEvents = (store: HostStore): Record<string, (...args: an
     [enums.serverToHostRemotes.lobbyStarted]: (lobbyCode: { lobbyCode: string }) => {
         console.log("Lobby code received : ", lobbyCode);
     },
-    //fix this thing
 });
