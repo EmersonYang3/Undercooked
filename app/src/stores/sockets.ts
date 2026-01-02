@@ -16,6 +16,7 @@ export const useSocketStore = defineStore("socket", () => {
             autoConnect: false,
             auth: handshake,
         }) as Socket;
+        console.log(handshake);
         socket.value = socketAttempt;
         const initBinder = initialRoleEvents[handshake.intendedRole];
         const initEvents = initBinder(roleStore);

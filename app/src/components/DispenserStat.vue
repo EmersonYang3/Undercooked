@@ -1,6 +1,7 @@
 <template>
     <div>
-
+        Currently Held Item {{ stationStore.currentHelditem }}
+        <img src="ImageLut placeholder">
     </div>
 </template>
 
@@ -10,10 +11,19 @@ import { useClientConnection } from './clientKeyPress';
 import { useSocketStore } from '@/stores/sockets';
 const stationStore = useTerminalStore();
 const socket = useSocketStore().getSocket();
-useClientConnection(stationStore.clientsKeys, startGame)
+let res = useClientConnection(stationStore.clientsKeys, startGame)
+
 function startGame(key: string) {
-    socket.emit("clientKeyPressed", stationStore.id, key);
+    socket.emit("specialKeyPressed", stationStore.id, key);
 }
+function gameState() {
+
+}
+
+function endGame() {
+
+}
+
 </script>
 
 <style scoped>

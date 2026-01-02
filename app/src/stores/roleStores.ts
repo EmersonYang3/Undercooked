@@ -1,30 +1,27 @@
 import { defineStore } from "pinia";
 import { ref, Ref } from "vue";
-import enums from "@shared/enums";
-import { stationRawMap } from "@/utils/lut";
-import { Socket } from "socket.io-client";
-import { MessageStore, JoinRequest } from "./messageStore";
+import sharedEnums from "@shared/enums";
 import { foodItem, plate } from "@shared/types";
 export type Item = string;
 export type StationType = "stove" | "oven" | "toaster" | "boiler" | "mixer" | "brewer" | "assembler" | "dispenser";
-export const useHostStore = defineStore(enums.gameRoles.host, () => {
+export const useHostStore = defineStore(sharedEnums.gameRoles.host, () => {
     const id: Ref<null | string> = ref(null);
     let isReady: Ref<boolean> = ref(false);
     const players: Ref<Array<number>> = ref([]);
     const stations: Ref<Array<number>> = ref([]);
+    const activeRecipes: Ref<Array<number>> = ref([]);
     return {
-        id, isReady, players, stations
+        id, isReady, players, stations, activeRecipes,
     }
 })
 
-export const useTerminalStore = defineStore(enums.gameRoles.station, () => {
-    const heldItems: Ref<Array<foodItem | plate | null>> = ref([null]);
+export const useTerminalStore = defineStore(sharedEnums.gameRoles.station, () => {
     const id: Ref<null | string> = ref(null);
+    const currentHelditem = ref<null | string>(null);
     const isPlaying: Ref<boolean> = ref(false);
     let clientsKeys: Set<string> = new Set();
     let isReady: Ref<boolean> = ref(false);
-    let maxItems = 1;
-    let station: null | StationType = null;
+    let station = ref<string | null>(null);
     function startGame() {
         isPlaying.value = true;
     }
@@ -34,46 +31,31 @@ export const useTerminalStore = defineStore(enums.gameRoles.station, () => {
     function setId(uniqId: string) {
         id.value = uniqId;
     }
-    function setStationType(max: number, stationType: StationType) {
-        maxItems = max;
-        station = stationType;
-        heldItems.value = Array(max).fill(null);
+    function setStationType(stationType: string) {
+        station.value = stationType;
     }
-    function placeItem(item: foodItem | plate | null,) {
-        if (!item) {
-            console.log("player has no item");
-            return;
-        }
-        const emptyIndex = heldItems.value.findIndex(i => i === null);
-        if (emptyIndex === -1) {
-            console.log("terminal has no space");
-            return;
-        }
-        //add emits to this here-
-        heldItems.value[emptyIndex] = item;
-        //backend removes the item from the player inventory if possible to be used
-    }
-    function givePlayerItem() {
-        
+    function setCurrentItem(item: string) {
+        currentHelditem.value = item;
     }
     return {
         clientsKeys,
         startGame,
         endGame,
-        heldItems,
         id,
         isPlaying,
         setId,
+        setCurrentItem,
         setStationType,
-        placeItem,
         isReady,
-        station
+        station,
+        currentHelditem,
     }
 })
-export const usePlayerStore = defineStore(enums.gameRoles.client, () => {
+export const usePlayerStore = defineStore(sharedEnums.gameRoles.client, () => {
     const inventory: Ref<null | string> = ref(null);
     const id: Ref<null | string> = ref(null);
     const isPlaying: Ref<boolean> = ref(false);
+    const key = ref<string | null>(null);
     let isReady: Ref<boolean> = ref(false);
     function updateInventory(item: string) {
         inventory.value = item;
@@ -90,6 +72,9 @@ export const usePlayerStore = defineStore(enums.gameRoles.client, () => {
     function endGame() {
         isPlaying.value = false;
     }
+    function setKey(playerKey: string) {
+        key.value = playerKey;
+    }
     return {
         inventory,
         id,
@@ -99,6 +84,7 @@ export const usePlayerStore = defineStore(enums.gameRoles.client, () => {
         setId,
         startGame,
         endGame,
+        setKey,
         isReady
     }
 })

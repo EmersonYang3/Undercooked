@@ -2,7 +2,7 @@
     <div v-if="currentScreen == 'code'">
         <div>
             <input @input="formatCode" type="input" v-model="code"> 
-            <button @click="submitCode"></button>
+            <button @click="submitCode">Submit Code</button>
         </div>
     </div>
     <div v-if="currentScreen == 'waiting'"> 
@@ -32,7 +32,7 @@ function submitCode() {
     }
     const auth = {
         intendedRole: props.role,
-        code: code.value,
+        lobbyCode: code.value,
     };
     socketStore.createSocket(auth, store);
 }

@@ -17,9 +17,9 @@ export type lobbyData = {
     clients: socketConnection[],
     stations: socketConnection[],
 
-    recipesInProgress?: activeRecipe[],
-    playerData?: Record<uniqueIdentifier, playerData>,
-    stationData?: Record<uniqueIdentifier, stationData>
+    recipesInProgress: activeRecipe[],
+    playerData: Record<uniqueIdentifier, playerData>,
+    stationData: Record<uniqueIdentifier, stationData>
 }
 
 export type eventsRegistering = Record<string, (...args: any[]) => void>

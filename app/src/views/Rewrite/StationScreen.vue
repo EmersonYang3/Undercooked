@@ -9,7 +9,9 @@
 import { ref } from 'vue';
 import JoinScreen from './JoinScreen.vue';
 const gameStarted = ref(false);
-//
+function route() {
+    
+}
 
 </script>
 

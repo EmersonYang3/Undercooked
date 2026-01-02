@@ -16,5 +16,4 @@ function onSpecialKeyPressed(stationSocket: Socket, stationIdentifier: uniqueIde
 
     stationTypeRoute(stationSocket, stationIdentifier, specialKey)
 }
-
 export default onSpecialKeyPressed

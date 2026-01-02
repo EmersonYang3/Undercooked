@@ -12,11 +12,12 @@ export type JoinRequest = {
 export const useRequestNotifStore = defineStore("requestNotif", () => {
     const requests = reactive<JoinRequest[]>([]);
     const timers = new Map<number, any>();
-
+    
     function addRequest(req: Omit<JoinRequest, "id">) {
         const id = Date.now();
         const request: JoinRequest = { id, ...req };
         requests.push(request);
+        console.log("request", request);
 
         if (request.expiry && request.expiry > 0) {
             startExpiryTimer(id);

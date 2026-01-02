@@ -11,10 +11,11 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { ImageLut } from '@/utils/lut';
+
 import { usePlayerStore } from '@/stores/roleStores';
 import JoinScreen from './JoinScreen.vue';
 //join screen just routes to the respective location
+const ImageLut = {};
 let player_store = usePlayerStore();
 const gameStarted = ref(false);
 const currentItemHeld = ref<string | null>(null);

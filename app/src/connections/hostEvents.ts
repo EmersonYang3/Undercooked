@@ -25,11 +25,14 @@ export const hostEvents = (hostStore: HostStore): Record<string, (...args: any[]
                 expiry: 10,
                 role: "station"
             });
+            console.log("station attempting to join");
         },
         [enums.serverToHostRemotes.newStationJoined]: (station: number) => {
             console.log("new station joined", station);
             hostStore.stations.push(station);
         },
+        //add the recipe shower 
+        //the server emits out an array of recipes sent to the host screen
     };
 };
 export const initialHostEvents = (store: HostStore): Record<string, (...args: any[]) => void> => ({

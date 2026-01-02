@@ -8,6 +8,9 @@ export function playerEvents(store: PlayerStore): Record<string, (...args: any[]
             store.setId(clientSpecialKey);
             store.isReady = true;
         },
+        [enums.serverToClientRemotes.gameStarted]: (clientKey: string) => {
+            store.setKey(clientKey);
+        }
     }
 }
 //these are always bound to the socket as it allows for picking up of the inital events 

@@ -6,13 +6,13 @@ import { foodItem, plate } from "@shared/types";
 
 export function terminalEvents(store: TerminalStore): Record<string, (...args: any[]) => void> {
     return {
-        "clientKeys": (clientKeys: Array<string>) => {
-            store.clientsKeys = new Set(clientKeys);
-        },
         "setCurrentItem": (item: foodItem | plate | null, isRecievingPlate: boolean) => {
             if (!item) { };
 
         },
+        "gameStarted": (keys: Array<string>) => {
+            store.clientsKeys = new Set(keys);
+        }
     }
 }
 export const initialTerminalEvents = (store: TerminalStore): Record<string, (...args: any[]) => void> => ({
@@ -20,7 +20,7 @@ export const initialTerminalEvents = (store: TerminalStore): Record<string, (...
         console.log("Identifier set in store:", identifierObj.identifier);
     },
     "stationAssigned": (stationName: string) => {
-        store.setStationType(1, stationName as any); // example usage
+        store.setStationType(stationName); // example usage
         console.log("Station assigned in store:", stationName);
     },
 });

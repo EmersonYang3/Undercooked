@@ -1,14 +1,15 @@
 <template>
     <div v-if="currentScreen == 'code'">
-        <input type="text" v-model="code">
+        <input type="text" v-model="code" class="bg-gray-300">
         <button @click="submitCode">Submit Code</button>
         <button @click="generateCode">Generate Random Code</button>
     </div>
 
-    <div v-if="currentScreen = 'lobby'">
+    <div v-if="currentScreen == 'lobby'">
         Waiting For players to Join lobby...
         Current Lobby Count: {{ hostStore.players.length + hostStore.stations.length }}
-        <div v-for="(message, index) in notifStore.requests" :index="message.id">
+        <div class="" v-for="(message, index) in notifStore.requests" :index="message.id">
+            {{ message }}
             <button @click="accept(message.role, message.client_name, message.id)">Accept</button>
             <button @click="reject(message.role, message.client_name, message.id)">Rejct</button>
         </div>
@@ -23,7 +24,10 @@
         </div>
         <button @click="currentScreen = 'started'">Start Game</button>
     </div>
-    <div v-if="currentScreen = 'started'">
+    <div>
+        Current Code : {{ code }}
+    </div>
+    <div v-if="currentScreen == 'started'">
 
     </div>
 </template>
@@ -32,7 +36,7 @@
 import { useRequestNotifStore } from '@/stores/messageStore';
 import { reactive, Ref, ref } from 'vue';
 import enums from '@shared/enums';
-import type { stationTypes } from '@shared/types';
+import type { handshakeData, stationTypes } from '@shared/types';
 import { useSocketStore } from '@/stores/sockets';
 import { Socket } from 'socket.io-client';
 import { useHostStore } from '@/stores/roleStores';
@@ -51,6 +55,11 @@ function submitCode() {
     if (code.value.length != CODELENGTH) {
 
     } 
+    let authData: handshakeData = {
+        intendedRole: enums.gameRoles.host,
+        lobbyCode: code.value,
+    };
+    socket = socketStore.createSocket(authData, hostStore);
     currentScreen.value = "lobby";
 }
 function generateCode() {
