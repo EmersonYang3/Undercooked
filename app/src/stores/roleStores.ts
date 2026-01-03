@@ -9,9 +9,15 @@ export const useHostStore = defineStore(sharedEnums.gameRoles.host, () => {
     let isReady: Ref<boolean> = ref(false);
     const players: Ref<Array<number>> = ref([]);
     const stations: Ref<Array<number>> = ref([]);
-    const activeRecipes: Ref<Array<number>> = ref([]);
+    const activeRecipes: Ref<Map<number, foodItem>> = ref(new Map());
+    function setActiveRecipe(id: number, foodItem: foodItem) {
+        activeRecipes.value.set(id, foodItem);
+    }
+    function deleteActiveRecipe(id: number) {
+        activeRecipes.value.delete(id);
+    }
     return {
-        id, isReady, players, stations, activeRecipes,
+        id, isReady, players, stations, activeRecipes, setActiveRecipe, deleteActiveRecipe
     }
 })
 

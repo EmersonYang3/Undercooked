@@ -24,7 +24,8 @@ function alertAllGameStarting() {
 }
 
 function attemptGameStart(hostSocket: Socket) {
-    singletons.recipeGenerator.RefreshMethods()
+    singletons.recipeGenerator.RefreshMethods();
+    singletons.gameState.CreateInitialRecipes();
     alertAllGameStarting()
 }
 

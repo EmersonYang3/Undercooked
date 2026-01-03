@@ -27,7 +27,7 @@ function canPlaceFoodInStation(food: string, stationIdentifier: uniqueIdentifier
     return isMethodValid
 }
 
-function getAction(playerIdentifier: uniqueIdentifier, stationIdentifier: uniqueIdentifier): "placing" | "removing" | "none" | "combining" {
+function getAction(playerIdentifier: uniqueIdentifier, stationIdentifier: uniqueIdentifier): "submit" | "placing" | "removing" | "none" | "combining" {
     const lobbyData = lobbyService.getLobbyData()
     const playerData = lobbyData.playerData[playerIdentifier]
     const stationData = lobbyData.stationData[stationIdentifier]
@@ -39,6 +39,10 @@ function getAction(playerIdentifier: uniqueIdentifier, stationIdentifier: unique
     if (stationData.isHoldingPlate && isPlayerHoldingItem && !playerData.isHoldingPlate) {
         return "combining"
     } else if (isPlayerHoldingItem && !isStationHoldingItem) {
+        if (stationData.stationType == "submit") {
+            return "submit";
+            //imma assume we have a different station for submission
+        }
         return "placing"
     } else if (!isPlayerHoldingItem && isStationHoldingItem) {
         return "removing"

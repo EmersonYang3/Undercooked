@@ -11,7 +11,11 @@ enum serverToHostRemotes {
     clientPendingJoin = "clientPendingJoin",
     stationPendingJoin = "stationPendingJoin",
     newClientJoined = "newClientJoined",
-    newStationJoined = "newStationJoined"
+    newStationJoined = "newStationJoined",
+
+    //not implemented
+    newRecipe = "newRecipe",
+    recipeFinished = "recipeFinished",
 }
 
 enum serverToClientRemotes {
@@ -20,17 +24,19 @@ enum serverToClientRemotes {
     changeCurrentlyHeldItem = "changeCurrentlyHeldItem",
     gameStarted = "gameStarted"
 }
-
+//all implemented
 
 enum serverToStationRemotes {
     pendingJoin = "pendingJoin",
     stationAssigned = "stationAssigned",
     gameStarted = "gameStarted"
 }
+//all implemented
 
 enum stationToServerRemotes {
     specialKeyPressed = "specialKeyPressed"
 }
+//in progress
 
 enum sharedRemotes {
     connect = "connect",
@@ -38,6 +44,9 @@ enum sharedRemotes {
     hostRejectedConnection = "hostRejectedConnection",
     setCurrentItem = "setCurrentItem"
 }
+//implemented setCurrentItem for both client and station
+//this should be seperated into two tytpes of sharedRemotes
+//considering some are only for 2 types instead of all
 
 enum portServer {
     port = 3000
@@ -58,16 +67,64 @@ enum connValidatorErrors {
 
 enum stationTypes {
     empty = "empty",
-    boilingStation = "boilingStation"
+    boilingStation = "boilingStation",
+    fryingStation = "fryingStation",
+    dicingStation = "dicingStation",
+    submitStation = "submitStation",
+    steamingStation = "steamingStation",
+    blendingStation = "blendingStation",
 }
 
 enum foods {
     uncookedEgg = "uncookedEgg",
-    boiledEgg = "boiledEgg"
+    boiledEgg = "boiledEgg",
+    friedEgg = "friedEgg",
+    scrambledEgg = "scrambledEgg",
+    batter = "batter",
+    shrimp = "shrimp",
+    chicken = "chicken",
+    onion = "onion",
+    batteredShrimp = "batteredShrimp",
+    batteredChicken = "batteredChicken",
+    batteredOnion = "batteredOnion",
+    friedShrimp = "friedShrimp",
+    friedChicken = "friedChicken",
+    friedOnion = "friedOnion",
+    dough = "dough",
+    doughnut = "doughnut",
+    bread = "bread",
+    toast = "toast",
+    crossiant = "crossiant", //idk what to implement for this
+    milk = "milk",
+    warmMilk = "warmMilk",
+    banana = "banana",
+    apple = "apple",
+    orange = "orange",
+    watermelon = "watermelon",
+    dicedBanana = "dicedBanana",
+    dicedApple = "dicedApple",
+    dicedOrange = "dicedOrange",
+    dicedWatermelon = "dicedWatermelon",
+    dicedFruit = "dicedFruit",
+    lettuce = "lettuce",
+    fish = "fish",
+    steamedFish = "steamedFish",
+    rice = "rice",
+    steamedRice = "steamedRice",
+    potato = "potato",
+    steamedPotato = "steamedPotato",
+    fruitSalad = "fruitSalad",
+    smoothie = "smoothie",
 }
 
 enum methods {
-    boil = "boil"
+    boil = "boil",
+    fry = "fry",
+    combine = "combine",
+    dice = "dice",
+    steam = "steam",
+    blend = "blend",
+    submit = "submit",
 }
 
 export default {

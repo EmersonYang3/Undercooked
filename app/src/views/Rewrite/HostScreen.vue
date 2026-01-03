@@ -28,7 +28,9 @@
         Current Code : {{ code }}
     </div>
     <div v-if="currentScreen == 'started'">
-
+        <div v-for="[key, value] in hostStore.activeRecipes">
+            {{ value.name }}
+        </div>
     </div>
 </template>
 

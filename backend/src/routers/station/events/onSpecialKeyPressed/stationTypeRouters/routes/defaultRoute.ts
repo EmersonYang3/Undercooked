@@ -1,9 +1,9 @@
 import type { Socket } from "socket.io"
-import type { uniqueIdentifier, plate } from "shared/types"
+import type { uniqueIdentifier, plate, foodItem } from "shared/types"
 
 import specialKeyService from "services/specialKey"
 import singletons from "utils/singletons"
-
+import lobby from "services/lobby"
 const itemPlacer = singletons.itemPlacer
 const foodTransform = singletons.foodTransform
 
@@ -19,6 +19,14 @@ function onSpecialKeyPressed(stationSocket: Socket, stationIdentifier: uniqueIde
     if (whatAction == "placing") {
         itemPlacer.removeItemAndGiveTo("player", stationIdentifier, clientIdentifier)
 
+    } else if (whatAction == "submit") {
+        itemPlacer.removeStationItem(stationIdentifier);
+        let lobbyData = lobby.getLobbyData();
+        let item = lobbyData.stationData[stationIdentifier].currentlyHeldItem as foodItem;
+        //why do we even have plates unless its for easier detection???
+        //for now imma do a type assertion
+        //FIX THIS LATER
+        singletons.gameState.FinishRecipe(item);
     } else if (whatAction == "removing") {
         itemPlacer.removeItemAndGiveTo("station", stationIdentifier, clientIdentifier)
 

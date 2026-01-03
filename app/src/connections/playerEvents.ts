@@ -10,14 +10,22 @@ export function playerEvents(store: PlayerStore): Record<string, (...args: any[]
         },
         [enums.serverToClientRemotes.gameStarted]: (clientKey: string) => {
             store.setKey(clientKey);
+        },
+        [enums.serverToClientRemotes.changeCurrentlyHeldItem]: () => {
+
+        },
+        [enums.sharedRemotes.setCurrentItem]: () => {
+            
         }
     }
 }
-//these are always bound to the socket as it allows for picking up of the inital events 
 
 
 export const initialPlayerEvents = (store: PlayerStore): Record<string, (...args: any[]) => void> => ({
     [enums.serverToClientRemotes.pendingJoin]: (identifier: { identifier: number }) => {
         console.log("Identifier for Client : ", identifier.identifier);
     },
+    [enums.sharedRemotes.hostRejectedConnection]: () => {
+        console.log("You were rejected by the host")
+    }
 });
