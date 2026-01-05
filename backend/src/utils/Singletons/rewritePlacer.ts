@@ -1,34 +1,74 @@
-import { uniqueIdentifier, foodItem, plate } from "shared/types"
+import { uniqueIdentifier, internalStationData, internalFoodData, foodItem, plate, stationTypes } from "shared/types"
 
 import lobbyService from "services/lobby"
 import socketRegistry from "services/socketRegistry"
 
+import sharedData from "shared/data"
 import sharedEnums from "shared/enums"
+import { recipesByInput } from "shared/data/foodData"
+
+const recipes = sharedData.recipes;
+const stationData = sharedData.stationData
+
 const ServerSharedRemotes = sharedEnums.sharedRemotes
 
-function getAction(playerIdentifier: uniqueIdentifier, stationIdentifier: uniqueIdentifier): "submit" | "placing" | "removing" | "none" | "combining" {
+//actions that can be done
+//the player can grab a plate from a dispenser station 
+//if the player has said plate they can place it down at an empty station
+//once its placed they can then place some foodItem on it (hot dog or sm other completed recipe)
+//the player can also grab items and place them onto an empty station. 
+//the empty station performs checks to see if the item can be merged
+//this continues until eventually the item is completed and placed on a plate to be served
+//or if the item is trash it must be discarded in a discard station or smth 
+//this encourages accuracy in gameplay
+//current important station types: disposal, dispenser, empty, serve/submit, 
+function canPlaceFoodInStation(food: string, stationIdentifier: uniqueIdentifier): boolean {
+    const lobbyData = lobbyService.getLobbyData();
+    const targetStationData = lobbyData.stationData[stationIdentifier];
+    if (!targetStationData) { return false };
+
+    const stationType: stationTypes = targetStationData.stationType;
+    if (stationType == "submit") {
+
+    }
+    const internalStationData: internalStationData = stationData[stationType];
+    const internalFoodData = recipes[food];
+    if (!internalFoodData || !internalStationData) { return false }
+
+    const stationMethod = internalStationData.method;
+    const isMethodValid = recipesByInput[food][stationMethod] !== undefined;
+
+    return isMethodValid;
+}
+
+
+function getAction(playerIdentifier: uniqueIdentifier, stationIdentifier: uniqueIdentifier): "submit" | "none" | "assemble" | "placing" | "combining" | "removing" {
     const lobbyData = lobbyService.getLobbyData()
-    const playerData = lobbyData.playerData[playerIdentifier]
+    const playerData = lobbyData.playerData[playerIdentifier];
     const stationData = lobbyData.stationData[stationIdentifier]
     if (!playerData || !stationData) { return "none" }
-
     const isPlayerHoldingItem = playerData.currentlyHeldItem !== undefined
     const isStationHoldingItem = stationData.currentlyHeldItem !== undefined
-
+    if (stationData.stationType == "submit") { return "submit" }
     if (stationData.isHoldingPlate && isPlayerHoldingItem && !playerData.isHoldingPlate) {
-        return "combining"
-    } else if (isPlayerHoldingItem && !isStationHoldingItem) {
-        if (stationData.stationType == "submit") {
-            return "submit";
-            //imma assume we have a different station for submission
-        }
-        return "placing"
+        return "assemble";
+    } else if (!isStationHoldingItem && isPlayerHoldingItem) {
+        //leave
+        return "placing";
+    } else if (isStationHoldingItem && isPlayerHoldingItem) {
+        //leave
+        return "combining";
     } else if (!isPlayerHoldingItem && isStationHoldingItem) {
-        return "removing"
+        //leave
+        return "removing";
     }
-
-    return "none"
+    return "none";
 }
+
+
+
+
+
 
 function getPlayerHeldItem(identifier: uniqueIdentifier): [foodItem | plate, boolean] | undefined {
     const lobbyData = lobbyService.getLobbyData()
@@ -37,7 +77,6 @@ function getPlayerHeldItem(identifier: uniqueIdentifier): [foodItem | plate, boo
 
     return [playerData.currentlyHeldItem, playerData.isHoldingPlate]
 }
-
 function getStationHeldItem(identifier: uniqueIdentifier): [foodItem | plate, boolean] | undefined {
     const lobbyData = lobbyService.getLobbyData()
     const stationData = lobbyData.stationData[identifier]
@@ -45,7 +84,6 @@ function getStationHeldItem(identifier: uniqueIdentifier): [foodItem | plate, bo
 
     return [stationData.currentlyHeldItem, stationData.isHoldingPlate]
 }
-
 function removePlayerItem(identifier: uniqueIdentifier): [foodItem | plate | undefined, boolean] {
     let playerHeldItem: foodItem | plate | undefined = undefined
     let isItemAPlate = false
@@ -134,15 +172,11 @@ function removeItemAndGiveTo(reciever: "station" | "player", fromIdentifier: uni
     if (reciever === "player") {
         const [removedStationItem, itemType] = removeStationItem(fromIdentifier)
         if (!removedStationItem) { return }
-
         givePlayerItem(toIdentifier, removedStationItem, itemType)
-
     } else {
         const [removedPlayerItem, itemType] = removePlayerItem(fromIdentifier)
         if (!removedPlayerItem) { return }
-
         giveStationItem(toIdentifier, removedPlayerItem, itemType)
     }
 }
-
-export default { removePlayerItem, givePlayerItem, removeStationItem, giveStationItem, getAction, getPlayerHeldItem, getStationHeldItem, removeItemAndGiveTo }
+export default { canPlaceFoodInStation, removePlayerItem, givePlayerItem, removeStationItem, giveStationItem, getAction, getPlayerHeldItem, getStationHeldItem, removeItemAndGiveTo }

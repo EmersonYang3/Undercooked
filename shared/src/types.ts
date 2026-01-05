@@ -1,3 +1,4 @@
+import sharedEnums from "./enums";
 export type uniqueIdentifier = number
 
 export type intendedRoles = 'host' | 'client' | 'station'
@@ -22,7 +23,7 @@ export type foodItem = {
     id: uniqueIdentifier,
     quality: number,
 }
-export type stationTypes = "boilStation" | "none" | "smth else"
+export type stationTypes = "boilStation" | "fryStation" | "disposal" | "none" | "submit" | "dispenser";
 export type internalStationData = {
     method: string
 }
@@ -37,7 +38,7 @@ export type plate = {
 }
 
 export type stationData = {
-    stationType: string,
+    stationType: stationTypes,
     isHoldingPlate: boolean,
     currentlyHeldItem?: foodItem | plate
 }
@@ -46,4 +47,26 @@ export type playerData = {
     currentPoints: number,
     isHoldingPlate: boolean,
     currentlyHeldItem?: foodItem | plate
+}
+export type FoodId = string;
+enum methods {
+    boil = "boil",
+    fry = "fry",
+    combine = "combine",
+    dice = "dice",
+    steam = "steam",
+    blend = "blend",
+    submit = "submit",
+}
+export type MethodId = `${methods}`;
+export interface Recipe {
+    name: string;
+    inputs: FoodId[],
+    method: MethodId;
+    output: FoodId;
+}
+export type InternalFoodData = {
+    id: uniqueIdentifier,
+    time_remaining: number,
+    recipe_name: string,
 }

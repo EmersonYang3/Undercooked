@@ -9,15 +9,12 @@ import { useTerminalStore } from '@/stores/roleStores';
 import router from '@/router';
 const gameStarted = ref(false);
 const stationStore = useTerminalStore();
-function route() {
-    let stationtype = stationStore.station;
-    router.push(`/terminal/${stationtype}`);
-}
 watch(() => gameStarted, (started) => {
     if (!started.value) {
         return;
     }
-    route();
+    let stationtype = stationStore.station;
+    router.push(`/terminal/${stationtype}`);
 })
 //simple routing function
 </script>

@@ -22,10 +22,10 @@ function alertAllGameStarting() {
 
     lobbyService.emitToAllStations(serverTSRemotes.gameStarted, allRegisteredKeys)
 }
-
-function attemptGameStart(hostSocket: Socket) {
+function attemptGameStart() {
     singletons.recipeGenerator.RefreshMethods();
-    singletons.gameState.CreateInitialRecipes();
+    singletons.recipeGenerator.RefreshValidRecipes();
+    
     alertAllGameStarting()
 }
 

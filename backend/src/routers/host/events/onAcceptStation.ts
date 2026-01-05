@@ -24,12 +24,12 @@ function onAcceptStation(hostSocket: Socket, identifier: uniqueIdentifier, stati
     if (!stationConnection) { console.log("Station connection not found"); return }
 
     const isStationInLobby = lobbyService.isConnectionRegistered(stationConnection)
-    if (!isStationInLobby) { console.log("Station not in lobby"); return }
+    if (isStationInLobby) { console.log("Station not in lobby"); return }
 
     pushStationToLobby(stationConnection, stationName, identifier)
 
     hostSocket.emit(serverToHostRemotes.newStationJoined, identifier)
     stationConnection.socket.emit(serverToStationRemotes.stationAssigned, stationName)
-}  
+}
 
 export default onAcceptStation

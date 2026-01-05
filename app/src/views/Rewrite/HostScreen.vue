@@ -22,7 +22,7 @@
             </select>
             <button @click="submitStationType">Submit</button>
         </div>
-        <button @click="currentScreen = 'started'">Start Game</button>
+        <button @click="startGame">Start Game</button>
     </div>
     <div>
         Current Code : {{ code }}
@@ -79,7 +79,9 @@ const currentIdentifier = ref<null | number>(null);
 const stationMap = reactive(new Map());
 
 function submitStationType() {
-    socket.emit("acceptTerminalJoin", currentIdentifier.value, selectedStation.value);
+    console.log(selectedStation.value);
+    console.log(currentIdentifier.value);
+    socket.emit(enums.hostToServerRemotes.acceptStationJoin, currentIdentifier.value, selectedStation.value);
     currentIdentifier.value =  null;
     selectedStation.value = null;
     selectType.value = false;
@@ -89,6 +91,7 @@ function accept(role: "player" | "station", identifier: number, messageId: numbe
         socket.emit("acceptClientJoin", identifier);
     } else if (role === "station") {
         selectType.value = true;
+        currentIdentifier.value = identifier;
     }
 
     notifStore.removeRequest(messageId);
@@ -101,7 +104,10 @@ function reject(role: "player" | "station", identifier: number, messageId: numbe
     }
     notifStore.removeRequest(messageId);
 }
-
+function startGame() {
+    currentScreen.value = 'started';
+    socket.emit(enums.hostToServerRemotes.startLobby);
+}
 
 </script>
 

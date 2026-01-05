@@ -1,7 +1,8 @@
-import foodData from "./data/foodData";
+import { recipes, recipesByInput } from "./data/foodData";
 import stationData from "./data/stationData"
 
 export default {
-    foodData,
+    recipes,
+    recipesByInput,
     stationData
 }

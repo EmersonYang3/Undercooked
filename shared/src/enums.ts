@@ -80,6 +80,7 @@ enum foods {
     boiledEgg = "boiledEgg",
     friedEgg = "friedEgg",
     scrambledEgg = "scrambledEgg",
+    omelette = "omelette",
     batter = "batter",
     shrimp = "shrimp",
     chicken = "chicken",
@@ -116,8 +117,11 @@ enum foods {
     fruitSalad = "fruitSalad",
     smoothie = "smoothie",
 }
-
-enum methods {
+export const FoodSet = new Set<string>(Object.values(foods));
+export function isFood(value: unknown): value is foods {
+    return typeof value === "string" && FoodSet.has(value);
+}
+export enum methods {
     boil = "boil",
     fry = "fry",
     combine = "combine",
@@ -145,5 +149,6 @@ export default {
 
     stationTypes,
     methods,
-    foods
+    foods,
+    isFood,
 }
