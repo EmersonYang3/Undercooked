@@ -13,7 +13,6 @@ enum serverToHostRemotes {
     newClientJoined = "newClientJoined",
     newStationJoined = "newStationJoined",
 
-    //not implemented
     newRecipe = "newRecipe",
     recipeFinished = "recipeFinished",
 }
@@ -24,19 +23,16 @@ enum serverToClientRemotes {
     changeCurrentlyHeldItem = "changeCurrentlyHeldItem",
     gameStarted = "gameStarted"
 }
-//all implemented
 
 enum serverToStationRemotes {
     pendingJoin = "pendingJoin",
     stationAssigned = "stationAssigned",
     gameStarted = "gameStarted"
 }
-//all implemented
 
 enum stationToServerRemotes {
     specialKeyPressed = "specialKeyPressed"
 }
-//in progress
 
 enum sharedRemotes {
     connect = "connect",
@@ -44,9 +40,6 @@ enum sharedRemotes {
     hostRejectedConnection = "hostRejectedConnection",
     setCurrentItem = "setCurrentItem"
 }
-//implemented setCurrentItem for both client and station
-//this should be seperated into two tytpes of sharedRemotes
-//considering some are only for 2 types instead of all
 
 enum portServer {
     port = 3000
@@ -95,7 +88,7 @@ enum foods {
     doughnut = "doughnut",
     bread = "bread",
     toast = "toast",
-    crossiant = "crossiant", //idk what to implement for this
+    crossiant = "crossiant",
     milk = "milk",
     warmMilk = "warmMilk",
     banana = "banana",
@@ -118,9 +111,11 @@ enum foods {
     smoothie = "smoothie",
 }
 export const FoodSet = new Set<string>(Object.values(foods));
+
 export function isFood(value: unknown): value is foods {
     return typeof value === "string" && FoodSet.has(value);
 }
+
 export enum methods {
     boil = "boil",
     fry = "fry",
@@ -152,3 +147,5 @@ export default {
     foods,
     isFood,
 }
+
+export { stationTypes }

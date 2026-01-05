@@ -1,148 +1,100 @@
-import { uniqueIdentifier, foodItem, plate } from "shared/types"
-
+import sharedEnums from "shared/enums"
 import lobbyService from "services/lobby"
 import socketRegistry from "services/socketRegistry"
 
-import sharedEnums from "shared/enums"
-const ServerSharedRemotes = sharedEnums.sharedRemotes
+import type { holdableItem, uniqueIdentifier } from "shared/types"
 
-function getAction(playerIdentifier: uniqueIdentifier, stationIdentifier: uniqueIdentifier): "submit" | "placing" | "removing" | "none" | "combining" {
-    const lobbyData = lobbyService.getLobbyData()
-    const playerData = lobbyData.playerData[playerIdentifier]
-    const stationData = lobbyData.stationData[stationIdentifier]
-    if (!playerData || !stationData) { return "none" }
+const serverToClientRemotes = sharedEnums.serverToClientRemotes
+const sharedRemotes = sharedEnums.sharedRemotes
 
-    const isPlayerHoldingItem = playerData.currentlyHeldItem !== undefined
-    const isStationHoldingItem = stationData.currentlyHeldItem !== undefined
+export function createEmptyHoldable(): holdableItem {
+    return { foodItems: [], isPlated: false }
+}
 
-    if (stationData.isHoldingPlate && isPlayerHoldingItem && !playerData.isHoldingPlate) {
-        return "combining"
-    } else if (isPlayerHoldingItem && !isStationHoldingItem) {
-        if (stationData.stationType == "submit") {
-            return "submit";
-            //imma assume we have a different station for submission
-        }
-        return "placing"
-    } else if (!isPlayerHoldingItem && isStationHoldingItem) {
-        return "removing"
+function cloneHoldable(item?: holdableItem): holdableItem {
+    if (!item) { return createEmptyHoldable() }
+    return {
+        isPlated: item.isPlated,
+        foodItems: item.foodItems.map((f) => ({ ...f })),
     }
+}
 
+function GetAction(clientIdentifier: uniqueIdentifier, stationIdentifier: uniqueIdentifier): "place" | "remove" | "none" {
+    const lobbyData = lobbyService.getLobbyData()
+    const player = lobbyData.playerData[clientIdentifier]
+    const station = lobbyData.stationData[stationIdentifier]
+    if (!player || !station) { return "none" }
+
+    const playerItem = player.currentlyHeldItem
+    const stationItem = station.currentlyHeldItem
+
+    const playerHasFood = playerItem.foodItems.length > 0
+    const stationHasFood = stationItem.foodItems.length > 0
+
+    if (playerHasFood && !playerItem.isPlated) { return "place" }
+    if (!playerHasFood && stationHasFood) { return "remove" }
     return "none"
 }
 
-function getPlayerHeldItem(identifier: uniqueIdentifier): [foodItem | plate, boolean] | undefined {
+function RemoveItemFromClient(clientIdentifier: uniqueIdentifier): holdableItem {
     const lobbyData = lobbyService.getLobbyData()
-    const playerData = lobbyData.playerData[identifier]
-    if (!playerData || playerData.currentlyHeldItem === undefined) { return undefined }
+    const player = lobbyData.playerData[clientIdentifier]
+    if (!player) { return createEmptyHoldable() }
 
-    return [playerData.currentlyHeldItem, playerData.isHoldingPlate]
+    const removedItem = cloneHoldable(player.currentlyHeldItem)
+    player.currentlyHeldItem = createEmptyHoldable()
+    return removedItem
 }
 
-function getStationHeldItem(identifier: uniqueIdentifier): [foodItem | plate, boolean] | undefined {
+function AlertClientHoldingItemChanged(clientIdentifier: uniqueIdentifier, newItem: holdableItem): void {
+    const connection = socketRegistry.getSocketConnectionById(clientIdentifier)
+    if (!connection) { return }
+
+    connection.socket.emit(serverToClientRemotes.changeCurrentlyHeldItem, newItem)
+}
+
+function RemoveItemFromStation(stationIdentifier: uniqueIdentifier): holdableItem {
     const lobbyData = lobbyService.getLobbyData()
-    const stationData = lobbyData.stationData[identifier]
-    if (!stationData || stationData.currentlyHeldItem === undefined) { return undefined }
+    const station = lobbyData.stationData[stationIdentifier]
+    if (!station) { return createEmptyHoldable() }
 
-    return [stationData.currentlyHeldItem, stationData.isHoldingPlate]
+    const removedItem = cloneHoldable(station.currentlyHeldItem)
+    station.currentlyHeldItem = createEmptyHoldable()
+    return removedItem
 }
 
-function removePlayerItem(identifier: uniqueIdentifier): [foodItem | plate | undefined, boolean] {
-    let playerHeldItem: foodItem | plate | undefined = undefined
-    let isItemAPlate = false
+function AlertStationHoldingItemChanged(stationIdentifier: uniqueIdentifier, newItem: holdableItem): void {
+    const connection = socketRegistry.getSocketConnectionById(stationIdentifier)
+    if (!connection) { return }
 
-    lobbyService.transformLobbyData((lobbyData) => {
-        const playerData = lobbyData.playerData[identifier]
-        const playerSocketConnection = socketRegistry.getSocketConnectionById(identifier)
-        if (!playerData || !playerSocketConnection) { return lobbyData }
-
-        playerHeldItem = playerData.currentlyHeldItem
-        if (!playerHeldItem) { return lobbyData }
-
-        isItemAPlate = playerData.isHoldingPlate
-
-        playerData.currentlyHeldItem = undefined
-        playerData.isHoldingPlate = false
-
-        lobbyData.playerData[identifier] = playerData
-        playerSocketConnection.socket.emit(ServerSharedRemotes.setCurrentItem, null, false)
-
-        return lobbyData
-    })
-
-    return [playerHeldItem, isItemAPlate]
+    connection.socket.emit(sharedRemotes.setCurrentItem, newItem)
 }
 
-function givePlayerItem(identifier: uniqueIdentifier, item: foodItem | plate, isRecievingPlate: boolean) {
-    lobbyService.transformLobbyData((lobbyData) => {
-        const playerData = lobbyData.playerData[identifier]
-        const playerSocketConnection = socketRegistry.getSocketConnectionById(identifier)
-        if (!playerData || playerData.currentlyHeldItem || !playerSocketConnection) { return lobbyData }
+function GiveItemToClient(clientIdentifier: uniqueIdentifier, item: holdableItem): void {
+    const lobbyData = lobbyService.getLobbyData()
+    const player = lobbyData.playerData[clientIdentifier]
+    if (!player) { return }
 
-        playerData.currentlyHeldItem = item
-        playerData.isHoldingPlate = isRecievingPlate
-
-        lobbyData.playerData[identifier] = playerData
-        playerSocketConnection.socket.emit(ServerSharedRemotes.setCurrentItem, item, isRecievingPlate)
-
-        return lobbyData
-    })
+    player.currentlyHeldItem = cloneHoldable(item)
+    AlertClientHoldingItemChanged(clientIdentifier, player.currentlyHeldItem)
 }
 
-function removeStationItem(identifier: uniqueIdentifier): [foodItem | plate | undefined, boolean] {
-    let stationHeldItem: foodItem | plate | undefined = undefined
-    let isItemAPlate = false
+function GiveItemToStation(stationIdentifier: uniqueIdentifier, item: holdableItem): void {
+    const lobbyData = lobbyService.getLobbyData()
+    const station = lobbyData.stationData[stationIdentifier]
+    if (!station) { return }
 
-    lobbyService.transformLobbyData((lobbyData) => {
-        const stationData = lobbyData.stationData[identifier]
-        const stationSocketConnection = socketRegistry.getSocketConnectionById(identifier)
-        if (!stationData || !stationSocketConnection) { return lobbyData }
-
-        stationHeldItem = stationData.currentlyHeldItem
-        if (!stationHeldItem) { return lobbyData }
-
-        isItemAPlate = stationData.isHoldingPlate
-
-        stationData.currentlyHeldItem = undefined
-        stationData.isHoldingPlate = false
-        lobbyData.stationData[identifier] = stationData
-
-        stationSocketConnection.socket.emit(ServerSharedRemotes.setCurrentItem, null, false)
-
-        return lobbyData
-    })
-
-    return [stationHeldItem, isItemAPlate]
+    station.currentlyHeldItem = cloneHoldable(item)
+    AlertStationHoldingItemChanged(stationIdentifier, station.currentlyHeldItem)
 }
 
-function giveStationItem(identifier: uniqueIdentifier, item: foodItem | plate, isRecievingPlate: boolean) {
-    lobbyService.transformLobbyData((lobbyData) => {
-        const stationData = lobbyData.stationData[identifier]
-        const stationSocketConnection = socketRegistry.getSocketConnectionById(identifier)
-        if (!stationData || stationData.currentlyHeldItem || !stationSocketConnection) { return lobbyData }
-
-        stationData.currentlyHeldItem = item
-        stationData.isHoldingPlate = isRecievingPlate
-        lobbyData.stationData[identifier] = stationData
-
-        stationSocketConnection.socket.emit(ServerSharedRemotes.setCurrentItem, item, isRecievingPlate)
-
-        return lobbyData
-    })
+export default {
+    GetAction,
+    RemoveItemFromClient,
+    AlertClientHoldingItemChanged,
+    RemoveItemFromStation,
+    AlertStationHoldingItemChanged,
+    GiveItemToClient,
+    GiveItemToStation,
+    createEmptyHoldable,
 }
-
-function removeItemAndGiveTo(reciever: "station" | "player", fromIdentifier: uniqueIdentifier, toIdentifier: uniqueIdentifier) {
-    if (reciever === "player") {
-        const [removedStationItem, itemType] = removeStationItem(fromIdentifier)
-        if (!removedStationItem) { return }
-
-        givePlayerItem(toIdentifier, removedStationItem, itemType)
-
-    } else {
-        const [removedPlayerItem, itemType] = removePlayerItem(fromIdentifier)
-        if (!removedPlayerItem) { return }
-
-        giveStationItem(toIdentifier, removedPlayerItem, itemType)
-    }
-}
-
-export default { removePlayerItem, givePlayerItem, removeStationItem, giveStationItem, getAction, getPlayerHeldItem, getStationHeldItem, removeItemAndGiveTo }

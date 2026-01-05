@@ -1,54 +1,49 @@
-import { FoodId, internalFoodData, internalStationData, Recipe } from "shared/types"
+import { internalStationData } from "shared/types"
+import { stationTypes } from "shared/enums"
 
 import lobbyService from "services/lobby"
 import sharedData from "shared/data"
-const recipes = sharedData.recipes;
-//test data for now
+
+const foodData = sharedData.foodData;
+const stationDataMap = sharedData.stationData as Record<stationTypes, internalStationData>;
+
 let availableMethods: Set<string> = new Set(["boil"]);
+
 function RefreshMethods() {
     const lobbyData = lobbyService.getLobbyData()
     if (!lobbyData.stationData) { return }
     availableMethods = new Set();
     for (const stationData of Object.values(lobbyData.stationData)) {
-        const internalStationData: internalStationData | undefined = stationData[stationData.stationType]
-        if (!internalStationData) { continue }
-        const method = internalStationData.method
+        const internalStation: internalStationData | undefined = stationDataMap[stationData.stationType]
+        if (!internalStation) { continue }
+        const method = internalStation.method
         if (!method || method === "") { continue }
         availableMethods.add(method);
     }
 }
 
-const craftableCache = new Map<FoodId, boolean>();
-export function CachedIsCraftable(recipe: Recipe): boolean {
-    const cached = craftableCache.get(recipe.output);
-    if (cached !== undefined) {
-        return cached;
-    }
-    if (!availableMethods.has(recipe.method)) {
-        craftableCache.set(recipe.output, false);
-        return false;
-    }
-    for (const input of recipe.inputs) {
-        const inputRecipe = recipes[input];
-        if (!inputRecipe) continue;
-
-        if (!CachedIsCraftable(inputRecipe)) {
-            craftableCache.set(recipe.output, false);
-            return false;
-        }
-    }
-    craftableCache.set(recipe.output, true);
-    return true;
-}
 const possibleRecipes: string[] = []
+
 function RefreshValidRecipes() {
-    for (const [name, recipe] of Object.entries(recipes)) {
-        const shouldConsiderAsRecipe = CachedIsCraftable(recipe as Recipe);
-        if (!shouldConsiderAsRecipe) { continue }
-        possibleRecipes.push(name);
+    possibleRecipes.length = 0
+    for (const [name, data] of Object.entries(foodData)) {
+        if (!data.considerAsRecipe) { continue }
+        // at least one of the required items should be achievable with currently available methods
+        if (data.requiredItems.length === 0) {
+            possibleRecipes.push(name)
+            continue
+        }
+
+        const hasPath = data.requiredItems.some((req) => {
+            const reqData = foodData[req]
+            if (!reqData) { return false }
+            return Object.keys(reqData.methods).some((method) => availableMethods.has(method))
+        })
+
+        if (hasPath) { possibleRecipes.push(name) }
     }
 }
-//caching table for faster assembling
+
 function GenerateRecipe(): string {
     if (possibleRecipes.length === 0) { throw new Error("No possible recipes could be generated") }
     const randomIndex = Math.floor(Math.random() * possibleRecipes.length)
@@ -56,6 +51,4 @@ function GenerateRecipe(): string {
     return randomlyPickedRecipe
 }
 
-
-
-export default { RefreshMethods, RefreshValidRecipes, GenerateRecipe, }
+export default { RefreshMethods, RefreshValidRecipes, GenerateRecipe }

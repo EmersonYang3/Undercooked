@@ -1,51 +1,66 @@
 import sharedEnums from "../enums"
-import type { FoodId, internalFoodData, Recipe } from "../types"
+import type { internalFoodData } from "../types"
 
 const foods = sharedEnums.foods
 const methods = sharedEnums.methods
-export const recipes: Record<string, Recipe> = {
+
+export const foodData: Record<string, internalFoodData> = {
+    [foods.uncookedEgg]: {
+        name: "Uncooked Egg",
+        methods: {
+            [methods.boil]: foods.boiledEgg,
+            [methods.fry]: foods.friedEgg,
+            [methods.blend]: foods.scrambledEgg,
+        },
+        considerAsRecipe: false,
+        requiredItems: [],
+    },
     [foods.boiledEgg]: {
         name: "Boiled Egg",
-        inputs: [foods.uncookedEgg],
-        method: methods.boil,
-        output: foods.boiledEgg
+        methods: {},
+        considerAsRecipe: true,
+        requiredItems: [foods.uncookedEgg],
     },
     [foods.friedEgg]: {
         name: "Fried Egg",
-        inputs: [foods.uncookedEgg],
-        method: methods.fry,
-        output: foods.friedEgg
+        methods: {},
+        considerAsRecipe: true,
+        requiredItems: [foods.uncookedEgg],
     },
     [foods.scrambledEgg]: {
         name: "Scrambled Egg",
-        inputs: [foods.uncookedEgg, foods.onion],
-        method: methods.blend,
-        output: foods.scrambledEgg,
+        methods: {
+            [methods.fry]: foods.omelette,
+        },
+        considerAsRecipe: true,
+        requiredItems: [foods.uncookedEgg, foods.onion],
     },
     [foods.omelette]: {
         name: "Omelette",
-        inputs: [foods.scrambledEgg],
-        method: methods.fry,
-        output: foods.omelette,
+        methods: {},
+        considerAsRecipe: true,
+        requiredItems: [foods.scrambledEgg],
+    },
+    [foods.dicedFruit]: {
+        name: "Diced Fruit Mix",
+        methods: {
+            [methods.blend]: foods.smoothie,
+        },
+        considerAsRecipe: false,
+        requiredItems: [foods.dicedBanana, foods.dicedApple, foods.dicedOrange, foods.dicedWatermelon],
+    },
+    [foods.fruitSalad]: {
+        name: "Fruit Salad",
+        methods: {},
+        considerAsRecipe: true,
+        requiredItems: [foods.dicedBanana, foods.dicedApple, foods.dicedOrange, foods.dicedWatermelon],
+    },
+    [foods.smoothie]: {
+        name: "Smoothie",
+        methods: {},
+        considerAsRecipe: true,
+        requiredItems: [foods.dicedFruit],
     },
 }
 
-export const recipesByInput: Record<string, Record<string, string>> = {}
-//sorts it by an input key
-//allows for o(1) lookups when checking if an item has certain methods 
-for (const [name, recipe] of Object.entries(recipes)) {
-    let key = inputKey(recipe.inputs);
-    if (!recipesByInput[key]) {
-        recipesByInput[key] = {}
-    }
-    recipesByInput[key][recipe.method] = name;
-}
-export function inputKey(inputs: Array<string>): string {
-    //if this fails its most likely due to sort
-    //if needs to be fixed write a function that assigns weights to the foods
-    //and use those weights for sorting to ensure behavior is known
-    return inputs.slice().sort().join("+");
-}
-
-
-export default { recipes, recipesByInput, inputKey }
+export default { foodData }

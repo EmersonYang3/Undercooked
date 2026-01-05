@@ -1,6 +1,6 @@
 import recipeGenerator from "./Singletons/recipeGenerator"
-import foodTransform from "./Singletons/rewriteTransform"
-import itemPlacer from "./Singletons/rewritePlacer"
+import foodTransform from "./Singletons/foodTransformer"
+import itemPlacer from "./Singletons/itemPlacer"
 import gameState from "./Singletons/gameState"
 export default {
     recipeGenerator,
