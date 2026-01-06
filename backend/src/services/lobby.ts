@@ -1,6 +1,6 @@
 import type { lobbyData, socketConnection, fixedSocketData } from "utils/types";
 
-let currentLobbyData: lobbyData = { host: { socket: null, identifier: 0 }, clients: [], stations: [], recipesInProgress: [], playerData: {}, stationData: {} };
+let currentLobbyData: lobbyData = { host: { socket: null, identifier: 0 }, clients: [], stations: [], recipesInProgress: {}, playerData: {}, stationData: {} };
 let currentLobbyCode = ''
 
 function generateLobbyCode(): string {
