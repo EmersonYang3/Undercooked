@@ -32,6 +32,8 @@ function onSpecialKeyPressed(stationSocket: Socket, stationIdentifier: uniqueIde
         const clientHoldable = itemPlacer.RemoveItemFromClient(clientIdentifier);
         itemPlacer.GiveItemToStation(stationIdentifier, clientHoldable);
     }
+
+    
     if (clientHasFood && stationHasFood && !stationItem.isPlated && !clientItem.isPlated) {
         const stationHoldable = itemPlacer.RemoveItemFromStation(stationIdentifier);
         const clientHoldable = itemPlacer.RemoveItemFromClient(clientIdentifier);
