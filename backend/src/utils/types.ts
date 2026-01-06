@@ -17,7 +17,7 @@ export type lobbyData = {
     clients: socketConnection[],
     stations: socketConnection[],
 
-    recipesInProgress: activeRecipe[],
+    recipesInProgress: Record<uniqueIdentifier, activeRecipe>,
     playerData: Record<uniqueIdentifier, playerData>,
     stationData: Record<uniqueIdentifier, stationData>
 }

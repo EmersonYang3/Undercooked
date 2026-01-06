@@ -1,26 +1,49 @@
 import { performance } from "node:perf_hooks";
 
-import type { activeRecipe } from "shared/types";
+import type { activeRecipe, uniqueIdentifier } from "shared/types";
 import lobby from "./lobby";
+import unqi from "./unqi";
+import recipeGenerator from "utils/Singletons/recipeGenerator";
+import foodData from "shared/data/foodData";
+
+
+const lobbyData = lobby.getLobbyData();
+const maxRecipes = 5;
 
 let isRunning = false;
 let timeCache = performance.now();
 
+let score = 0;
+
 function shouldGenerateNewRecipe(): boolean {
-    return true;
+    return Object.values(lobbyData.recipesInProgress).length >= maxRecipes;
 }
 
-function generateNewRecipe(): void {
+function generateNewRecipe(): activeRecipe {
     console.log("[GameLoop] Stub: generate new recipe");
+    const newRecipeName = recipeGenerator.GenerateRecipe();
+    const newActiveRecipe: activeRecipe = {
+        targetFoodItem: newRecipeName,
+        id: unqi.getUnqi(),
+        timeRemaining: 6000,
+    }
+    return newActiveRecipe;
+}
+
+function finishRecipe(id: uniqueIdentifier, failedRecipe: boolean): void {
+    console.log(`[GameLoop] Stub: finished recipe ${id}`);
+    const recipe = lobbyData.recipesInProgress[id];
+    const internalEntry = foodData.recipes[recipe.targetFoodItem];
+    if (failedRecipe) {
+        score;
+    }
+    delete lobbyData.recipesInProgress[id];
 }
 
 function tick(): void {
-    const lobbyData = lobby.getLobbyData();
-
-    const activeRecipes: activeRecipe[] = lobbyData.recipesInProgress ?? [];
-    const updatedRecipes: activeRecipe[] = [];
-
-    for (const recipe of activeRecipes) {
+    const activeRecipes: Record<uniqueIdentifier, activeRecipe> = lobbyData.recipesInProgress ?? {};
+    const updatedRecipes: Record<uniqueIdentifier, activeRecipe> = {};
+    for (const recipe of Object.values(activeRecipes)) {
         const now = performance.now();
         const delta = now - timeCache;
 
@@ -28,11 +51,12 @@ function tick(): void {
 
         if (updatedTimeRemaining === 0 && recipe.timeRemaining > 0) {
             console.log(`[GameLoop] Recipe "${recipe.targetFoodItem}" has reached zero time remaining.`);
+            finishRecipe(recipe.id, true);
+            continue;
         }
-
-        updatedRecipes.push({ ...recipe, timeRemaining: updatedTimeRemaining });
+        const newId = unqi.getUnqi();
+        updatedRecipes[newId] = { ...recipe, timeRemaining: updatedTimeRemaining, id: newId };
     }
-
     lobby.transformLobbyData((data) => ({ ...data, recipesInProgress: updatedRecipes }));
 
     if (shouldGenerateNewRecipe()) { generateNewRecipe(); }
@@ -43,6 +67,11 @@ function tick(): void {
 
 function startGameLoop(): void {
     if (isRunning) { return }
+    recipeGenerator.RefreshMethods();
+    while (Object.values(lobbyData.recipesInProgress).length < maxRecipes) {
+        const newActiveRecipe = generateNewRecipe();
+        lobbyData.recipesInProgress[newActiveRecipe.id] = newActiveRecipe;
+    }
 
     isRunning = true
     timeCache = performance.now()
@@ -50,4 +79,4 @@ function startGameLoop(): void {
     setImmediate(tick)
 }
 
-export { startGameLoop };
+export { startGameLoop, finishRecipe };
