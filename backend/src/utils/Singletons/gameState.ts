@@ -1,45 +1,44 @@
-import { InternalFoodData, uniqueIdentifier } from "shared/types";
+import { holdableItem, internalFoodData, uniqueIdentifier } from "shared/types";
 import recipeGenerator from "./recipeGenerator";
 import unqi from "../../services/unqi";
-import lobby from "services/lobby";
+import foodData from "shared/data/foodData";
 
-const MAXRECIPES = 5;
-let currentRecipes: Map<uniqueIdentifier, InternalFoodData> = new Map();
+const MaxRecipes = 5;
+const currentRecipes: Record<uniqueIdentifier, internalFoodData> = {};
 let finishedRecipes = 0;
 let score = 0;
-function CreateInitialRecipes() {
-    for (let i = 0; i < MAXRECIPES; i++) {
-        CreateRecipe();
+
+
+
+function GenerateInitialRecipes() {
+    for (let i = 0; i < MaxRecipes; i++) {
+        GenerateNewRecipe();
     }
 }
-function CreateRecipe() {
-    if (currentRecipes.size >= MAXRECIPES) {
-        console.log("Max recipes allowed at a time, recipe not created");
-        return;
+function GenerateNewRecipe() {
+    const uniqId = unqi.getUnqi();
+    const recipeName = recipeGenerator.GenerateRecipe();
+    const internalRep = foodData[recipeName];
+    currentRecipes[uniqId] = internalRep;
+}
+function AttemptSubmit(item: holdableItem): boolean {
+    if (item.foodItems.length != 1) { return false };
+    if (!item.foodItems[0]) { return false };
+    const toBeSubmitted = item.foodItems[0];
+    let matched = false;
+    for (const [id, data] of Object.entries(currentRecipes)) {
+        if (data.name == toBeSubmitted.name) {
+            score += toBeSubmitted.quality;
+            matched = true;
+            unqi.freeUnqi(Number(id));
+            delete currentRecipes[id];
+            break;
+        }
     }
-    let uniqId = unqi.getUnqi();
-    let new_recipe = recipeGenerator.GenerateRecipe();
-    let foodItem: InternalFoodData = {
-        id: uniqId,
-        time_remaining: 60 * 1000,
-        recipe_name: new_recipe,
+    if (!matched) {
+        score -= toBeSubmitted.quality;
     }
-    currentRecipes.set(uniqId, foodItem);
-    let lobbyData = lobby.getLobbyData();
-    lobbyData.host.socket.emit("newRecipe", foodItem)
+    GenerateNewRecipe();
+    return true;
 }
-function FinishRecipe(identifier: uniqueIdentifier) {
-    let foodData = currentRecipes.get(identifier);
-    let recipeScore = CalculateRecipeScore(foodData.recipe_name);
-    score += recipeScore;
-    finishedRecipes += 1;
-    let lobbyData = lobby.getLobbyData();
-    lobbyData.host.socket.emit("recipeFinished", identifier);
-    currentRecipes.delete(identifier);
-    unqi.freeUnqi(identifier);
-}
-function CalculateRecipeScore(recipe: string): number {
-    //subsitute method for now
-    return 0;
-}
-export default { CreateInitialRecipes, CreateRecipe, FinishRecipe };
+export default { AttemptSubmit, GenerateNewRecipe, GenerateInitialRecipes };

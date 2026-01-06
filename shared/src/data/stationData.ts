@@ -5,7 +5,7 @@ const methods = sharedEnums.methods
 const stationsTypes = sharedEnums.stationTypes
 
 const stationData: Record<string, internalStationData> = {
-    [stationsTypes.empty]: { method: "" },
+    [stationsTypes.emptyStation]: { method: "" },
     [stationsTypes.boilingStation]: { method: methods.boil }
 }
 

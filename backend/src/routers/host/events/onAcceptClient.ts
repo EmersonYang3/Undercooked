@@ -6,13 +6,14 @@ import socketRegistry from "services/socketRegistry"
 import specialKey from "services/specialKey"
 import sharedEnums from "shared/enums"
 import lobbyService from "services/lobby"
+import itemPlacer from "utils/Singletons/itemPlacer"
 
 const serverToHostRemotes = sharedEnums.serverToHostRemotes
 const serverToClientRemotes = sharedEnums.serverToClientRemotes
 
 function pushClientToLobby(clientConnection: socketConnection, identifier: uniqueIdentifier) {
     lobbyService.transformLobbyData((lobbyData: lobbyData) => {
-        const playerData: playerData = { currentPoints: 0, isHoldingPlate: false, currentlyHeldItem: null }
+        const playerData: playerData = { currentPoints: 0, currentlyHeldItem: itemPlacer.createEmptyHoldable() }
         lobbyData.clients.push(clientConnection)
         lobbyData.playerData[identifier] = playerData
 
