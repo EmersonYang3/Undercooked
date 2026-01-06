@@ -33,9 +33,11 @@ function generateNewRecipe(): activeRecipe {
 function finishRecipe(id: uniqueIdentifier, failedRecipe: boolean): void {
     console.log(`[GameLoop] Stub: finished recipe ${id}`);
     const recipe = lobbyData.recipesInProgress[id];
-    const internalEntry = foodData.recipes[recipe.targetFoodItem];
+    const internalEntry = foodData.foodData[recipe.targetFoodItem];
     if (failedRecipe) {
-        score;
+        score -= 10;
+    } else {
+        score += 10;
     }
     delete lobbyData.recipesInProgress[id];
 }
