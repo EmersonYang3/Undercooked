@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref, Ref } from "vue";
 import sharedEnums from "@shared/enums";
-import { foodItem, plate } from "@shared/types";
+import { holdableItem } from "@shared/types";
 export type Item = string;
 export type StationType = "stove" | "oven" | "toaster" | "boiler" | "mixer" | "brewer" | "assembler" | "dispenser";
 export const useHostStore = defineStore(sharedEnums.gameRoles.host, () => {
@@ -9,15 +9,19 @@ export const useHostStore = defineStore(sharedEnums.gameRoles.host, () => {
     let isReady: Ref<boolean> = ref(false);
     const players: Ref<Array<number>> = ref([]);
     const stations: Ref<Array<number>> = ref([]);
-    const activeRecipes: Ref<Map<number, foodItem>> = ref(new Map());
-    function setActiveRecipe(id: number, foodItem: foodItem) {
+    const activeRecipes: Ref<Map<number, holdableItem>> = ref(new Map());
+    const score = ref<number>();
+    function setActiveRecipe(id: number, foodItem: holdableItem) {
         activeRecipes.value.set(id, foodItem);
     }
     function deleteActiveRecipe(id: number) {
         activeRecipes.value.delete(id);
     }
+    function setScore(newScore: number) {
+        score.value = newScore;
+    }
     return {
-        id, isReady, players, stations, activeRecipes, setActiveRecipe, deleteActiveRecipe
+        setScore, id, isReady, players, stations, activeRecipes, setActiveRecipe, deleteActiveRecipe
     }
 })
 
