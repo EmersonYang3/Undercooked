@@ -5,7 +5,6 @@ enum hostToServerRemotes {
     rejectPlayerJoin = "recjectPlayerJoin",
     rejectStationJoin = "rejectStationJoin",
 }
-
 enum serverToHostRemotes {
     lobbyStarted = "lobbyStarted",
     clientPendingJoin = "clientPendingJoin",
@@ -13,8 +12,11 @@ enum serverToHostRemotes {
     newClientJoined = "newClientJoined",
     newStationJoined = "newStationJoined",
 
+    //events related to gameState
     newRecipe = "newRecipe",
     recipeFinished = "recipeFinished",
+    scoreUpdate = "scoreUpdate",
+    failedRecipe = "failedRecipe"
 }
 
 enum serverToClientRemotes {
@@ -59,13 +61,14 @@ enum connValidatorErrors {
 }
 
 enum stationTypes {
-    empty = "empty",
+    emptyStation = "emptyStation",
     boilingStation = "boilingStation",
     fryingStation = "fryingStation",
     dicingStation = "dicingStation",
     submitStation = "submitStation",
     steamingStation = "steamingStation",
     blendingStation = "blendingStation",
+    dispenseStation = "dispenseStation"
 }
 
 enum foods {

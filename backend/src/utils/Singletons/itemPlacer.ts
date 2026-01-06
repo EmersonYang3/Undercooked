@@ -19,6 +19,8 @@ function cloneHoldable(item?: holdableItem): holdableItem {
     }
 }
 
+
+
 function GetAction(clientIdentifier: uniqueIdentifier, stationIdentifier: uniqueIdentifier): "place" | "remove" | "none" {
     const lobbyData = lobbyService.getLobbyData()
     const player = lobbyData.playerData[clientIdentifier]
