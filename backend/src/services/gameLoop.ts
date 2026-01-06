@@ -1,6 +1,6 @@
 import { performance } from "node:perf_hooks";
 
-import type { activeRecipe, uniqueIdentifier } from "shared/types";
+import type { activeRecipe, holdableItem, uniqueIdentifier } from "shared/types";
 import lobby from "./lobby";
 import unqi from "./unqi";
 import recipeGenerator from "utils/Singletons/recipeGenerator";
@@ -29,16 +29,32 @@ function generateNewRecipe(): activeRecipe {
     }
     return newActiveRecipe;
 }
-
-function finishRecipe(id: uniqueIdentifier, failedRecipe: boolean): void {
+function attemptSubmit(id: uniqueIdentifier, item: holdableItem) {
+    if (item.foodItems.length != 1) { return false };
+    if (!item.foodItems[0]) { return false };
+    const toBeSubmitted = item.foodItems[0];
+    let matched = false;
+    for (const [id, data] of Object.entries(lobbyData.recipesInProgress)) {
+        if (data.targetFoodItem == toBeSubmitted.name) {
+            score += toBeSubmitted.quality;
+            matched = true;
+            break;
+        }
+    }
+    finishRecipe(id, matched, toBeSubmitted.quality);
+}
+function finishRecipe(id: uniqueIdentifier, failedRecipe: boolean, quality?: number): void {
     console.log(`[GameLoop] Stub: finished recipe ${id}`);
     const recipe = lobbyData.recipesInProgress[id];
     const internalEntry = foodData.foodData[recipe.targetFoodItem];
     if (failedRecipe) {
-        score -= 10;
+        score -= 5;
     } else {
-        score += 10;
+        score += quality;
     }
+    lobbyData.host.socket.emit("scoreUpdate", score);
+    lobbyData.host.socket.emit("finishRecipe", id);
+    unqi.freeUnqi(Number(id));
     delete lobbyData.recipesInProgress[id];
 }
 
@@ -61,7 +77,11 @@ function tick(): void {
     }
     lobby.transformLobbyData((data) => ({ ...data, recipesInProgress: updatedRecipes }));
 
-    if (shouldGenerateNewRecipe()) { generateNewRecipe(); }
+    if (shouldGenerateNewRecipe()) {
+        const newActiveRecipe = generateNewRecipe();
+        lobbyData.recipesInProgress[newActiveRecipe.id] = newActiveRecipe;
+        lobbyData.host.socket.emit("newRecipe", newActiveRecipe);
+    }
 
     timeCache = performance.now();
     setImmediate(tick);
