@@ -16,7 +16,7 @@ enum serverToHostRemotes {
     newRecipe = "newRecipe",
     recipeFinished = "recipeFinished",
     scoreUpdate = "scoreUpdate",
-    failedRecipe = "failedRecipe"
+    wrongItem = "wrongItem",
 }
 
 enum serverToClientRemotes {

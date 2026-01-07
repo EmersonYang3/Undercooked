@@ -12,13 +12,12 @@ const maxRecipes = 5;
 
 let isRunning = false;
 let timeCache = performance.now();
-
 let score = 0;
+
 
 function shouldGenerateNewRecipe(): boolean {
     return Object.values(lobbyData.recipesInProgress).length >= maxRecipes;
 }
-
 function generateNewRecipe(): activeRecipe {
     console.log("[GameLoop] Stub: generate new recipe");
     const newRecipeName = recipeGenerator.GenerateRecipe();
@@ -29,20 +28,25 @@ function generateNewRecipe(): activeRecipe {
     }
     return newActiveRecipe;
 }
-function attemptSubmit(id: uniqueIdentifier, item: holdableItem) {
+function attemptSubmit(item: holdableItem): boolean {
     if (item.foodItems.length != 1) { return false };
     if (!item.foodItems[0]) { return false };
     const toBeSubmitted = item.foodItems[0];
-    let matched = false;
     for (const [id, data] of Object.entries(lobbyData.recipesInProgress)) {
         if (data.targetFoodItem == toBeSubmitted.name) {
             score += toBeSubmitted.quality;
-            matched = true;
-            break;
+            finishRecipe(Number(id), true, toBeSubmitted.quality);
+            return;
         }
     }
-    finishRecipe(id, matched, toBeSubmitted.quality);
+    score -= 5;
+    return true;
 }
+function calculateScore() {
+    //put some custom implemention here
+    //idk what would be good so imma leave it empty for now
+}
+
 function finishRecipe(id: uniqueIdentifier, failedRecipe: boolean, quality?: number): void {
     console.log(`[GameLoop] Stub: finished recipe ${id}`);
     const recipe = lobbyData.recipesInProgress[id];
@@ -53,7 +57,7 @@ function finishRecipe(id: uniqueIdentifier, failedRecipe: boolean, quality?: num
         score += quality;
     }
     lobbyData.host.socket.emit("scoreUpdate", score);
-    lobbyData.host.socket.emit("finishRecipe", id);
+    lobbyData.host.socket.emit("recipeFinished", id);
     unqi.freeUnqi(Number(id));
     delete lobbyData.recipesInProgress[id];
 }
@@ -101,4 +105,4 @@ function startGameLoop(): void {
     setImmediate(tick)
 }
 
-export { startGameLoop, finishRecipe };
+export default { startGameLoop, finishRecipe, attemptSubmit };
