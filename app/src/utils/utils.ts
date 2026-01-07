@@ -10,11 +10,3 @@ export function onEvents(socket: Socket, eventMap: Record<string, (...args: any[
         })
     })
 }
-function onAnyEvent(socket: Socket, eventMap: Record<string, (event, ...args: any[]) => void>) {
-    Object.entries(eventMap).forEach(([eventNames, callback]) => {
-        socket.onAny((event, ...args) => {
-            const handler = eventMap[event];
-            if (handler) handler(args);
-        });
-    })
-}
