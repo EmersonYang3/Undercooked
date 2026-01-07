@@ -1,7 +1,7 @@
 import enums from "@shared/enums"
 import { useRequestNotifStore } from "@/stores/messageStore";
 import { HostStore } from "@/stores/roleStores";
-import type { foodItem, holdableItem } from "@shared/types";
+import type { activeRecipe, foodItem } from "@shared/types";
 //operates on the assumption that the notifStore instace has been constructed or smth
 export const hostEvents = (hostStore: HostStore): Record<string, (...args: any[]) => void> => {
     const notifStore = useRequestNotifStore();
@@ -32,19 +32,16 @@ export const hostEvents = (hostStore: HostStore): Record<string, (...args: any[]
             console.log("new station joined", station);
             hostStore.stations.push(station);
         },
-        [enums.serverToHostRemotes.newRecipe]: (foodItem: holdableItem, id: number) => {
-            hostStore.setActiveRecipe(id, foodItem);
+
+        [enums.serverToHostRemotes.newRecipe]: (recipe: activeRecipe) => {
+            hostStore.setActiveRecipe(recipe.id, recipe);
         },
         [enums.serverToHostRemotes.recipeFinished]: (id: number) => {
             hostStore.deleteActiveRecipe(id);
         },
         [enums.serverToHostRemotes.scoreUpdate]: (newScore: number) => {
             hostStore.setScore(newScore);
-        },
-        [enums.serverToHostRemotes.failedRecipe]: (id: number) => {
-            hostStore.deleteActiveRecipe(id);
         }
-
         //add the recipe shower 
         //the server emits out an array of recipes sent to the host screen
     };
