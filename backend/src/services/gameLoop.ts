@@ -3,77 +3,91 @@ import lobby from "./lobby";
 import unqi from "./unqi";
 import recipeGenerator from "utils/Singletons/recipeGenerator";
 
-const minStartGrace = 10 * 1000
-const maxStartGrace = 20 * 1000
-const minTimeIncreaseMax = 2 * 60 * 1000
-const maxTimeIncreaseMax = 3 * 60 * 1000
-const trueMinTimeBetweenRecipes = 3 * 1000
-const trueMaxTimeBetweenRecipes = 5 * 1000
-const minTimeDecreaseRecipeGrace = 30 * 1000
-const maxTimeDecreaseRecipeGrace = 60 * 1000
-const maxLerpIterationsRecipeDecrease = 5
-const trueMaxRecipes = 10
+const Timing = {
+    startGrace: { min: 10 * 1000, max: 20 * 1000 },
+    timeIncreaseMax: { min: 2 * 60 * 1000, max: 3 * 60 * 1000 },
+    trueTimeBetweenRecipes: { min: 3 * 1000, max: 5 * 1000 },
+    timeDecreaseRecipeGrace: { min: 30 * 1000, max: 60 * 1000 },
+};
 
-let isRunning = false
-let minTimeGraceBetweenRecipes = 7 * 1000
-let maxTimeGraceBetweenRecipes = 15 * 1000
-let recipeDecreaseLerpIterations = 0
-let lastDecreaseRecipeGrace = 0
-let lastGeneratedRecipeTick = 0
-let startTickTime = 0
-let maxRecipes = 5
-let timeCache = 0
+const Recipe = {
+    maxLerpIterationsDecrease: 5,
+    trueMaxRecipes: 10,
+};
 
-let lobbyData = lobby.getLobbyData()
+let isRunning = false;
+let minTimeGraceBetweenRecipes = 7 * 1000;
+let maxTimeGraceBetweenRecipes = 15 * 1000;
+let recipeDecreaseLerpIterations = 0;
+let lastDecreaseRecipeGrace = 0;
+let lastGeneratedRecipeTick = 0;
+let startTickTime = 0;
+let maxRecipes = 5;
+let timeCache = 0;
+let lobbyData = lobby.getLobbyData();
+
+function getRandom(minimumValue: number, maximumValue: number): number {
+    return minimumValue + Math.random() * (maximumValue - minimumValue);
+}
 
 function exponentiallyLerp(startValue: number, endValue: number, iteration: number, maxIterations: number): number {
-    const t = 1 - Math.pow(0.5, iteration / maxIterations)
-    return startValue + (endValue - startValue) * t
+    const interpolationFactor = 1 - Math.pow(0.5, iteration / maxIterations);
+    return startValue + (endValue - startValue) * interpolationFactor;
 }
 
 function getRecipeTimer(): number {
-    return 60 * 1000
-}
-
-function getRandom(minimumValue: number, maximumValue: number): number {
-    return minimumValue + Math.random() * (maximumValue - minimumValue)
+    return 60 * 1000;
 }
 
 function tickIncreaseMaxRecipes(timeSinceStart: number): void {
-    const timeToMaxIncrease = getRandom(minTimeIncreaseMax, maxTimeIncreaseMax)
+    const timeToMaxIncrease = getRandom(Timing.timeIncreaseMax.min, Timing.timeIncreaseMax.max);
     if (timeSinceStart < timeToMaxIncrease) { return }
 
-    maxRecipes = Math.min(trueMaxRecipes, maxRecipes + 1)
+    maxRecipes = Math.min(Recipe.trueMaxRecipes, maxRecipes + 1);
 }
 
 function tickDecreaseRecipeGrace(currentTick: number): void {
-    if (recipeDecreaseLerpIterations >= maxLerpIterationsRecipeDecrease) { return }
+    if (recipeDecreaseLerpIterations >= Recipe.maxLerpIterationsDecrease) { return; }
 
-    const timeSinceLastDecrease = currentTick - lastDecreaseRecipeGrace
-    const graceDecreaseRecipe = getRandom(minTimeDecreaseRecipeGrace, maxTimeDecreaseRecipeGrace)
-    if (timeSinceLastDecrease < graceDecreaseRecipe) { return }
+    const timeSinceLastDecrease = currentTick - lastDecreaseRecipeGrace;
+    const graceDecreaseRecipe = getRandom(Timing.timeDecreaseRecipeGrace.min, Timing.timeDecreaseRecipeGrace.max);
+    if (timeSinceLastDecrease < graceDecreaseRecipe) { return; }
 
-    recipeDecreaseLerpIterations += 1
+    recipeDecreaseLerpIterations += 1;
 
-    minTimeGraceBetweenRecipes = exponentiallyLerp(minTimeGraceBetweenRecipes, trueMinTimeBetweenRecipes, recipeDecreaseLerpIterations, maxLerpIterationsRecipeDecrease)
-    maxTimeGraceBetweenRecipes = exponentiallyLerp(maxTimeGraceBetweenRecipes, trueMaxTimeBetweenRecipes, recipeDecreaseLerpIterations, maxLerpIterationsRecipeDecrease)
+    minTimeGraceBetweenRecipes = exponentiallyLerp(
+        minTimeGraceBetweenRecipes,
+        Timing.trueTimeBetweenRecipes.min,
+        recipeDecreaseLerpIterations,
+        Recipe.maxLerpIterationsDecrease
+    );
 
-    lastDecreaseRecipeGrace = currentTick
+    maxTimeGraceBetweenRecipes = exponentiallyLerp(
+        maxTimeGraceBetweenRecipes,
+        Timing.trueTimeBetweenRecipes.max,
+        recipeDecreaseLerpIterations,
+        Recipe.maxLerpIterationsDecrease
+    );
+
+    lastDecreaseRecipeGrace = currentTick;
 }
 
 function shouldGenerateNewRecipe(): boolean {
-    const currentTick = performance.now()
-    const graceForStart = getRandom(minStartGrace, maxStartGrace)
-    const timeSinceStart = currentTick - startTickTime
-    if (timeSinceStart < graceForStart) { return false }
+    const currentTick = performance.now();
+    const graceForStart = getRandom(Timing.startGrace.min, Timing.startGrace.max);
+    const timeSinceStart = currentTick - startTickTime;
+    if (timeSinceStart < graceForStart) { return false; }
 
-    tickIncreaseMaxRecipes(timeSinceStart)
-    if (Object.values(lobbyData.recipesInProgress ?? {}).length == maxRecipes) { return false }
+    tickIncreaseMaxRecipes(timeSinceStart);
+    if (Object.values(lobbyData.recipesInProgress ?? {}).length == maxRecipes) { return false; }
 
-    tickDecreaseRecipeGrace(currentTick)
-    const graceToNextRecipe = getRandom(minTimeGraceBetweenRecipes, maxTimeGraceBetweenRecipes)
-    const timeSinceLastRecipe = currentTick - lastGeneratedRecipeTick
-    if (timeSinceLastRecipe < graceToNextRecipe) { return false }
+    tickDecreaseRecipeGrace(currentTick);
+    const graceToNextRecipe = getRandom(minTimeGraceBetweenRecipes, maxTimeGraceBetweenRecipes);
+    const timeSinceLastRecipe = currentTick - lastGeneratedRecipeTick;
+    if (timeSinceLastRecipe < graceToNextRecipe) { return false; }
+
+    lastGeneratedRecipeTick = currentTick
+    return true
 }
 
 function generateNewRecipe(): activeRecipe {
@@ -118,7 +132,6 @@ function startGameLoop(): void {
     if (isRunning) { return }
 
     const currentTick = performance.now()
-
     isRunning = true
 
     timeCache = currentTick
