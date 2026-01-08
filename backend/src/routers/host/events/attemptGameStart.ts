@@ -1,10 +1,9 @@
-import type { Socket } from "socket.io";
+import lobbyService from "services/lobby"
+import specialKey from "services/specialKey"
+import gameLoop from "services/gameLoop"
 
-import lobbyService from "services/lobby";
-import specialKey from "services/specialKey";
-
-import sharedEnums from "shared/enums";
-import singletons from "utils/singletons";
+import sharedEnums from "shared/enums"
+import singletons from "utils/singletons"
 
 const serverTSRemotes = sharedEnums.serverToStationRemotes
 const serverTCRemotes = sharedEnums.serverToClientRemotes
@@ -22,11 +21,14 @@ function alertAllGameStarting() {
 
     lobbyService.emitToAllStations(serverTSRemotes.gameStarted, allRegisteredKeys)
 }
+
 function attemptGameStart() {
     singletons.recipeGenerator.RefreshMethods();
     singletons.recipeGenerator.RefreshValidRecipes();
-    
+
     alertAllGameStarting()
+
+    gameLoop.startGameLoop()
 }
 
 export default attemptGameStart

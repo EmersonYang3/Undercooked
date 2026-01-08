@@ -1,108 +1,144 @@
-import { performance } from "node:perf_hooks";
-
-import type { activeRecipe, holdableItem, uniqueIdentifier } from "shared/types";
+import type { activeRecipe, uniqueIdentifier } from "shared/types";
 import lobby from "./lobby";
 import unqi from "./unqi";
 import recipeGenerator from "utils/Singletons/recipeGenerator";
-import foodData from "shared/data/foodData";
 
+const Timing = {
+    startGrace: { min: 10 * 1000, max: 20 * 1000 },
+    timeIncreaseMax: { min: 2 * 60 * 1000, max: 3 * 60 * 1000 },
+    trueTimeBetweenRecipes: { min: 3 * 1000, max: 5 * 1000 },
+    timeDecreaseRecipeGrace: { min: 30 * 1000, max: 60 * 1000 },
+};
 
-const lobbyData = lobby.getLobbyData();
-const maxRecipes = 5;
+const Recipe = {
+    maxLerpIterationsDecrease: 5,
+    trueMaxRecipes: 10,
+};
 
 let isRunning = false;
-let timeCache = performance.now();
-let score = 0;
+let minTimeGraceBetweenRecipes = 7 * 1000;
+let maxTimeGraceBetweenRecipes = 15 * 1000;
+let recipeDecreaseLerpIterations = 0;
+let lastDecreaseRecipeGrace = 0;
+let lastGeneratedRecipeTick = 0;
+let startTickTime = 0;
+let maxRecipes = 5;
+let timeCache = 0;
+let lobbyData = lobby.getLobbyData();
 
+function getRandom(minimumValue: number, maximumValue: number): number {
+    return minimumValue + Math.random() * (maximumValue - minimumValue);
+}
+
+function exponentiallyLerp(startValue: number, endValue: number, iteration: number, maxIterations: number): number {
+    const interpolationFactor = 1 - Math.pow(0.5, iteration / maxIterations);
+    return startValue + (endValue - startValue) * interpolationFactor;
+}
+
+function getRecipeTimer(): number {
+    return 60 * 1000;
+}
+
+function tickIncreaseMaxRecipes(timeSinceStart: number): void {
+    const timeToMaxIncrease = getRandom(Timing.timeIncreaseMax.min, Timing.timeIncreaseMax.max);
+    if (timeSinceStart < timeToMaxIncrease) { return }
+
+    maxRecipes = Math.min(Recipe.trueMaxRecipes, maxRecipes + 1);
+}
+
+function tickDecreaseRecipeGrace(currentTick: number): void {
+    if (recipeDecreaseLerpIterations >= Recipe.maxLerpIterationsDecrease) { return; }
+
+    const timeSinceLastDecrease = currentTick - lastDecreaseRecipeGrace;
+    const graceDecreaseRecipe = getRandom(Timing.timeDecreaseRecipeGrace.min, Timing.timeDecreaseRecipeGrace.max);
+    if (timeSinceLastDecrease < graceDecreaseRecipe) { return; }
+
+    recipeDecreaseLerpIterations += 1;
+
+    minTimeGraceBetweenRecipes = exponentiallyLerp(
+        minTimeGraceBetweenRecipes,
+        Timing.trueTimeBetweenRecipes.min,
+        recipeDecreaseLerpIterations,
+        Recipe.maxLerpIterationsDecrease
+    );
+
+    maxTimeGraceBetweenRecipes = exponentiallyLerp(
+        maxTimeGraceBetweenRecipes,
+        Timing.trueTimeBetweenRecipes.max,
+        recipeDecreaseLerpIterations,
+        Recipe.maxLerpIterationsDecrease
+    );
+
+    lastDecreaseRecipeGrace = currentTick;
+}
 
 function shouldGenerateNewRecipe(): boolean {
-    return Object.values(lobbyData.recipesInProgress).length >= maxRecipes;
-}
-function generateNewRecipe(): activeRecipe {
-    console.log("[GameLoop] Stub: generate new recipe");
-    const newRecipeName = recipeGenerator.GenerateRecipe();
-    const newActiveRecipe: activeRecipe = {
-        targetFoodItem: newRecipeName,
-        id: unqi.getUnqi(),
-        timeRemaining: 6000,
-    }
-    return newActiveRecipe;
-}
-function attemptSubmit(item: holdableItem): boolean {
-    if (item.foodItems.length != 1) { return false };
-    if (!item.foodItems[0]) { return false };
-    const toBeSubmitted = item.foodItems[0];
-    for (const [id, data] of Object.entries(lobbyData.recipesInProgress)) {
-        if (data.targetFoodItem == toBeSubmitted.name) {
-            score += toBeSubmitted.quality;
-            finishRecipe(Number(id), true, toBeSubmitted.quality);
-            return;
-        }
-    }
-    score -= 5;
-    return true;
-}
-function calculateScore() {
-    //put some custom implemention here
-    //idk what would be good so imma leave it empty for now
+    const currentTick = performance.now();
+    const graceForStart = getRandom(Timing.startGrace.min, Timing.startGrace.max);
+    const timeSinceStart = currentTick - startTickTime;
+    if (timeSinceStart < graceForStart) { return false; }
+
+    tickIncreaseMaxRecipes(timeSinceStart);
+    if (Object.values(lobbyData.recipesInProgress ?? {}).length == maxRecipes) { return false; }
+
+    tickDecreaseRecipeGrace(currentTick);
+    const graceToNextRecipe = getRandom(minTimeGraceBetweenRecipes, maxTimeGraceBetweenRecipes);
+    const timeSinceLastRecipe = currentTick - lastGeneratedRecipeTick;
+    if (timeSinceLastRecipe < graceToNextRecipe) { return false; }
+
+    lastGeneratedRecipeTick = currentTick
+    return true
 }
 
-function finishRecipe(id: uniqueIdentifier, failedRecipe: boolean, quality?: number): void {
-    console.log(`[GameLoop] Stub: finished recipe ${id}`);
-    const recipe = lobbyData.recipesInProgress[id];
-    const internalEntry = foodData.foodData[recipe.targetFoodItem];
-    if (failedRecipe) {
-        score -= 5;
-    } else {
-        score += quality;
-    }
-    lobbyData.host.socket.emit("scoreUpdate", score);
-    lobbyData.host.socket.emit("recipeFinished", id);
-    unqi.freeUnqi(Number(id));
-    delete lobbyData.recipesInProgress[id];
+function generateNewRecipe(): activeRecipe {
+    console.log("[GameLoop] Stub: generate new recipe")
+    const newRecipeName = recipeGenerator.GenerateRecipe()
+
+    return { targetFoodItem: newRecipeName, id: unqi.getUnqi(), timeRemaining: getRecipeTimer() }
 }
 
 function tick(): void {
-    const activeRecipes: Record<uniqueIdentifier, activeRecipe> = lobbyData.recipesInProgress ?? {};
-    const updatedRecipes: Record<uniqueIdentifier, activeRecipe> = {};
-    for (const recipe of Object.values(activeRecipes)) {
-        const now = performance.now();
-        const delta = now - timeCache;
+    lobbyData = lobby.getLobbyData()
 
-        const updatedTimeRemaining = Math.max(0, recipe.timeRemaining - delta);
+    const activeRecipes = lobbyData.recipesInProgress ?? {}
+    const updatedRecipes: Record<uniqueIdentifier, activeRecipe> = {}
+
+    for (const recipe of Object.values(activeRecipes)) {
+        const delta = performance.now() - timeCache
+        const updatedTimeRemaining = Math.max(0, recipe.timeRemaining - delta)
+        const recipeId = recipe.id
 
         if (updatedTimeRemaining === 0 && recipe.timeRemaining > 0) {
-            console.log(`[GameLoop] Recipe "${recipe.targetFoodItem}" has reached zero time remaining.`);
-            finishRecipe(recipe.id, true);
-            continue;
+            console.log(`[GameLoop] Recipe "${recipe.targetFoodItem}" has reached zero time remaining.`)
+            continue
         }
-        const newId = unqi.getUnqi();
-        updatedRecipes[newId] = { ...recipe, timeRemaining: updatedTimeRemaining, id: newId };
+
+        updatedRecipes[recipeId] = { ...recipe, timeRemaining: updatedTimeRemaining, id: recipeId }
     }
-    lobby.transformLobbyData((data) => ({ ...data, recipesInProgress: updatedRecipes }));
+
+    lobby.transformLobbyData((data) => ({ ...data, recipesInProgress: updatedRecipes }))
 
     if (shouldGenerateNewRecipe()) {
-        const newActiveRecipe = generateNewRecipe();
-        lobbyData.recipesInProgress[newActiveRecipe.id] = newActiveRecipe;
-        lobbyData.host.socket.emit("newRecipe", newActiveRecipe);
+        const newActiveRecipe = generateNewRecipe()
+        lobbyData.recipesInProgress[newActiveRecipe.id] = newActiveRecipe
+        lobbyData.host.socket.emit("newRecipe", newActiveRecipe)
     }
 
-    timeCache = performance.now();
-    setImmediate(tick);
+    timeCache = performance.now()
+    setImmediate(tick)
 }
 
 function startGameLoop(): void {
     if (isRunning) { return }
-    recipeGenerator.RefreshMethods();
-    while (Object.values(lobbyData.recipesInProgress).length < maxRecipes) {
-        const newActiveRecipe = generateNewRecipe();
-        lobbyData.recipesInProgress[newActiveRecipe.id] = newActiveRecipe;
-    }
 
+    const currentTick = performance.now()
     isRunning = true
-    timeCache = performance.now()
+
+    timeCache = currentTick
+    startTickTime = currentTick
+    lastDecreaseRecipeGrace = currentTick
 
     setImmediate(tick)
 }
 
-export default { startGameLoop, finishRecipe, attemptSubmit };
+export default { startGameLoop }
