@@ -32,7 +32,7 @@ export const hostEvents = (hostStore: HostStore): Record<string, (...args: any[]
             console.log("new station joined", station);
             hostStore.stations.push(station);
         },
-        
+
         [enums.serverToHostRemotes.newRecipe]: (recipe: activeRecipe) => {
             hostStore.setActiveRecipe(recipe.id, recipe);
         },

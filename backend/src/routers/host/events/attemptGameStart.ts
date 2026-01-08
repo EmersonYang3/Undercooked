@@ -9,7 +9,7 @@ const serverTSRemotes = sharedEnums.serverToStationRemotes
 const serverTCRemotes = sharedEnums.serverToClientRemotes
 
 function alertAllGameStarting() {
-    let allRegisteredKeys = [];
+    let allRegisteredKeys: string[] = [];
 
     lobbyService.loopThroughClients((client) => {
         const clientKey = specialKey.getKeyByConnection(client)

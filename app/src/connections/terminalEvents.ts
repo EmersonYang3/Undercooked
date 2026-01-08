@@ -1,15 +1,15 @@
 import { TerminalStore } from "@/stores/roleStores";
 import enums from "@shared/enums";
-import { foodItem, plate } from "@shared/types";
+import { foodItem } from "@shared/types";
 //new event -  Clientkey send
 //this sets the terminalstores clientKey variable to an array containing the clientKeys.
 
 
 export function terminalEvents(store: TerminalStore): Record<string, (...args: any[]) => void> {
     return {
-        [enums.sharedRemotes.setCurrentItem]: (item: foodItem | plate | null, isRecievingPlate: boolean) => {
+        [enums.sharedRemotes.setCurrentItem]: (item: foodItem, isRecievingPlate: boolean) => {
             if (!item) { };
-            
+
         },
         [enums.serverToStationRemotes.gameStarted]: (keys: Array<string>) => {
             store.clientsKeys = new Set(keys);

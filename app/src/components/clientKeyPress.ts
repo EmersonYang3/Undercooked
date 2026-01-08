@@ -3,6 +3,7 @@ export function useClientConnection(validKeys: Set<string>, onKeySelected: (key:
     const keyClient = ref<string | null>(null);
     function listener(event: KeyboardEvent) {
         const key = event.key.toLowerCase();
+
         if (!validKeys.has(key)) return;
         keyClient.value = key;
         onKeySelected(key);
