@@ -4,65 +4,7 @@ import type { internalFoodData } from "../types"
 const foods = sharedEnums.foods
 const methods = sharedEnums.methods
 
-export const ligma: Record<string, internalFoodData> = {
-    [foods.uncookedEgg]: {
-        name: "Uncooked Egg",
-        methods: {
-            [methods.boil]: foods.boiledEgg,
-            [methods.fry]: foods.friedEgg,
-            [methods.blend]: foods.scrambledEgg,
-        },
-        considerAsRecipe: false,
-        requiredItems: [],
-    },
-    [foods.boiledEgg]: {
-        name: "Boiled Egg",
-        methods: {},
-        considerAsRecipe: true,
-        requiredItems: [foods.uncookedEgg],
-    },
-    [foods.friedEgg]: {
-        name: "Fried Egg",
-        methods: {},
-        considerAsRecipe: true,
-        requiredItems: [foods.uncookedEgg],
-    },
-    [foods.scrambledEgg]: {
-        name: "Scrambled Egg",
-        methods: {
-            [methods.fry]: foods.omelette,
-        },
-        considerAsRecipe: true,
-        requiredItems: [foods.uncookedEgg, foods.onion],
-    },
-    [foods.omelette]: {
-        name: "Omelette",
-        methods: {},
-        considerAsRecipe: true,
-        requiredItems: [foods.scrambledEgg],
-    },
-    [foods.dicedFruit]: {
-        name: "Diced Fruit Mix",
-        methods: {
-            [methods.blend]: foods.smoothie,
-        },
-        considerAsRecipe: false,
-        requiredItems: [foods.dicedBanana, foods.dicedApple, foods.dicedOrange, foods.dicedWatermelon],
-    },
-    [foods.fruitSalad]: {
-        name: "Fruit Salad",
-        methods: {},
-        considerAsRecipe: true,
-        requiredItems: [foods.dicedBanana, foods.dicedApple, foods.dicedOrange, foods.dicedWatermelon],
-    },
-    [foods.smoothie]: {
-        name: "Smoothie",
-        methods: {},
-        considerAsRecipe: true,
-        requiredItems: [foods.dicedFruit],
-    },
-}
-export const foodData: Record<string, internalFoodData> = {
+const foodData: Record<string, internalFoodData> = {
     [foods.uncookedEgg]: {
         name: "Uncooked Egg",
         methods: {
@@ -104,7 +46,6 @@ export const foodData: Record<string, internalFoodData> = {
         requiredItems: [foods.scrambledEgg],
     },
 
-    // TOAST
     [foods.bread]: {
         name: "Bread",
         methods: {
@@ -136,7 +77,6 @@ export const foodData: Record<string, internalFoodData> = {
         requiredItems: [foods.toast, foods.friedEgg],
     },
 
-    // STEWS / SOUPS
     [foods.carrotStew]: {
         name: "Carrot Stew",
         methods: {},
@@ -165,7 +105,6 @@ export const foodData: Record<string, internalFoodData> = {
         requiredItems: [foods.pumpkin, foods.water],
     },
 
-    // BAKED GOODS
     [foods.croissant]: {
         name: "Croissant",
         methods: {},
@@ -187,7 +126,6 @@ export const foodData: Record<string, internalFoodData> = {
         requiredItems: [foods.dough, foods.jam],
     },
 
-    // DRINKS
     [foods.coffee]: {
         name: "Coffee",
         methods: {},
@@ -202,7 +140,6 @@ export const foodData: Record<string, internalFoodData> = {
         requiredItems: [foods.teaLeaves, foods.water],
     },
 
-    // SNACKS
     [foods.milkAndCookies]: {
         name: "Milk & Cookies",
         methods: {},
@@ -211,4 +148,4 @@ export const foodData: Record<string, internalFoodData> = {
     },
 }
 
-export default { foodData }
+export default foodData

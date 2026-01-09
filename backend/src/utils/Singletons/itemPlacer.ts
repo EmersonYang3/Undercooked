@@ -7,19 +7,14 @@ import type { holdableItem, uniqueIdentifier } from "shared/types"
 const serverToClientRemotes = sharedEnums.serverToClientRemotes
 const sharedRemotes = sharedEnums.sharedRemotes
 
-export function createEmptyHoldable(): holdableItem {
+function createEmptyHoldable(): holdableItem {
     return { foodItems: [], isPlated: false }
 }
 
 function cloneHoldable(item?: holdableItem): holdableItem {
     if (!item) { return createEmptyHoldable() }
-    return {
-        isPlated: item.isPlated,
-        foodItems: item.foodItems.map((f) => ({ ...f })),
-    }
+    return { isPlated: item.isPlated, foodItems: item.foodItems.map((f) => ({ ...f })) }
 }
-
-
 
 function GetAction(clientIdentifier: uniqueIdentifier, stationIdentifier: uniqueIdentifier): "place" | "remove" | "none" {
     const lobbyData = lobbyService.getLobbyData()
