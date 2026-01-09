@@ -1,5 +1,3 @@
-import sharedEnums, { stationTypes } from "./enums";
-
 export type uniqueIdentifier = number
 
 export type intendedRoles = 'host' | 'client' | 'station'
@@ -27,9 +25,9 @@ export type holdableItem = {
     isPlated: boolean;
 }
 
-
 export type internalStationData = {
-    method: string
+    method?: string,
+    dispensingItem?: string
 }
 
 export type activeRecipe = {
@@ -39,7 +37,7 @@ export type activeRecipe = {
 }
 
 export type stationData = {
-    stationType: stationTypes,
+    stationType: string,
     currentlyHeldItem: holdableItem,
 }
 

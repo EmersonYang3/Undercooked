@@ -2,7 +2,7 @@ import sharedData from "shared/data"
 import sharedEnums from "shared/enums"
 
 import unqi from "services/unqi"
-import { createEmptyHoldable } from "./itemPlacer"
+import itemPlacer from "./itemPlacer"
 
 import type { holdableItem, internalFoodData, foodItem } from "shared/types"
 
@@ -51,8 +51,8 @@ function foodsMatchRequired(foodNames: string[], required: string[]): boolean {
 }
 
 function CombineItems(item: holdableItem, itemToAdd: holdableItem): holdableItem {
-    const base = item ?? createEmptyHoldable()
-    const addition = itemToAdd ?? createEmptyHoldable()
+    const base = item ?? itemPlacer.createEmptyHoldable()
+    const addition = itemToAdd ?? itemPlacer.createEmptyHoldable()
 
     const combined: holdableItem = {
         isPlated: base.isPlated || addition.isPlated,
