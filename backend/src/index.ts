@@ -18,7 +18,7 @@ serverPort.use(validateConnection)
 serverPort.on("connection", (socket) => { connectionRouter(socket) })
 
 httpServer.listen(sharedEnums.portServer.port, () => {
-    console.log(`Backend server running on http://localhost:${sharedEnums.portServer.port}`)
+    console.log(`Backend server running on port: ${sharedEnums.portServer.port}`)
 })
 
 // import { io } from "socket.io-client"
