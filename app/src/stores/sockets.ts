@@ -12,7 +12,7 @@ export const useSocketStore = defineStore("socket", () => {
     function createSocket(handshake: handshakeData, roleStore: RoleStore): Socket {
         console.log("attempting to create socket");
         if (socket.value) return socket.value as Socket;
-        const socketAttempt = io("http://localhost:3000", {
+        const socketAttempt = io("http://100.101.69.168:3000", {
             autoConnect: false,
             auth: handshake,
         }) as Socket;
