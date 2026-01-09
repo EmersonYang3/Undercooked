@@ -1,11 +1,10 @@
 import { internalStationData } from "shared/types"
-import { stationTypes } from "shared/enums"
 
 import lobbyService from "services/lobby"
 import sharedData from "shared/data"
 
 const foodData = sharedData.foodData;
-const stationDataMap = sharedData.stationData as Record<stationTypes, internalStationData>;
+const stationDataMap = sharedData.stationData as Record<string, internalStationData>;
 
 let availableMethods: Set<string> = new Set(["boil"]);
 

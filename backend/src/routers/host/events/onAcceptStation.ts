@@ -4,13 +4,13 @@ import type { Socket } from "socket.io"
 
 import socketRegistry from "services/socketRegistry"
 import lobbyService from "services/lobby"
-import sharedEnums, { stationTypes } from "shared/enums"
+import sharedEnums from "shared/enums"
 import itemPlacer from "utils/Singletons/itemPlacer"
 
 const serverToHostRemotes = sharedEnums.serverToHostRemotes
 const serverToStationRemotes = sharedEnums.serverToStationRemotes
 
-function pushStationToLobby(stationConnection: socketConnection, stationName: stationTypes, identifier: uniqueIdentifier) {
+function pushStationToLobby(stationConnection: socketConnection, stationName: string, identifier: uniqueIdentifier) {
     lobbyService.transformLobbyData((lobbyData: lobbyData) => {
         const stationData: stationData = { stationType: stationName, currentlyHeldItem: itemPlacer.createEmptyHoldable() }
         lobbyData.stationData[identifier] = stationData
@@ -20,7 +20,7 @@ function pushStationToLobby(stationConnection: socketConnection, stationName: st
     })
 }
 
-function onAcceptStation(hostSocket: Socket, identifier: uniqueIdentifier, stationName: stationTypes) {
+function onAcceptStation(hostSocket: Socket, identifier: uniqueIdentifier, stationName: string) {
     const stationConnection = socketRegistry.getSocketConnectionById(identifier)
     if (!stationConnection) { console.log("Station connection not found"); return }
 
