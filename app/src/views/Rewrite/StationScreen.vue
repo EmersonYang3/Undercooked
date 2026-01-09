@@ -5,8 +5,8 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import JoinScreen from './JoinScreen.vue';
-import { useTerminalStore } from '@/stores/roleStores';
-import router from '@/router';
+import { useTerminalStore } from '@/stores/rewrite/roleStores';
+import router from '@/router/rewrite';
 const gameStarted = ref(false);
 const stationStore = useTerminalStore();
 watch(() => gameStarted, (started) => {

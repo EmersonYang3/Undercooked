@@ -5,9 +5,9 @@
 </template>
     
 <script setup lang="ts">
-import { useSocketStore } from '@/stores/sockets';
+import { useSocketStore } from '@/stores/rewrite/sockets';
 import { useClientConnection } from './clientKeyPress';
-import { TerminalStore, useTerminalStore } from '@/stores/roleStores';
+import { TerminalStore, useTerminalStore } from '@/stores/rewrite/roleStores';
 const termStore = useTerminalStore();
 const socketStore = useSocketStore();
 const socket = socketStore.getSocket();

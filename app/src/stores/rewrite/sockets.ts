@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref, useHost } from "vue";
 import { io, type Socket } from "socket.io-client";
-import { initialRoleEvents, RoleEvents } from "@/connections/table";
+import { initialRoleEvents, RoleEvents } from "@/connections/rewrite/table";
 import { onEvents } from "@/utils/utils";
 import type { handshakeData, intendedRoles } from "@shared/types";
 import { RoleStore } from "./roleStores";

@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { reactive } from "vue";
 export type joinRole = "player" | "station";
-export type JoinRequest = {
+type JoinRequest = {
     id: number;
     client_name: number;
     message: string;
@@ -12,7 +12,7 @@ export type JoinRequest = {
 export const useRequestNotifStore = defineStore("requestNotif", () => {
     const requests = reactive<JoinRequest[]>([]);
     const timers = new Map<number, any>();
-    
+
     function addRequest(req: Omit<JoinRequest, "id">) {
         const id = Date.now();
         const request: JoinRequest = { id, ...req };

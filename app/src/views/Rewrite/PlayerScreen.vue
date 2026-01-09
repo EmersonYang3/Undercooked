@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 
-import { usePlayerStore } from '@/stores/roleStores';
+import { usePlayerStore } from '@/stores/rewrite/roleStores';
 import JoinScreen from './JoinScreen.vue';
 //join screen just routes to the respective location
 const ImageLut = {};

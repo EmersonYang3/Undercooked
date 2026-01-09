@@ -16,8 +16,8 @@
 
 <script setup lang="ts">
 import { useClientConnection } from './clientKeyPress';
-import { useTerminalStore } from '@/stores/roleStores';
-import { useSocketStore } from '@/stores/sockets';
+import { useTerminalStore } from '@/stores/rewrite/roleStores';
+import { useSocketStore } from '@/stores/rewrite/sockets';
 import { ImageLut } from '@/utils/lut';
 import { reactive, Ref, ref, watch } from 'vue';
 const stationStore = useTerminalStore();

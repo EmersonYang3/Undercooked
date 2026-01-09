@@ -9,7 +9,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import router from '@/router';
+import router from '@/router/rewrite';
 import { ref } from 'vue';
 const joining = ref(false);
 

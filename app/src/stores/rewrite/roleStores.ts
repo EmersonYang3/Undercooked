@@ -103,4 +103,3 @@ export type HostStore = ReturnType<typeof useHostStore>;
 export type TerminalStore = ReturnType<typeof useTerminalStore>;
 export type PlayerStore = ReturnType<typeof usePlayerStore>;
 export type RoleStore = HostStore | TerminalStore | PlayerStore;
-

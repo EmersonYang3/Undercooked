@@ -6,9 +6,9 @@
 </template>
 
 <script setup lang="ts">
-import { useTerminalStore } from '@/stores/roleStores';
+import { useTerminalStore } from '@/stores/rewrite/roleStores';
 import { useClientConnection } from './clientKeyPress';
-import { useSocketStore } from '@/stores/sockets';
+import { useSocketStore } from '@/stores/rewrite/sockets';
 const stationStore = useTerminalStore();
 const socket = useSocketStore().getSocket();
 let res = useClientConnection(stationStore.clientsKeys, startGame)

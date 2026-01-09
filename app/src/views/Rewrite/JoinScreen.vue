@@ -11,8 +11,8 @@
 </template>
 
 <script setup lang="ts">
-import { usePlayerStore, useTerminalStore } from '@/stores/roleStores';
-import { useSocketStore } from '@/stores/sockets';
+import { usePlayerStore, useTerminalStore } from '@/stores/rewrite/roleStores';
+import { useSocketStore } from '@/stores/rewrite/sockets';
 import { ref, Ref, watch } from 'vue';
 
 const emit = defineEmits(["start"]);

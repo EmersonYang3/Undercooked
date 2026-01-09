@@ -1,6 +1,6 @@
 import enums from "@shared/enums"
-import { useRequestNotifStore } from "@/stores/messageStore";
-import { HostStore } from "@/stores/roleStores";
+import { useRequestNotifStore } from "@/stores/rewrite/messageStore";
+import { HostStore } from "@/stores/rewrite/roleStores";
 import type { activeRecipe, foodItem } from "@shared/types";
 //operates on the assumption that the notifStore instace has been constructed or smth
 export const hostEvents = (hostStore: HostStore): Record<string, (...args: any[]) => void> => {

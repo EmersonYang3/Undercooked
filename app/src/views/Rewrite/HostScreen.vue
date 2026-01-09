@@ -35,13 +35,13 @@
 </template>
 
 <script setup lang="ts">
-import { useRequestNotifStore } from '@/stores/messageStore';
+import { useRequestNotifStore } from '@/stores/rewrite/messageStore';
 import { reactive, Ref, ref } from 'vue';
 import enums from '@shared/enums';
 import type { handshakeData, stationTypes } from '@shared/types';
-import { useSocketStore } from '@/stores/sockets';
+import { useSocketStore } from '@/stores/rewrite/sockets';
 import { Socket } from 'socket.io-client';
-import { useHostStore } from '@/stores/roleStores';
+import { useHostStore } from '@/stores/rewrite/roleStores';
 const hostStore = useHostStore();
 const notifStore = useRequestNotifStore();
 const socketStore = useSocketStore();
@@ -50,13 +50,11 @@ type Screen = "code" | "lobby" | "started";
 const currentScreen = ref<Screen>("code");
 
 const code:Ref<string> = ref("");
-const CODELENGTH:number = 6;
-const letters:string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const CODELENGTH: number = 6;
+const letters: string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 function submitCode() {
-    if (code.value.length != CODELENGTH) {
-
-    } 
+    if (code.value.length != CODELENGTH) { } 
     let authData: handshakeData = {
         intendedRole: enums.gameRoles.host,
         lobbyCode: code.value,

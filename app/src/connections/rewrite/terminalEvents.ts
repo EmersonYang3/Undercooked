@@ -1,4 +1,4 @@
-import { TerminalStore } from "@/stores/roleStores";
+import { TerminalStore } from "@/stores/rewrite/roleStores";
 import enums from "@shared/enums";
 import { foodItem } from "@shared/types";
 //new event -  Clientkey send
