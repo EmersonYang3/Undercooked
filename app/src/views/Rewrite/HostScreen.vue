@@ -28,9 +28,6 @@
         Current Code : {{ code }}
     </div>
     <div v-if="currentScreen == 'started'">
-        <div v-for="[key, value] in hostStore.activeRecipes">
-            {{ value.name }}
-        </div>
     </div>
 </template>
 
@@ -38,7 +35,7 @@
 import { useRequestNotifStore } from '@/stores/messageStore';
 import { reactive, Ref, ref } from 'vue';
 import enums from '@shared/enums';
-import type { handshakeData, stationTypes } from '@shared/types';
+import type { handshakeData } from '@shared/types';
 import { useSocketStore } from '@/stores/sockets';
 import { Socket } from 'socket.io-client';
 import { useHostStore } from '@/stores/roleStores';
