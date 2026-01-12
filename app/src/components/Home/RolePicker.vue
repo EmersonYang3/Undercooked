@@ -11,7 +11,6 @@ const gameRoles = sharedEnums.gameRoles
 const events = defineEmits<{ (e: 'roleSelected', role: string): void }>();
 
 const availableRoles = {
-    [gameRoles.host]: "Host",
     [gameRoles.client]: "Client",
     [gameRoles.station]: "Station"
 }
