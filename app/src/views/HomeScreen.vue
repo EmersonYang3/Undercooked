@@ -5,7 +5,6 @@
 </template>
 
 <script setup lang="ts">
-
 import Deciding from "@/components/Home/DecidingComp.vue"
 import JoinLobby from "@/components/Home/JoinLobby.vue"
 import HostLobby from "@/components/Home/HostLobby.vue"

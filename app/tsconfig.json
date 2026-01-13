@@ -4,7 +4,10 @@
     "paths": {
       "@shared/*": [
         "../shared/src/*"
-      ]
+      ],
+      "@stores/*": [
+        "src/stores/*"
+      ],
     }
   },
   "files": [],
