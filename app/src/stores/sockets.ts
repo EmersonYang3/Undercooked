@@ -13,7 +13,7 @@ export const useSocketStore = defineStore("socket", () => {
     function createSocket(handshake: handshakeData, roleStore: RoleStore): Socket {
         console.log("attempting to create socket");
         if (socket.value) return socket.value as Socket;
-        const socketAttempt = io(`http://100.101.69.168:${sharedEnums.portServer.port}`, {
+        const socketAttempt = io(`:${sharedEnums.portServer.port}`, {
             autoConnect: false,
             auth: handshake,
         }) as Socket;
