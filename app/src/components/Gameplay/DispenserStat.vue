@@ -17,7 +17,7 @@ function startGame(key: string) {
     socket.emit("specialKeyPressed", stationStore.id, key);
 }
 function gameState() {
-
+    
 }
 
 function endGame() {
