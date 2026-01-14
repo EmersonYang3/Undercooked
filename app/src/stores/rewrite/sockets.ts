@@ -5,6 +5,7 @@ import { initialRoleEvents, RoleEvents } from "@/connections/rewrite/table";
 import { onEvents } from "@/utils/utils";
 import type { handshakeData, intendedRoles } from "@shared/types";
 import { RoleStore } from "./roleStores";
+import sharedEnums from "@shared/enums";
 
 export const useSocketStore = defineStore("socket", () => {
     const socket = ref<Socket | null>(null);    // kept in a ref so the store retains it
@@ -12,7 +13,7 @@ export const useSocketStore = defineStore("socket", () => {
     function createSocket(handshake: handshakeData, roleStore: RoleStore): Socket {
         console.log("attempting to create socket");
         if (socket.value) return socket.value as Socket;
-        const socketAttempt = io("http://localhost:3000", {
+        const socketAttempt = io(`:${sharedEnums.portServer.port}`, {
             autoConnect: false,
             auth: handshake,
         }) as Socket;
