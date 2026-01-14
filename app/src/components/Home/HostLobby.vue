@@ -15,6 +15,6 @@ const events = defineEmits(['go-back'])
 function onBackButton() { events('go-back') }
 
 function onHostLobby() {
-    joiningStore.attemptJoinLobby('ABCDEFGHIJKLMNOP', 'host')
+    joiningStore.attemptJoinLobby('ABCDEF', 'host')
 }
 </script>

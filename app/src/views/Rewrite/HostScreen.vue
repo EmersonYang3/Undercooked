@@ -36,7 +36,7 @@ import { useRequestNotifStore } from '@/stores/rewrite/messageStore';
 import { reactive, Ref, ref } from 'vue';
 import enums from '@shared/enums';
 import type { handshakeData } from '@shared/types';
-import { useSocketStore } from '@/stores/sockets';
+import { useSocketStore } from '@/stores/rewrite/sockets';
 import { Socket } from 'socket.io-client';
 import { useHostStore } from '@/stores/rewrite/roleStores';
 const hostStore = useHostStore();
