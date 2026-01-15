@@ -1,9 +1,10 @@
 import { handshakeData, intendedRoles } from "@shared/types"
 import { useSocketStore } from "./SocketStore"
-import router from '@/router'
+import { useLobbyCodeStore } from "./LobbyCode"
 import { defineStore } from "pinia"
 import { io } from "socket.io-client"
 
+import router from '@/router'
 import sharedEnums from "@shared/enums"
 
 const serverPort = `:${sharedEnums.portServer.port}`
@@ -18,8 +19,11 @@ function navigateToRoleRoute(role: string) {
 }
 
 export const useJoiningStore = defineStore("joining", () => {
-    function attemptJoinLobby(code: string, role: intendedRoles) {
-        const handshake: handshakeData = { intendedRole: role, lobbyCode: code }
+    function attemptJoinLobby(role: intendedRoles) {
+        const lobbyCodeStore = useLobbyCodeStore()
+        const lobbyCode = lobbyCodeStore.lobbyCode
+
+        const handshake: handshakeData = { intendedRole: role, lobbyCode: lobbyCode }
         const clientSocket = io(serverPort, { auth: handshake })
 
         clientSocket.on(sharedRemotes.connectError, (errorMessage: Error) => {
@@ -32,6 +36,8 @@ export const useJoiningStore = defineStore("joining", () => {
             const socketStore = useSocketStore()
             socketStore.setSocket(clientSocket)
             socketStore.setGameRole(role)
+
+            clientSocket.removeAllListeners()
 
             navigateToRoleRoute(role)
         })

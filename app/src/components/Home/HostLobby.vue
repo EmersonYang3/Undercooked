@@ -1,6 +1,6 @@
 <template>
     <button @click="onBackButton">Go Back</button>
-    <CodeInput @update:code="updateCode"/>
+    <CodeInput />
     <DecisionButton text="HOST LOBBY" @on-click="onHostLobby"/>
 </template>
 
@@ -8,18 +8,16 @@
 import CodeInput from './CodeInput.vue'
 import DecisionButton from './DecisionButton.vue'
 import { useJoiningStore } from '@/stores/JoiningStore'
-import { ref } from 'vue'
+import { useLobbyCodeStore } from '@/stores/LobbyCode'
 
 const joiningStore = useJoiningStore()
-const code = ref("")
-
+const lobbyCodeStore = useLobbyCodeStore()
 const events = defineEmits(['go-back'])
 
 function onBackButton() { events('go-back') }
-function updateCode(newCode: string) { code.value = newCode }
 
 function onHostLobby() {
-    if (code.value.length !== 6) { return }
-    joiningStore.attemptJoinLobby(code.value, 'host')
+    if (!lobbyCodeStore.isLobbyCodeValid()) { return }
+    joiningStore.attemptJoinLobby('host')
 }
 </script>

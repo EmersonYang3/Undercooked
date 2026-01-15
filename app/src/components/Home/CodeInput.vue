@@ -1,13 +1,18 @@
 <template>
-    <input v-model="" maxlength="6" @input="" placeholder="Enter Lobby Code" />
+    <input v-model="code" maxlength="6" @input="onCodeInput" placeholder="Enter Lobby Code" />
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue"
 
-import { useLobbyCodeStore } from "@/stores/LobbyCOde";
+import { useLobbyCodeStore } from "@/stores/LobbyCode"
+const lobbyCodeStore = useLobbyCodeStore()
 
+const code = ref("")
 
-// function validateCode() { lobbyCode.value = lobbyCode.value.toUpperCase().replace(/[^A-Z0-9]/g, "") }
+function onCodeInput() {
+    code.value = code.value.toUpperCase().replace(/[^A-Z0-9]/g, "")
+    lobbyCodeStore.setLobbyCode(code.value)
+}
 
 </script>
