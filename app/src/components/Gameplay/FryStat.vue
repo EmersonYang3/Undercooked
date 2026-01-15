@@ -18,7 +18,8 @@
 import { useClientConnection } from './clientKeyPress';
 import { useTerminalStore } from '@/stores/rewrite/roleStores';
 import { useSocketStore } from '@/stores/rewrite/sockets';
-import { ImageLut } from '@/utils/lut';
+import { ImageLut } from '@/utils/ImageLut';
+import { holdableItem } from '@shared/types';
 import { reactive, Ref, ref, watch } from 'vue';
 const stationStore = useTerminalStore();
 const socketStore = useSocketStore();
@@ -36,7 +37,7 @@ const start:Ref<boolean>=  ref(false);
 function onkeyPressed(key: string) {
     socket.emit("onSpecialKeyPressed", Number(stationStore.id), key );
 
-    if (stationStore.currentHelditem) {
+    if (stationStore.heldItem) {
         //Means the item has been done and the user can pick it up
         return;
     }
@@ -50,12 +51,12 @@ function endGame() {
     startListening();
     start.value = false;
 }
-function startGame(heldItem: string) {
-    currentlyCookingItem.item = heldItem;
+function startGame(heldItem: holdableItem) {
+    currentlyCookingItem.item = heldItem.foodItems[0].name;
     currentlyCookingItem.cookingTime = CookTime;
     setInterval(() => {
         if (currentlyCookingItem.cookingTime == 0) {
-            endGame
+            endGame()
             currentlyCookingItem.cookingTime = null;
             currentlyCookingItem.item = null;
             return;
@@ -65,7 +66,7 @@ function startGame(heldItem: string) {
 }
 
 
-watch(() => stationStore.currentHelditem, startGame)
+watch(() => stationStore.heldItem, startGame)
 
 </script>
 

@@ -33,7 +33,7 @@ export type internalStationData = {
 export type activeRecipe = {
     targetFoodItem: string,
     timeRemaining: number,
-    id: uniqueIdentifier
+    id: uniqueIdentifier,
 }
 
 export type stationData = {

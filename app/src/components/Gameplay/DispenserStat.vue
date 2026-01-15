@@ -1,7 +1,7 @@
 <template>
     <div>
-        Currently Held Item {{ stationStore.currentHelditem }}
-        <img src="ImageLut placeholder">
+        Currently Held Item {{ stationStore.heldItem.foodItems[0].name }}
+        <img :src="stationStore.heldItem.foodItems[0].name">
     </div>
 </template>
 

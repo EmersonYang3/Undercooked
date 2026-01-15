@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref, Ref } from "vue";
 import sharedEnums from "@shared/enums";
-import { activeRecipe } from "@shared/types";
+import { activeRecipe, holdableItem } from "@shared/types";
 export type Item = string;
 export type StationType = "stove" | "oven" | "toaster" | "boiler" | "mixer" | "brewer" | "assembler" | "dispenser";
 export const useHostStore = defineStore(sharedEnums.gameRoles.host, () => {
@@ -10,6 +10,7 @@ export const useHostStore = defineStore(sharedEnums.gameRoles.host, () => {
     const players: Ref<Array<number>> = ref([]);
     const stations: Ref<Array<number>> = ref([]);
     const activeRecipes: Ref<Map<number, activeRecipe>> = ref(new Map());
+    const addedRecipe: boolean = false;
     const score: Ref<number> = ref(0);
     function setActiveRecipe(id: number, foodItem: activeRecipe) {
         activeRecipes.value.set(id, foodItem);
@@ -21,13 +22,13 @@ export const useHostStore = defineStore(sharedEnums.gameRoles.host, () => {
         score.value = newScore;
     }
     return {
-        score, setScore, id, isReady, players, stations, activeRecipes, setActiveRecipe, deleteActiveRecipe
+        addedRecipe, score, setScore, id, isReady, players, stations, activeRecipes, setActiveRecipe, deleteActiveRecipe
     }
 })
 
 export const useTerminalStore = defineStore(sharedEnums.gameRoles.station, () => {
     const id: Ref<null | string> = ref(null);
-    const currentHelditem = ref<null | string>(null);
+    const heldItem = ref<null | holdableItem>(null);
     const isPlaying: Ref<boolean> = ref(false);
     let clientsKeys: Set<string> = new Set();
     let isReady: Ref<boolean> = ref(false);
@@ -44,8 +45,8 @@ export const useTerminalStore = defineStore(sharedEnums.gameRoles.station, () =>
     function setStationType(stationType: string) {
         station.value = stationType;
     }
-    function setCurrentItem(item: string) {
-        currentHelditem.value = item;
+    function setCurrentItem(item: holdableItem) {
+        heldItem.value = item;
     }
     return {
         clientsKeys,
@@ -58,20 +59,20 @@ export const useTerminalStore = defineStore(sharedEnums.gameRoles.station, () =>
         setStationType,
         isReady,
         station,
-        currentHelditem,
+        heldItem,
     }
 })
 export const usePlayerStore = defineStore(sharedEnums.gameRoles.client, () => {
-    const inventory: Ref<null | string> = ref(null);
+    const heldItem: Ref<null | holdableItem> = ref(null);
     const id: Ref<null | string> = ref(null);
     const isPlaying: Ref<boolean> = ref(false);
     const key = ref<string | null>(null);
     let isReady: Ref<boolean> = ref(false);
-    function updateInventory(item: string) {
-        inventory.value = item;
+    function updateInventory(item: holdableItem) {
+        heldItem.value = item;
     }
     function clearInventory() {
-        inventory.value = null;
+        heldItem.value = null;
     }
     function setId(uniqid: string) {
         id.value = uniqid;
@@ -86,7 +87,7 @@ export const usePlayerStore = defineStore(sharedEnums.gameRoles.client, () => {
         key.value = playerKey;
     }
     return {
-        inventory,
+        heldItem,
         id,
         isPlaying,
         updateInventory,
