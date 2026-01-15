@@ -12,5 +12,10 @@ export const useSocketStore = defineStore("socket", () => {
     function setUniqueIdentifier(id: uniqueIdentifier) { uniqueIdentifier.value = id }
     function setGameRole(role: string) { gameRole.value = role }
 
-    return { socket, uniqueIdentifier, setSocket, setUniqueIdentifier, setGameRole }
+    function onSocketEvent(event: string, callback: (...args: any[]) => void) {
+        if (!socket.value) return
+        socket.value.on(event, callback)
+    }
+
+    return { socket, uniqueIdentifier, setSocket, setUniqueIdentifier, setGameRole, onSocketEvent }
 })

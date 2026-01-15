@@ -4,7 +4,7 @@
 </template>
 
 <script setup lang="ts">
-const events = defineEmits<{ (e: 'decisionEvent', where: string): void}>();
+const events = defineEmits<{ (e: 'decisionEvent', where: string): void}>()
 
 function joinLobby() { events('decisionEvent', 'JoinLobby') }
 function hostLobby() { events('decisionEvent', 'HostLobby') }
