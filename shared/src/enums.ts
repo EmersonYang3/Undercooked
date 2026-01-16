@@ -25,7 +25,6 @@ enum serverToHostRemotes {
 enum serverToClientRemotes {
     pendingJoin = "pendingJoin",
     clientAccepted = "clientAccepted",
-    changeCurrentlyHeldItem = "changeCurrentlyHeldItem",
     gameStarted = "gameStarted"
 }
 
