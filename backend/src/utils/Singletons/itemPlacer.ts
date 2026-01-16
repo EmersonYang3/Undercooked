@@ -47,7 +47,7 @@ function AlertClientHoldingItemChanged(clientIdentifier: uniqueIdentifier, newIt
     const connection = socketRegistry.getSocketConnectionById(clientIdentifier)
     if (!connection) { return }
 
-    connection.socket.emit(serverToClientRemotes.changeCurrentlyHeldItem, newItem)
+    connection.socket.emit(sharedRemotes.setCurrentItem, newItem)
 }
 
 function RemoveItemFromStation(stationIdentifier: uniqueIdentifier): holdableItem {

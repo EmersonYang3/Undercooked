@@ -1,6 +1,8 @@
 <template>
     <div>
-
+        <div>
+            
+        </div>
     </div>
 </template>
     
@@ -15,9 +17,6 @@ const {keyClient, startListening, stopListening} = useClientConnection(termStore
 function onKeyPressed(key: string) {
     socket.emit("onSpecialKeyPressed", key);
 }
-
-
-
 </script>
 
 <style scoped>

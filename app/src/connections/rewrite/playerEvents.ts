@@ -1,5 +1,6 @@
 import enums from "@shared/enums";
 import type { PlayerStore } from "@/stores/rewrite/roleStores";
+import { holdableItem } from "@shared/types";
 export function playerEvents(store: PlayerStore): Record<string, (...args: any[]) => void> {
     return {
         [enums.serverToClientRemotes.clientAccepted]: (clientSpecialKey: string) => {
@@ -11,11 +12,8 @@ export function playerEvents(store: PlayerStore): Record<string, (...args: any[]
         [enums.serverToClientRemotes.gameStarted]: (clientKey: string) => {
             store.setKey(clientKey);
         },
-        [enums.serverToClientRemotes.changeCurrentlyHeldItem]: () => {
-
-        },
-        [enums.sharedRemotes.setCurrentItem]: () => {
-
+        [enums.sharedRemotes.setCurrentItem]: (item: holdableItem) => {
+            store.updateInventory(item);
         }
     }
 }

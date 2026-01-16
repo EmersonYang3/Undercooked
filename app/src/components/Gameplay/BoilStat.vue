@@ -34,14 +34,14 @@ let internalTimer: Ref<Timer> = ref({
 
 let frameId: number | null = null;
 function startGame() {
-    const currentlyHeldItem = termStore.currentHelditem
+    const currentlyHeldItem = termStore.heldItem
     if (!currentlyHeldItem) {
         return new Error("There was no valid held item to be acted on")
     }
     internalTimer.value = {
         time_remaining: 6000, 
         id: 10,
-        item: currentlyHeldItem,
+        item: currentlyHeldItem.foodItems[0].name
     }
 }
 let last_tick = null;
