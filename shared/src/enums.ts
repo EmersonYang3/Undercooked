@@ -59,6 +59,7 @@ enum connValidatorErrors {
     noHandshakeData = "No handshake auth data provided.",
     invalidHandshakeData = "Invalid handshake auth data provided.",
     hostConnectionFailed = "Host already connected to lobby with provided code.",
+    hostAlreadyExists = "A host with a lobby already exists. Only a single lobby and host allowed at a time. Restart the backend server to destroy existing lobby",
     otherConnectionsFailed = "No lobby with provided code exists."
 }
 

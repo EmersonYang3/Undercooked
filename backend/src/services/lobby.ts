@@ -17,6 +17,10 @@ function generateLobbyCode(): string {
 
 }
 
+function hostAlreadyExists(): boolean {
+    return (currentLobbyCode !== '')
+}
+
 function lobbyExists(lobbyCode: string): boolean {
     return (lobbyCode === currentLobbyCode && lobbyCode !== '')
 }
@@ -80,4 +84,4 @@ function emitToAllStations(eventName: string, ...args: any[]): void {
     }
 }
 
-export default { generateLobbyCode, lobbyExists, createLobby, getLobbyData, transformLobbyData, isConnectionRegistered, getLobbyCode, emitToAllClients, emitToAllStations, loopThroughClients }
+export default { generateLobbyCode, lobbyExists, createLobby, getLobbyData, transformLobbyData, isConnectionRegistered, getLobbyCode, emitToAllClients, emitToAllStations, loopThroughClients, hostAlreadyExists }

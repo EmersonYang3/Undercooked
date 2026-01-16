@@ -15,9 +15,7 @@ function throwError(message: string) {
 
 function ensureHandshakeData(data: any): boolean {
     if (!data) { return false }
-
     if (!data.intendedRole || typeof data.intendedRole !== 'string') { return false }
-
     if (!validRoles[data.intendedRole as intendedRoles]) { return false }
 
     return true
@@ -32,22 +30,17 @@ function formatHandshakeData(data: any): handshakeData {
     return formattedHandshakeData
 }
 
-function validateHost(data: handshakeData, socket: Socket): boolean {
-    let targetLobbyCode = ""
+function validateHost(data: handshakeData, socket: Socket): [boolean, string] {
+    const hostAlreadyExists = lobbyService.hostAlreadyExists()
+    if (hostAlreadyExists) { return [false, connValidatorErr.hostAlreadyExists] }
 
-    if (!data.lobbyCode) {
-        targetLobbyCode = lobbyService.generateLobbyCode()
-    } else {
-        targetLobbyCode = data.lobbyCode.toUpperCase()
-    }
+    let targetLobbyCode = (data.lobbyCode) ? data.lobbyCode.toUpperCase() : lobbyService.generateLobbyCode()
 
     const isHostingAlready = lobbyService.lobbyExists(targetLobbyCode)
-
-    if (isHostingAlready) { return false }
+    if (isHostingAlready) { return [false, connValidatorErr.hostConnectionFailed] }
 
     socket.data = { ...data, lobbyCode: targetLobbyCode }
-
-    return true
+    return [true, ""]
 }
 
 function validateOthers(data: handshakeData, socket: Socket): boolean {
@@ -68,8 +61,8 @@ function validateConnection(socket: Socket, next: (err?: ExtendedError) => void)
     const formattedHandshakeData: handshakeData = formatHandshakeData(handshakeAuthData)
 
     if (formattedHandshakeData.intendedRole === gameRoles.host) {
-        const isHostValid = validateHost(formattedHandshakeData, socket)
-        if (!isHostValid) { return next(throwError(connValidatorErr.hostConnectionFailed)) }
+        const [isHostValid, hostError] = validateHost(formattedHandshakeData, socket)
+        if (!isHostValid) { return next(throwError(hostError)) }
     } else {
         const isOtherValid = validateOthers(formattedHandshakeData, socket)
         if (!isOtherValid) { return next(throwError(connValidatorErr.otherConnectionsFailed)) }
