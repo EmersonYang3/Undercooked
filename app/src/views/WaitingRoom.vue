@@ -1,4 +1,8 @@
 <template>
+    <p> ~Waiting Room~</p>
+    <p> Wait for host approval!</p>
+    
+    <p>Lobby Code:</p>
     <CodeArea />
 </template>
 

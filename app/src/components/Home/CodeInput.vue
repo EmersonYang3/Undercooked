@@ -10,6 +10,8 @@ const lobbyCodeStore = useLobbyCodeStore()
 
 const code = ref("")
 
+lobbyCodeStore.setLobbyCode(code.value)
+
 function onCodeInput() {
     code.value = code.value.toUpperCase().replace(/[^A-Z0-9]/g, "")
     lobbyCodeStore.setLobbyCode(code.value)

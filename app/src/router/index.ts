@@ -1,18 +1,20 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import HomeScreen from '@/views/HomeScreen.vue'
-import HostingLobby from '@/views/HostingLobby.vue'
-
 const routes = [
     {
         path: '/',
         name: "Main",
-        component: HomeScreen
+        component: () => import('@/views/HomeScreen.vue')
     },
     {
         path: '/hosting',
         name: "HostingLobby",
-        component: HostingLobby
+        component: () => import('@/views/HostingLobby.vue')
+    },
+    {
+        path: '/waiting',
+        name: "WaitingRoom",
+        component: () => import('@/views/WaitingRoom.vue')
     }
 ]
 
