@@ -28,24 +28,30 @@ export const useHostStore = defineStore(sharedEnums.gameRoles.host, () => {
 
 export const useTerminalStore = defineStore(sharedEnums.gameRoles.station, () => {
     const id: Ref<null | string> = ref(null);
-    const heldItem = ref<null | holdableItem>(null);
-    const isPlaying: Ref<boolean> = ref(false);
-    let clientsKeys: Set<string> = new Set();
-    let isReady: Ref<boolean> = ref(false);
-    let station = ref<string | null>(null);
+    const station = ref<StationType | null>(null);
+
+    const heldItem = ref<null | string>(null);
+    const clientsKeys: Set<string> = new Set();
+
+    const isActive: Ref<boolean> = ref(false);
+    const isConnected: Ref<boolean> = ref(false);
+
+    function setConnect(connected: boolean) {
+        isConnected.value = connected;
+    }
     function startGame() {
-        isPlaying.value = true;
+        isActive.value = true;
     }
     function endGame() {
-        isPlaying.value = false;
+        isActive.value = false;
     }
     function setId(uniqId: string) {
         id.value = uniqId;
     }
-    function setStationType(stationType: string) {
+    function setStationType(stationType: StationType) {
         station.value = stationType;
     }
-    function setCurrentItem(item: holdableItem) {
+    function setHeldItem(item: string) {
         heldItem.value = item;
     }
     return {
@@ -53,22 +59,27 @@ export const useTerminalStore = defineStore(sharedEnums.gameRoles.station, () =>
         startGame,
         endGame,
         id,
-        isPlaying,
+        isActive,
         setId,
-        setCurrentItem,
+        setHeldItem,
         setStationType,
-        isReady,
+        setConnect,
+        isConnected,
         station,
         heldItem,
     }
 })
 export const usePlayerStore = defineStore(sharedEnums.gameRoles.client, () => {
-    const heldItem: Ref<null | holdableItem> = ref(null);
+    const heldItem: Ref<null | string> = ref(null);
     const id: Ref<null | string> = ref(null);
-    const isPlaying: Ref<boolean> = ref(false);
     const key = ref<string | null>(null);
-    let isReady: Ref<boolean> = ref(false);
-    function updateInventory(item: holdableItem) {
+    const isConnected: Ref<boolean> = ref(false);
+    const isActive: Ref<boolean> = ref(false);
+
+    function setConnect(connected: boolean) {
+        isConnected.value = connected;
+    }
+    function updateInventory(item: string) {
         heldItem.value = item;
     }
     function clearInventory() {
@@ -78,10 +89,10 @@ export const usePlayerStore = defineStore(sharedEnums.gameRoles.client, () => {
         id.value = uniqid;
     }
     function startGame() {
-        isPlaying.value = true;
+        isActive.value = true;
     }
     function endGame() {
-        isPlaying.value = false;
+        isActive.value = false;
     }
     function setKey(playerKey: string) {
         key.value = playerKey;
@@ -89,14 +100,16 @@ export const usePlayerStore = defineStore(sharedEnums.gameRoles.client, () => {
     return {
         heldItem,
         id,
-        isPlaying,
+        isActive,
         updateInventory,
         clearInventory,
         setId,
         startGame,
         endGame,
         setKey,
-        isReady
+        isConnected,
+        setConnect,
+        key,
     }
 })
 

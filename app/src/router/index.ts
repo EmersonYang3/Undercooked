@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-
 const routes = [
     {
         path: '/',
@@ -15,9 +14,17 @@ const routes = [
         path: '/waiting',
         name: "WaitingRoom",
         component: () => import('@/views/WaitingRoom.vue')
+    },
+    {
+        path: '/client',
+        name: "ClientRoom",
+        component: () => import('@/views/ClientRoom.vue'),
+    },
+    {
+        path: '/terminal',
+        name: "TerminalRoom",
+        component: () => import('@/views/TerminalRoom.vue')
     }
 ]
-
 const router = createRouter({ history: createWebHistory(import.meta.env.BASE_URL), routes })
-
 export default router

@@ -1,4 +1,4 @@
-import { TerminalStore } from "@/stores/rewrite/roleStores";
+import { StationType, TerminalStore } from "@/stores/rewrite/roleStores";
 import enums from "@shared/enums";
 import { foodItem, holdableItem } from "@shared/types";
 //new event -  Clientkey send
@@ -13,7 +13,7 @@ export function terminalEvents(store: TerminalStore): Record<string, (...args: a
         [enums.serverToStationRemotes.gameStarted]: (keys: Array<string>) => {
             store.clientsKeys = new Set(keys);
         },
-        [enums.serverToStationRemotes.stationAssigned]: (stationName: string) => {
+        [enums.serverToStationRemotes.stationAssigned]: (stationName: StationType) => {
             store.setStationType(stationName);
         },
     }
@@ -21,9 +21,5 @@ export function terminalEvents(store: TerminalStore): Record<string, (...args: a
 export const initialTerminalEvents = (store: TerminalStore): Record<string, (...args: any[]) => void> => ({
     "pendingJoin": (identifierObj: { identifier: number }) => {
         console.log("Identifier set in store:", identifierObj.identifier);
-    },
-    "stationAssigned": (stationName: string) => {
-        store.setStationType(stationName); // example usage
-        console.log("Station assigned in store:", stationName);
     },
 });
