@@ -6,7 +6,7 @@ export function playerEvents(store: PlayerStore): Record<string, (...args: any[]
             console.log("Successfully joined the server");
             console.log("Client Special Key : ", clientSpecialKey);
             store.setId(clientSpecialKey);
-            store.isReady = true;
+            store.isActive = true;
         },
         [enums.serverToClientRemotes.gameStarted]: (clientKey: string) => {
             store.setKey(clientKey);

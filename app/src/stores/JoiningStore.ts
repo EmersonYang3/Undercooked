@@ -6,6 +6,7 @@ import { io } from "socket.io-client"
 
 import router from '@/router'
 import sharedEnums from "@shared/enums"
+import { RoleStore, useHostStore, usePlayerStore, useTerminalStore } from "./rewrite/roleStores"
 
 const gameRoles = sharedEnums.gameRoles
 
@@ -14,9 +15,19 @@ const sharedRemotes = sharedEnums.sharedRemotes
 
 const rolesToRoutes: Record<string, string> = {
     [gameRoles.host]: '/hosting',
-    [gameRoles.client]: '/waiting',
-    [gameRoles.station]: '/waiting'
+    [gameRoles.client]: '/client',
+    [gameRoles.station]: '/terminal'
 }
+function getRoleStore(role: intendedRoles): RoleStore {
+    if (role == "client") {
+        return usePlayerStore();
+    } else if (role == "host") {
+        return useHostStore();
+    } else if (role == "station") {
+        return useTerminalStore();
+    }
+}
+
 
 function navigateToRoleRoute(role: string) {
     const targetRoute = rolesToRoutes[role]
@@ -44,9 +55,8 @@ export const useJoiningStore = defineStore("joining", () => {
             const socketStore = useSocketStore()
             socketStore.setSocket(clientSocket)
             socketStore.setGameRole(role)
-
-            clientSocket.removeAllListeners()
-
+            const roleStore = getRoleStore(role);
+            socketStore.bindEvents(roleStore);
             navigateToRoleRoute(role)
         })
     }
