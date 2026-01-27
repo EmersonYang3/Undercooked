@@ -16,5 +16,4 @@ function onCodeInput() {
     code.value = code.value.toUpperCase().replace(/[^A-Z0-9]/g, "")
     lobbyCodeStore.setLobbyCode(code.value)
 }
-
 </script>

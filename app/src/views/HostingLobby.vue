@@ -1,6 +1,6 @@
 <template>
     <CodeArea />
-    <RequestNotif></RequestNotif>
+    <RequestNotif />
     <div>Amount of players : {{ hostStore.players.length }}</div>
     <div>Amount of stations: {{ hostStore.stations.length }}</div>
 </template>

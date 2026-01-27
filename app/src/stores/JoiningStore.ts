@@ -18,16 +18,19 @@ const rolesToRoutes: Record<string, string> = {
     [gameRoles.client]: '/client',
     [gameRoles.station]: '/terminal'
 }
-function getRoleStore(role: intendedRoles): RoleStore {
-    if (role == "client") {
-        return usePlayerStore();
-    } else if (role == "host") {
-        return useHostStore();
-    } else if (role == "station") {
-        return useTerminalStore();
-    }
+
+const rolesToStoreInitializers: Record<string, () => RoleStore> = {
+    [gameRoles.host]: useHostStore,
+    [gameRoles.client]: usePlayerStore,
+    [gameRoles.station]: useTerminalStore
 }
 
+function getRoleStore(role: string): RoleStore {
+    const storeInitializer = rolesToStoreInitializers[role]
+    if (!storeInitializer) { throw new Error(`No store initializer found for role: ${role}`) }
+
+    return storeInitializer()
+}
 
 function navigateToRoleRoute(role: string) {
     const targetRoute = rolesToRoutes[role]
@@ -55,8 +58,7 @@ export const useJoiningStore = defineStore("joining", () => {
             const socketStore = useSocketStore()
             socketStore.setSocket(clientSocket)
             socketStore.setGameRole(role)
-            const roleStore = getRoleStore(role);
-            socketStore.bindEvents(roleStore);
+
             navigateToRoleRoute(role)
         })
     }
