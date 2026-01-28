@@ -1,16 +1,71 @@
 import { intendedRoles, uniqueIdentifier } from "@shared/types"
 import { defineStore } from "pinia"
 import { Socket } from "socket.io-client"
-import { ref } from "vue"
+
+import sharedEnums from "@shared/enums"
+
+const FromServerRemotes = {
+    ToClient: sharedEnums.serverToClientRemotes,
+    ToHost: sharedEnums.serverToHostRemotes,
+    ToStation: sharedEnums.serverToStationRemotes
+}
+
+const ToServerRemotes = {
+    FromStation: sharedEnums.stationToServerRemotes,
+    FromHost: sharedEnums.hostToServerRemotes
+}
 
 export const useSocketStore = defineStore("socket", () => {
-    const socket = ref<Socket | null>(null)
-    const gameRole = ref<string | intendedRoles>(null)
-    const uniqueIdentifier = ref<uniqueIdentifier | null>(null)
+    let socket: Socket | null = null
+    let gameRole: string | intendedRoles = (null)
+    let uniqueIdentifier: uniqueIdentifier | null = (null)
 
-    function setSocket(newSocket: Socket) { socket.value = newSocket }
-    function setUniqueIdentifier(id: uniqueIdentifier) { uniqueIdentifier.value = id }
-    function setGameRole(role: string) { gameRole.value = role }
+    let dispatchingEvents: boolean = false
+    let eventsToFunctionMap: Record<string, (...args: any[]) => void> = {}
 
-    return { socket, gameRole, uniqueIdentifier, setSocket, setUniqueIdentifier, setGameRole }
+    function _refreshDispatcher() {
+        const shouldDispatch = Object.keys(eventsToFunctionMap).length > 0
+
+        if (shouldDispatch && !dispatchingEvents && socket) {
+            dispatchingEvents = true
+
+            socket.onAny((event: string, ...args: any[]) => {
+                const callback = eventsToFunctionMap[event]
+                if (callback) { callback(...args) }
+            })
+        } else if (!shouldDispatch && dispatchingEvents && socket) {
+            dispatchingEvents = false
+            socket.offAny()
+        }
+    }
+
+    function setSocket(newSocket: Socket) {
+        socket = newSocket
+        _refreshDispatcher()
+    }
+
+    function setUniqueIdentifier(id: uniqueIdentifier) {
+        uniqueIdentifier = id
+    }
+
+    function setGameRole(role: string) {
+        gameRole = role
+    }
+
+    function attachEventListener(event: string, callback: (...args: any[]) => void) {
+        eventsToFunctionMap[event] = callback
+        _refreshDispatcher()
+    }
+
+    function emitEvent(event: string, ...args: any[]) {
+        if (!socket) { return }
+        socket.emit(event, ...args)
+    }
+
+    return {
+        socket, gameRole, uniqueIdentifier,
+        FromServerRemotes, ToServerRemotes,
+        setSocket, setUniqueIdentifier, setGameRole,
+        attachEventListener, emitEvent
+    }
 })

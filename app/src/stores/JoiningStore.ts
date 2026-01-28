@@ -13,32 +13,6 @@ const gameRoles = sharedEnums.gameRoles
 const serverPort = `:${sharedEnums.portServer.port}`
 const sharedRemotes = sharedEnums.sharedRemotes
 
-const rolesToRoutes: Record<string, string> = {
-    [gameRoles.host]: '/hosting',
-    [gameRoles.client]: '/client',
-    [gameRoles.station]: '/terminal'
-}
-
-const rolesToStoreInitializers: Record<string, () => RoleStore> = {
-    [gameRoles.host]: useHostStore,
-    [gameRoles.client]: usePlayerStore,
-    [gameRoles.station]: useTerminalStore
-}
-
-function getRoleStore(role: string): RoleStore {
-    const storeInitializer = rolesToStoreInitializers[role]
-    if (!storeInitializer) { throw new Error(`No store initializer found for role: ${role}`) }
-
-    return storeInitializer()
-}
-
-function navigateToRoleRoute(role: string) {
-    const targetRoute = rolesToRoutes[role]
-    if (!targetRoute) return
-
-    router.push(targetRoute)
-}
-
 export const useJoiningStore = defineStore("joining", () => {
     function attemptJoinLobby(role: intendedRoles) {
         const lobbyCodeStore = useLobbyCodeStore()
@@ -59,7 +33,7 @@ export const useJoiningStore = defineStore("joining", () => {
             socketStore.setSocket(clientSocket)
             socketStore.setGameRole(role)
 
-            navigateToRoleRoute(role)
+            router.push(role == gameRoles.host ? "/hosting" : "/waiting")
         })
     }
 

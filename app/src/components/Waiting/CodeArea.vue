@@ -1,5 +1,5 @@
 <template>
-    <p>{{ code }}</p>
+    <p>Lobby Code: {{ code }}</p>
 </template>
 
 <script lang="ts" setup>
