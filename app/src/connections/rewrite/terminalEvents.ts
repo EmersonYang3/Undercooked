@@ -8,7 +8,7 @@ import { foodItem, holdableItem } from "@shared/types";
 export function terminalEvents(store: TerminalStore): Record<string, (...args: any[]) => void> {
     return {
         [enums.sharedRemotes.setCurrentItem]: (item: holdableItem) => {
-            store.setCurrentItem(item);
+            store.setHeldItem(item);
         },
         [enums.serverToStationRemotes.gameStarted]: (keys: Array<string>) => {
             store.clientsKeys = new Set(keys);
@@ -18,6 +18,7 @@ export function terminalEvents(store: TerminalStore): Record<string, (...args: a
         },
     }
 }
+
 export const initialTerminalEvents = (store: TerminalStore): Record<string, (...args: any[]) => void> => ({
     "pendingJoin": (identifierObj: { identifier: number }) => {
         console.log("Identifier set in store:", identifierObj.identifier);

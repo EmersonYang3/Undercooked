@@ -1,15 +1,23 @@
-import Temporary1 from "@/components/Stations/Temporary1.vue";
-import Temporary2 from "@/components/Stations/Temporary2.vue";
-import { StationType } from "@/stores/rewrite/roleStores";
-import { Component } from "vue";
-export const componentMap: Record<StationType, Component> = {
-    "stove": Temporary1,
-    "assembler": Temporary1,
-    "boiler": Temporary1,
-    "brewer": Temporary1,
-    "dispenser": Temporary1,
-    "oven": Temporary1,
-    "mixer": Temporary1,
-    "toaster": Temporary1,
+import BlendingStation from "@/components/Stations/BlendingStation.vue";
+import BoilingStation from "@/components/Stations/BoilingStation.vue";
+import DicingStation from "@/components/Stations/DicingStation.vue";
+import DispenseStation from "@/components/Stations/DispenseStation.vue";
+import DisposeStation from "@/components/Stations/DisposeStation.vue";
+import EmptyStation from "@/components/Stations/EmptyStation.vue";
+import FryingStation from "@/components/Stations/FryingStation.vue";
+import SubmitStation from "@/components/Stations/SubmitStation.vue";
 
+import { Component } from "vue";
+import sharedEnums from "@shared/enums";
+
+let stationTypes = sharedEnums.stationTypes;
+export const componentMap: Record<string, Component> = {
+    [stationTypes.submitStation]: SubmitStation,
+    [stationTypes.dispenseStation]: DispenseStation,
+    [stationTypes.emptyStation]: EmptyStation,
+    [stationTypes.dicingStation]: DicingStation,
+    [stationTypes.disposeStation]: DisposeStation,
+    [stationTypes.fryingStation]: FryingStation,
+    [stationTypes.blendingStation]: BlendingStation,
+    [stationTypes.boilingStation]: BoilingStation,
 }
