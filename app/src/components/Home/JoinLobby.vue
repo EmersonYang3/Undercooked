@@ -14,7 +14,7 @@ import { intendedRoles } from "@shared/types"
 import CodeInput from './CodeInput.vue'
 import RolePicker from './RolePicker.vue'
 import sharedEnums from "@shared/enums"
-import DecisionButton from "./DecisionButton.vue"
+import DecisionButton from "../Shared/DecisionButton.vue"
 
 const joiningStore = useJoiningStore()
 const lobbyCodeStore = useLobbyCodeStore()

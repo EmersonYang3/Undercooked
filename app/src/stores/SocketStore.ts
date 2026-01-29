@@ -57,6 +57,16 @@ export const useSocketStore = defineStore("socket", () => {
         _refreshDispatcher()
     }
 
+    function removeEventListener(event: string) {
+        delete eventsToFunctionMap[event]
+        _refreshDispatcher()
+    }
+
+    function removeAllEventListeners() {
+        eventsToFunctionMap = {}
+        _refreshDispatcher()
+    }
+
     function emitEvent(event: string, ...args: any[]) {
         if (!socket) { return }
         socket.emit(event, ...args)
@@ -66,6 +76,6 @@ export const useSocketStore = defineStore("socket", () => {
         socket, gameRole, uniqueIdentifier,
         FromServerRemotes, ToServerRemotes,
         setSocket, setUniqueIdentifier, setGameRole,
-        attachEventListener, emitEvent
+        attachEventListener, removeEventListener, removeAllEventListeners, emitEvent
     }
 })

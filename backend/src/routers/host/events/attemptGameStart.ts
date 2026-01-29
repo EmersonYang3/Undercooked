@@ -13,7 +13,7 @@ const serverTSRemotes = sharedEnums.serverToStationRemotes
 const serverTCRemotes = sharedEnums.serverToClientRemotes
 const sharedStationData = sharedData.stationData
 
-function alertAllGameStarting() {
+function alertPlayersAndStations() {
     let allRegisteredKeys: string[] = [];
 
     lobbyService.loopThroughClients((client) => {
@@ -51,7 +51,7 @@ function attemptGameStart() {
     singletons.recipeGenerator.RefreshMethods();
     singletons.recipeGenerator.RefreshValidRecipes();
 
-    alertAllGameStarting()
+    alertPlayersAndStations()
     setDispensingItemsToStations()
 
     gameLoop.startGameLoop()

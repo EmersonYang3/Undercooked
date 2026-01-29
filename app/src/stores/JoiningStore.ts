@@ -1,12 +1,13 @@
+import { defineStore } from "pinia"
+import { io } from "socket.io-client"
 import { handshakeData, intendedRoles } from "@shared/types"
 import { useSocketStore } from "./SocketStore"
 import { useLobbyCodeStore } from "./LobbyCode"
-import { defineStore } from "pinia"
-import { io } from "socket.io-client"
+import { useClientStore } from "./Roles/ClientStore"
+import { useStationStore } from "./Roles/StationStore"
 
 import router from '@/router'
 import sharedEnums from "@shared/enums"
-import { RoleStore, useHostStore, usePlayerStore, useTerminalStore } from "./rewrite/roleStores"
 
 const gameRoles = sharedEnums.gameRoles
 
@@ -21,6 +22,12 @@ export const useJoiningStore = defineStore("joining", () => {
         const lobbyCode = lobbyCodeStore.lobbyCode
         const handshake: handshakeData = { intendedRole: role, lobbyCode: lobbyCode }
         const clientSocket = io(serverPort, { auth: handshake })
+
+        if (role === gameRoles.client) {
+            useClientStore().initializePreconnections()
+        } else if (role === gameRoles.station) {
+            useStationStore().initializePreconnections()
+        }
 
         clientSocket.on(sharedRemotes.connectError, (errorMessage: Error) => {
             console.error("Connection error:", errorMessage)
