@@ -2,7 +2,7 @@ import { intendedRoles, uniqueIdentifier } from "@shared/types"
 import { defineStore } from "pinia"
 import { Socket } from "socket.io-client"
 import { ref } from "vue"
-import { RoleEvents } from "@/connections/rewrite/table"
+import { initialRoleEvents, RoleEvents } from "@/connections/rewrite/table"
 import { RoleStore } from "./rewrite/roleStores"
 import { onEvents } from "@/utils/utils"
 
@@ -21,6 +21,17 @@ export const useSocketStore = defineStore("socket", () => {
         const events = binder(roleStore);
         onEvents(socket.value as Socket, events);
     }
+    function bindInitEvents(roleStore: RoleStore) {
+        if (!socket.value) {
+            throw new Error("There was no socket to bind events for");
+        }
+        if (!gameRole.value) {
+            throw new Error("Game role was not set unable to determine appropiate event table");
+        }
+        const binder = initialRoleEvents[gameRole.value];
+        const events = binder(roleStore);
+        onEvents(socket.value as Socket, events);
+    }
     function setSocket(newSocket: Socket) { socket.value = newSocket }
     function setUniqueIdentifier(id: uniqueIdentifier) { uniqueIdentifier.value = id }
     function setGameRole(role: string) { gameRole.value = role }
@@ -30,5 +41,5 @@ export const useSocketStore = defineStore("socket", () => {
         socket.value.on(event, callback)
     }
 
-    return { socket, gameRole, uniqueIdentifier, setSocket, setUniqueIdentifier, setGameRole, onSocketEvent, bindEvents }
+    return { bindInitEvents, socket, gameRole, uniqueIdentifier, setSocket, setUniqueIdentifier, setGameRole, onSocketEvent, bindEvents }
 })

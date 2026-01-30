@@ -14,13 +14,14 @@ export function terminalEvents(store: TerminalStore): Record<string, (...args: a
             store.clientsKeys = new Set(keys);
         },
         [enums.serverToStationRemotes.stationAssigned]: (stationName: StationType) => {
+            store.isConnected = true;
             store.setStationType(stationName);
         },
     }
 }
 
 export const initialTerminalEvents = (store: TerminalStore): Record<string, (...args: any[]) => void> => ({
-    "pendingJoin": (identifierObj: { identifier: number }) => {
+    [enums.serverToStationRemotes.pendingJoin]: (identifierObj: { identifier: number }) => {
         console.log("Identifier set in store:", identifierObj.identifier);
     },
 });

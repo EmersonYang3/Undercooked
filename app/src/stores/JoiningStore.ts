@@ -48,6 +48,11 @@ export const useJoiningStore = defineStore("joining", () => {
         clientSocket.on(sharedRemotes.connectError, (errorMessage: Error) => {
             console.error("Connection error:", errorMessage)
         })
+        const socketStore = useSocketStore();
+        socketStore.setSocket(clientSocket);
+        socketStore.setGameRole(role);
+        const roleStore = getRoleStore(role);
+        socketStore.bindInitEvents(roleStore);
 
         clientSocket.on(sharedRemotes.connect, () => {
             console.log("Successfully connected to server as", role)
