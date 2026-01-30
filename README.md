@@ -12,7 +12,10 @@ Build the frontend
 
 Serve the frontend from the backend 
 
-`npx serve -s dist -l port_number`
+```shell
+npx serve -s dist -l port_number.
+```
+
 *port number can be any port number. 
 
 It should return a simple box giving you two links, local and network
