@@ -5,6 +5,7 @@ import { useSocketStore } from "./SocketStore"
 import { useLobbyCodeStore } from "./LobbyCode"
 import { useClientStore } from "./Roles/ClientStore"
 import { useStationStore } from "./Roles/StationStore"
+import { useHostStore } from "./Roles/HostStore"
 
 import router from '@/router'
 import sharedEnums from "@shared/enums"
@@ -23,9 +24,11 @@ export const useJoiningStore = defineStore("joining", () => {
         const handshake: handshakeData = { intendedRole: role, lobbyCode: lobbyCode }
         const clientSocket = io(serverPort, { auth: handshake })
 
-        if (role === gameRoles.client) {
+        if (role === gameRoles.host) {
+            useHostStore().initializePreconnections()
+        } else if (role === gameRoles.client) {
             useClientStore().initializePreconnections()
-        } else if (role === gameRoles.station) {
+        } else {
             useStationStore().initializePreconnections()
         }
 

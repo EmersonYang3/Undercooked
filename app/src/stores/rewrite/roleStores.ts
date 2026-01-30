@@ -21,6 +21,7 @@ export const useHostStore = defineStore(sharedEnums.gameRoles.host, () => {
     function setScore(newScore: number) {
         score.value = newScore;
     }
+
     return {
         addedRecipe, score, setScore, id, isReady, players, stations, activeRecipes, setActiveRecipe, deleteActiveRecipe
     }
@@ -69,6 +70,7 @@ export const useTerminalStore = defineStore(sharedEnums.gameRoles.station, () =>
         heldItem,
     }
 })
+
 export const usePlayerStore = defineStore(sharedEnums.gameRoles.client, () => {
     const heldItem: Ref<null | string> = ref(null);
     const id: Ref<null | string> = ref(null);

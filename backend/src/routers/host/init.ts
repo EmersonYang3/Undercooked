@@ -14,7 +14,7 @@ function initHostSocket(socket: Socket) {
     const lobbyCode = lobbyService.createLobby(socketConnection)
 
     console.log("lobby code recieved", lobbyCode);
-    socket.emit(serverToHostRemotes.lobbyStarted, { lobbyCode })
+    socket.emit(serverToHostRemotes.lobbyStarted, lobbyCode, socketConnection.identifier)
     hookEvents(socket, events)
 }
 

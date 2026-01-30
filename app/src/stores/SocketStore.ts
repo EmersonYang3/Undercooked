@@ -2,6 +2,8 @@ import { intendedRoles, uniqueIdentifier } from "@shared/types"
 import { defineStore } from "pinia"
 import { Socket } from "socket.io-client"
 
+import { ref } from "vue"
+
 import sharedEnums from "@shared/enums"
 
 const FromServerRemotes = {
@@ -16,12 +18,13 @@ const ToServerRemotes = {
 }
 
 export const useSocketStore = defineStore("socket", () => {
-    let socket: Socket | null = null
+    let socket: Socket | null = (null)
     let gameRole: string | intendedRoles = (null)
-    let uniqueIdentifier: uniqueIdentifier | null = (null)
 
     let dispatchingEvents: boolean = false
     let eventsToFunctionMap: Record<string, (...args: any[]) => void> = {}
+
+    const uniqueIdentifier = ref<uniqueIdentifier | null>(null)
 
     function _refreshDispatcher() {
         const shouldDispatch = Object.keys(eventsToFunctionMap).length > 0
@@ -45,7 +48,8 @@ export const useSocketStore = defineStore("socket", () => {
     }
 
     function setUniqueIdentifier(id: uniqueIdentifier) {
-        uniqueIdentifier = id
+        console.log("Setting unique identifier:", id)
+        uniqueIdentifier.value = id
     }
 
     function setGameRole(role: string) {
