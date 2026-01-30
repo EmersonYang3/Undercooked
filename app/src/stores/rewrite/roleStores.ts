@@ -31,7 +31,7 @@ export const useTerminalStore = defineStore(sharedEnums.gameRoles.station, () =>
     const id: Ref<null | string> = ref(null);
     const station = ref<StationType | null>(null);
 
-    const heldItem = ref<null | string>(null);
+    const heldItem = ref<null | holdableItem>(null);
     const clientsKeys: Set<string> = new Set();
 
     const isActive: Ref<boolean> = ref(false);
@@ -52,7 +52,7 @@ export const useTerminalStore = defineStore(sharedEnums.gameRoles.station, () =>
     function setStationType(stationType: StationType) {
         station.value = stationType;
     }
-    function setHeldItem(item: string) {
+    function setHeldItem(item: holdableItem) {
         heldItem.value = item;
     }
     return {
@@ -72,7 +72,7 @@ export const useTerminalStore = defineStore(sharedEnums.gameRoles.station, () =>
 })
 
 export const usePlayerStore = defineStore(sharedEnums.gameRoles.client, () => {
-    const heldItem: Ref<null | string> = ref(null);
+    const heldItem: Ref<null | holdableItem> = ref(null);
     const id: Ref<null | string> = ref(null);
     const key = ref<string | null>(null);
     const isConnected: Ref<boolean> = ref(false);
@@ -81,7 +81,7 @@ export const usePlayerStore = defineStore(sharedEnums.gameRoles.client, () => {
     function setConnect(connected: boolean) {
         isConnected.value = connected;
     }
-    function updateInventory(item: string) {
+    function updateInventory(item: holdableItem) {
         heldItem.value = item;
     }
     function clearInventory() {

@@ -18,7 +18,6 @@
     </div>
 </template>
 <script setup lang="ts">
-//will later rewrite this to be resuauble as code duplication
 import { useSocketStore } from '@/stores/SocketStore';
 import { acquireEventListener } from './eventListener';
 import { useTerminalStore } from '@/stores/rewrite/roleStores';
@@ -29,7 +28,6 @@ const socket = socketStore.socket;
 const terminalStore = useTerminalStore();
 const listening = ref<boolean>(false);
 const cantAct = ref<boolean>(false);
-
 let frameID = null;
 
 const currentTime = ref<number | null>(null);

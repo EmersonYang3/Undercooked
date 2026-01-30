@@ -1,13 +1,13 @@
-import { onMounted, onUnmounted, ref } from "vue";
-export function useClientConnection(validKeys: Set<string>, onKeySelected: (key: string) => void) {
-    const keyClient = ref<string | null>(null);
+import { ref } from "vue";
+
+export function acquireEventListener(validKeys: Set<string>, start: (key: string) => void) {
+    const pressedKey = ref<string | null>(null);
     function listener(event: KeyboardEvent) {
         const key = event.key.toLowerCase();
-
         if (!validKeys.has(key)) return;
-        keyClient.value = key;
-        onKeySelected(key);
+        pressedKey.value = key;
         document.removeEventListener("keydown", listener);
+        start(key);
     }
     function startListening() {
         document.addEventListener("keydown", listener);
@@ -15,15 +15,8 @@ export function useClientConnection(validKeys: Set<string>, onKeySelected: (key:
     function stopListening() {
         document.removeEventListener("keydown", listener);
     }
-    onMounted(() => {
-        startListening();
-    });
-
-    onUnmounted(() => {
-        stopListening();
-    });
     return {
-        keyClient,
+        pressedKey,
         startListening,
         stopListening,
     }
