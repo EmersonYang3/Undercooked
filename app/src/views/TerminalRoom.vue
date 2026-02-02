@@ -3,7 +3,7 @@
     <div v-else>
         <div>
             <!-- this will be in a corner on the top -->
-            Held Item: {{ terminalStore.heldItem }}
+            Held Item: {{ gameStore.heldItem }}
             <img :src="'placeholder'">
         </div>
         <!-- gameplay component that is attached via a look up table -->
@@ -17,15 +17,34 @@
 <script setup lang="ts">
 import WaitingArea from '@/components/Home/WaitingArea.vue';
 
-import { useTerminalStore } from '@/stores/rewrite/roleStores';
+import { StationType, useTerminalStore } from '@/stores/rewrite/roleStores';
+import { useSocketStore } from '@/stores/SocketStore';
 import { componentMap } from '@/utils/componentMap';
-import { computed } from 'vue';
-
-const terminalStore = useTerminalStore();
-//fetches the specific station Gameplay Comp to be shown
-const selectedComponent = computed(() => {
-  return componentMap[terminalStore.station]
+import { Component, computed } from 'vue';
+import sharedEnums from '@shared/enums';
+import { useGameStore } from '@/stores/Shared/PlayerStore';
+import { holdableItem } from '@shared/types';
+const socketStore = useSocketStore();
+const gameStore = useGameStore();
+let selectedComponent: null | Component = null;
+socketStore.attachEventListener(sharedEnums.sharedRemotes.setCurrentItem, 
+    (item: holdableItem) => {
+        gameStore.setItem(item);
+    }
+)
+socketStore.attachEventListener(sharedEnums.serverToStationRemotes.gameStarted, 
+    (keys: Set<string>) => {
+        gameStore.setClientKeys(keys);
+    }
+);
+socketStore.attachEventListener(sharedEnums.serverToStationRemotes.stationAssigned, (stationName: StationType) => {
+    selectedComponent =  componentMap[stationName];
 })
+
+
+
+
+//fetches the specific station Gameplay Comp to be shown
 </script>
 
 <style scoped>
