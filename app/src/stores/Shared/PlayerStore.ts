@@ -17,5 +17,5 @@ export const useGameStore = defineStore("player", () => {
     function getClientKeys(): Ref<Set<string> | null> {
         return clientKeys;
     }
-    return { setItem, getItem, setClientKeys, getClientKeys }
+    return { setItem, getItem, setClientKeys, getClientKeys, heldItem, clientKeys }
 })
