@@ -36,6 +36,9 @@ const currentTime = ref<number | null>(null);
 
 function startGame(key: string) {
     socket.emit("specialKeyPressed", terminalStore.id,  key);
+    //add some sort of delay incase the socket takes a bit to return a message. 
+    //or add a flag that forces the code to stall if its not on.
+
     if (terminalStore.heldItem.foodItems.length == 0) {
         //means that nothing got placed and thus should not do anything
         //this can be for when the item is invalid or when the client is picking up the items
@@ -70,6 +73,9 @@ function endGame() {
     startListening();
 }
 const { startListening, stopListening } = acquireEventListener(terminalStore.clientsKeys, startGame);
+const { gameplayListener, gsl } = acquireEventListener(new Set(["a"]), ) 
+
+
 onUnmounted(() => {
     stopListening();
 })
