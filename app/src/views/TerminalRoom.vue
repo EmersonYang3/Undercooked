@@ -16,7 +16,6 @@
 
 <script setup lang="ts">
 import WaitingArea from '@/components/Home/WaitingArea.vue';
-
 import { StationType } from '@/stores/rewrite/roleStores';
 import { useSocketStore } from '@/stores/SocketStore';
 import { componentMap } from '@/utils/componentMap';
@@ -39,10 +38,11 @@ socketStore.attachEventListener(sharedEnums.serverToStationRemotes.gameStarted,
         isWaiting.value = false;
     }
 );
-socketStore.attachEventListener(sharedEnums.serverToStationRemotes.stationAssigned, (stationName: StationType) => {
-    
-    selectedComponent =  componentMap[stationName];
-});
+socketStore.attachEventListener(sharedEnums.serverToStationRemotes.stationAssigned, 
+    (stationName: StationType) => {
+        selectedComponent =  componentMap[stationName];
+    }
+);
 
 
 

@@ -18,4 +18,7 @@ socketStore.removeAllEventListeners()
 
 const isJoiningAsClient = socketStore.gameRole === gameRoles.client
 const fromServerEvents = socketStore.FromServerRemotes
+
+
+
 </script>
