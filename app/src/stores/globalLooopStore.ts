@@ -1,2 +1,2 @@
 import { defineStore } from "pinia"
-import { ref } from "vue"s
+import { ref } from "vue"

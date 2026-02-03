@@ -16,6 +16,5 @@ export const useClientStore = defineStore("client", () => {
 
         console.log("Client preconnections initialized")
     }
-
     return { initializePreconnections }
 })

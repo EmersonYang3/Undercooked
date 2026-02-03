@@ -31,6 +31,8 @@ const cantAct = ref<boolean>(false);
 let frameID = null;
 
 const currentTime = ref<number | null>(null);
+const pressedKeys: Set<string> = new Set();
+
 
 function startGame(key: string) {
     socket.emit("specialKeyPressed", terminalStore.id,  key);
@@ -43,6 +45,10 @@ function startGame(key: string) {
     }
     listening.value = true;
     currentTime.value = performance.now();
+    document.addEventListener("keydown", (event: KeyboardEvent) => {
+        const pressedKey = event.key.toLowerCase();
+
+    }); 
     requestAnimationFrame(gameLoop);
     endGame();
 }
@@ -50,7 +56,7 @@ function startGame(key: string) {
 function gameLoop() {
     let deltaTime = performance.now() - currentTime.value;
     currentTime.value = performance.now(); 
-    
+       
     if (endCondition()) {
         cancelAnimationFrame(frameID);
         return;
@@ -60,6 +66,10 @@ function gameLoop() {
 
 function endCondition(): boolean {
     return false;
+}
+
+function bindListenerToSet(event: KeyboardEvent) {
+    pressedKeys.add
 }
 
 function endGame() {

@@ -24,6 +24,11 @@ const routes = [
         path: '/terminal',
         name: "TerminalRoom",
         component: () => import('@/views/TerminalRoom.vue')
+    },
+    {
+        path: '/host',
+        name: "HostingView",
+        component: () => import('@/views/HostView.vue')
     }
 ]
 const router = createRouter({ history: createWebHistory(import.meta.env.BASE_URL), routes })
