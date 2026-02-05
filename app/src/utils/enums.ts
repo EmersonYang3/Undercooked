@@ -1,8 +1,8 @@
-enum notificationHandlerKeys {
+enum NOTIFICATION_HANDLER_KEYS {
     ACCEPT_CLIENT = " ACCEPT_CLIENT",
     ACCEPT_STATION = "ACCEPT_STATION",
 }
 
 export const frontendEnums = {
-    notificationHandlerKeys
+    NOTIFICATION_HANDLER_KEYS
 }

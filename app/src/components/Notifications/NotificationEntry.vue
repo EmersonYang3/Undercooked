@@ -6,12 +6,14 @@
 </template>
 
 <script setup lang="ts">
-import { notificationEntry } from '@/utils/types';
+import { NotificationEntry } from '@/utils/types';
 import DecisionButton from '../Shared/DecisionButton.vue';
 
-const props = defineProps<{ entry: notificationEntry }>()
+import dispatchNotificationHandler from '@/services/NotificationHandlerDispatcher/dispatcher'
+
+const props = defineProps<{ entry: NotificationEntry }>()
 
 function onCallback(handlerKey: string) {
-    console.log(handlerKey, props.entry.callbackParameters)
+    dispatchNotificationHandler(handlerKey, props.entry.callbackParameters, props.entry.id)
 }
 </script>

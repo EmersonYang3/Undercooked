@@ -11,10 +11,7 @@ const notificationStore = useNotificationStore()
 notificationStore.addNotification({
     message: "THIS IS A TEST",
     callbackParameters: { testParam: 12345 },
-    options: [
-        {"optionText": "Option 1", "handlerKey": "option1"},
-        {"optionText": "Option 2", "handlerKey": "option2"}
-    ]
+    options: [{"optionText": "Option 1", "handlerKey": notificationStore.HANDLER_KEYS.ACCEPT_CLIENT}]
 })
 
 </script>
