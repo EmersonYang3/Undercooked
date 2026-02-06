@@ -10,47 +10,54 @@
 </template>
 
 <script setup lang="ts">
+import { useNotificationStore } from '@/stores/NotificationStore'
+import { useSocketStore } from '@/stores/SocketStore'
+import { uniqueIdentifier } from '@shared/types'
+
 import CodeArea from '@/components/Waiting/CodeArea.vue'
 import RequestNotif from '@/components/Waiting/RequestNotif.vue'
 import DecisionButton from '@/components/Shared/DecisionButton.vue'
 import UniqueIdentifier from '@/components/Shared/UniqueIdentifier.vue'
 
+const socketStore = useSocketStore()
+const notificationStore = useNotificationStore()
 
-import { useSocketStore } from '@/stores/SocketStore'
-import enums from '@shared/enums'
-import router from '@/router'
-import { reactive } from 'vue'
-const socketStore = useSocketStore();
+const fromServerToHostRemotes = socketStore.FromServerRemotes.ToHost
+const notificationHandlerKeys = notificationStore.HANDLER_KEYS
 
-const activeStations = reactive([])
-const activePlayers = reactive([]);
+function listenForPlayersPendingJoin() {
+    socketStore.attachEventListener(fromServerToHostRemotes.clientPendingJoin, (identifier: uniqueIdentifier) => {
+        notificationStore.addNotification({
+            message: `Player with ID ${identifier} is requesting to join your lobby.`,
+            options: [{"optionText": "ACCEPT", handlerKey: notificationHandlerKeys.ACCEPT_CLIENT}],
+            callbackParameters: { clientIdentifier: identifier }
+        })
+    })
 
-const messageStore = "useMessageStore()";
-
-
-
-//this could become another store if we want to maintain player count and shw it across components
-socketStore.attachEventListener(enums.serverToHostRemotes.clientPendingJoin, (identifier: { identifier: number }) => {
-    
-    //message store gets sent the message with config opts
-})
-socketStore.attachEventListener(enums.serverToHostRemotes.newClientJoined, (client: number) => {
-    activePlayers.push(client)
-})
-socketStore.attachEventListener(enums.serverToHostRemotes.stationPendingJoin, (identifier: { identifier: number }) => {
-    
-})
-
-socketStore.attachEventListener(enums.serverToHostRemotes.newStationJoined, (stations: number) => {
-    activeStations.push(stations)
-})
-
-
-
-function startGame() { 
-    console.log("Starting Game...") 
-    //clean everything up first before going 
-    socketStore.removeAllEventListeners();
-    router.push('/host');
+    socketStore.attachEventListener(fromServerToHostRemotes.stationPendingJoin, (identifier: uniqueIdentifier) => {
+        notificationStore.addNotification({
+            message: `Station with ID ${identifier} is requesting to join your lobby.`,
+            options: [{"optionText": "ACCEPT", handlerKey: notificationHandlerKeys.ACCEPT_STATION}],
+            callbackParameters: { stationIdentifier: identifier }
+        })
+    })
 }
+
+// TODO: Implement these listeners properly
+function listenForPlayersJoined() {
+    socketStore.attachEventListener(fromServerToHostRemotes.newClientJoined, () => {})
+    socketStore.attachEventListener(fromServerToHostRemotes.newStationJoined, () => {})
+}
+
+function removeListenersForPlayersPendingJoin() {
+    socketStore.removeEventListener(fromServerToHostRemotes.clientPendingJoin)
+    socketStore.removeEventListener(fromServerToHostRemotes.stationPendingJoin)
+}
+
+function startGame() {
+    removeListenersForPlayersPendingJoin() 
+    console.log("Starting Game...") 
+}
+
+listenForPlayersPendingJoin()
 </script>

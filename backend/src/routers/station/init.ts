@@ -15,7 +15,7 @@ function initStationSocket(socket: Socket) {
     const currentLobbyData = lobbyService.getLobbyData()
     const hostSocket = currentLobbyData.host.socket
 
-    hostSocket.emit(serverTHRemotes.stationPendingJoin, { identifier: socketConnection.identifier })
+    hostSocket.emit(serverTHRemotes.stationPendingJoin, socketConnection.identifier)
     socket.emit(serverTSRemotes.pendingJoin, socketConnection.identifier)
 
     hookEvents(socket, events)
