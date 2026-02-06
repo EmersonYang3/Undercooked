@@ -1,7 +1,21 @@
-export type notificationEntry = {
+export type NotificationOptionEntry = {
+    optionText?: string;
+    handlerKey?: string;
+}
+
+export type NotificationCallbackParameters = Record<string, any>;
+
+export type NotificationInput = {
     message: string;
 
-    options?: Record<string, string>;
-    attributes?: Record<string, any>;
-    callbacks?: Record<string, string>;
+    options?: NotificationOptionEntry[];
+    callbackParameters?: NotificationCallbackParameters;
+}
+
+export type NotificationEntry = NotificationInput & {
+    id: number;
+}
+
+export type NotificationHandler = {
+    onCallback: (parameters: NotificationCallbackParameters, id: number) => void;
 }

@@ -3,22 +3,22 @@ const routes = [
     {
         path: '/',
         name: "Main",
-        component: () => import('@/views/HomeScreen.vue')
+        component: () => import('@/views/Waiting/HomeScreen.vue')
     },
     {
         path: '/hosting',
         name: "HostingLobby",
-        component: () => import('@/views/HostingLobby.vue')
+        component: () => import('@/views/Waiting/HostingLobby.vue')
     },
     {
         path: '/waiting',
         name: "WaitingRoom",
-        component: () => import('@/views/WaitingRoom.vue')
+        component: () => import('@/views/Waiting/WaitingRoom.vue')
     },
     {
         path: '/client',
         name: "ClientRoom",
-        component: () => import('@/views/ClientRoom.vue'),
+        component: () => import('@/views/Game/ClientRoom.vue'),
     },
     {
         path: '/terminal',
