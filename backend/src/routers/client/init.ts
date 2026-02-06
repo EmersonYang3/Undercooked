@@ -12,7 +12,7 @@ function initClientSocket(socket: Socket) {
     const currentLobbyData = lobbyService.getLobbyData()
     const hostSocket = currentLobbyData.host.socket
 
-    hostSocket.emit(serverToHostRemotes.clientPendingJoin, { identifier: socketConnection.identifier })
+    hostSocket.emit(serverToHostRemotes.clientPendingJoin, socketConnection.identifier)
     socket.emit(serverToClientRemotes.pendingJoin, socketConnection.identifier)
 }
 

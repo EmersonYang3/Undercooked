@@ -7,11 +7,4 @@ import { useNotificationStore } from '@/stores/NotificationStore'
 import NotificationEntry from '@/components/Notifications/NotificationEntry.vue';
 
 const notificationStore = useNotificationStore()
-
-notificationStore.addNotification({
-    message: "THIS IS A TEST",
-    callbackParameters: { testParam: 12345 },
-    options: [{"optionText": "Option 1", "handlerKey": notificationStore.HANDLER_KEYS.ACCEPT_CLIENT}]
-})
-
 </script>
