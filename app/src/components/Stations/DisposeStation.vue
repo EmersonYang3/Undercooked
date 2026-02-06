@@ -20,7 +20,7 @@
 <script setup lang="ts">
 //will later rewrite this to be resuauble as code duplication
 import { useSocketStore } from '@/stores/SocketStore';
-import { acquireEventListener } from './eventListener';
+import { acquireEventListener, createKeyTracker } from './eventListener';
 import { useTerminalStore } from '@/stores/rewrite/roleStores';
 import { onMounted, onUnmounted, ref } from 'vue';
 
@@ -73,8 +73,8 @@ function endGame() {
     startListening();
 }
 const { startListening, stopListening } = acquireEventListener(terminalStore.clientsKeys, startGame);
-const { gameplayListener, gsl } = acquireEventListener(new Set(["a"]), ) 
-
+spaceListen.attachListener();
+spaceListen.detachListener();
 
 onUnmounted(() => {
     stopListening();
