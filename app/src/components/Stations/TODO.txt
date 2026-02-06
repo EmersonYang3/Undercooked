@@ -4,3 +4,11 @@
 - Metrics could be retrieved via a map
 - Since only one instance of this is ever really active we don't need to make it a store
 - Leave it as a composable 
+
+
+- Gameplay aspects
+- Random circles to be hit on time
+- Holding a certain button down
+- Clicking a button a set amount of times in a given duration
+- Waiting 
+- 
