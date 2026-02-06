@@ -4,10 +4,8 @@
     <CodeArea />
     <RequestNotif />
     <UniqueIdentifier />
-
-    <!-- <div>Amount of players : {{ hostStore.players.length }}</div>
-    <div>Amount of stations: {{ hostStore.stations.length }}</div> -->
-
+    <div>Current station count :{{ activeStations.length }}</div>
+    <div>Current player count : {{ activePlayers.length }}</div>
     <DecisionButton text="START GAME" @on-click="startGame" />
 </template>
 
