@@ -23,7 +23,6 @@ import { useSocketStore } from '@/stores/SocketStore';
 import { acquireEventListener } from './eventListener';
 import { useTerminalStore } from '@/stores/rewrite/roleStores';
 import { onMounted, onUnmounted, ref } from 'vue';
-
 const socketStore = useSocketStore();
 const socket = socketStore.socket;
 const terminalStore = useTerminalStore();

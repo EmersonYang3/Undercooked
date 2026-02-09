@@ -11,8 +11,8 @@
             <div v-if="!startedGame">
                 Press your client key to start the game
             </div>
-            <component v-else :is="selectedComponent" @completed=""></component>
-        </div>``
+            <component v-else :is="selectedComponent" @completed="startListening"></component>
+        </div>
         <div v-else>
             Station type was not set. Unable to find a suitable gameplay component
         </div>
@@ -21,25 +21,27 @@
 
 <script setup lang="ts">
 import WaitingArea from '@/components/Home/WaitingArea.vue';
+
+import sharedEnums from '@shared/enums';
+import { holdableItem } from '@shared/types';
+import { createSingleClick, SingleClickChecker } from '@/components/Stations/comp';
+
 import { StationType } from '@/stores/rewrite/roleStores';
+import { useGameStore } from '@/stores/Shared/PlayerStore';
 import { useSocketStore } from '@/stores/SocketStore';
+
 import { componentMap } from '@/utils/componentMap';
 import { Component, ref} from 'vue';
-import sharedEnums from '@shared/enums';
-import { useGameStore } from '@/stores/Shared/PlayerStore';
-import { holdableItem } from '@shared/types';
-import { createKeyTracker } from '@/components/Stations/eventListener';
-import type { KeyTracker } from '@/components/Stations/eventListener';
+
 const socketStore = useSocketStore();
-const socket = socketStore.socket;
 const gameStore = useGameStore();
+
 const isWaiting = ref<boolean>(true);
 const clientKeys = ref<Set<string> | null>(null);
-let keyListener: null | KeyTracker = null;
-let selectedComponent: null | Component = null;
-
 const startedGame = ref<boolean | null>(null);
 
+let listener: SingleClickChecker | null = null;
+let selectedComponent: null | Component = null;
 
 socketStore.attachEventListener(sharedEnums.sharedRemotes.setCurrentItem, 
     (item: holdableItem) => {
@@ -51,7 +53,7 @@ socketStore.attachEventListener(sharedEnums.serverToStationRemotes.gameStarted,
         gameStore.setClientKeys(keys);
         clientKeys.value = keys;
         isWaiting.value = false;
-        keyListener = createKeyTracker(keys, attemptAction);
+        startListening(keys);
     }
 );
 socketStore.attachEventListener(sharedEnums.serverToStationRemotes.stationAssigned, 
@@ -59,19 +61,22 @@ socketStore.attachEventListener(sharedEnums.serverToStationRemotes.stationAssign
         selectedComponent =  componentMap[stationName];
     }
 );
-//wait for the backend to emit an event to allow the component to be accessed. the item itself cannot be accessed however until the game is over as the state
-function attemptAction(key: string) {
-    socket.emit("specialKeyPressed", );
-}
-function startGame() {
 
-}
-function finishedgameplay() {
-    //destroy the gampleay component or make it inaccessible
-    //
-    startedGame.value = true;
+//Prevents constant recreation of listener by re using the initially created one
+//arm() must be called. 
+function startListening(keys: Set<string>) {
+    if (!listener) {
+        listener = createSingleClick(keys, socketStore, triggerGameplay);
+    };
+    listener.arm();
 }
 
-
-//fetches the specific station Gameplay Comp to be shown
+//Some condition will be regarding if the item can be used at the station
+//Should probably rewrite the backend to return an action enum/string so 
+//Theres less logic on the frontend. 
+function triggerGameplay(some_condition: boolean) {
+    if (some_condition) {
+        startedGame.value = true;
+    }    
+}
 </script>

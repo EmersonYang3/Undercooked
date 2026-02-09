@@ -83,3 +83,4 @@ export const useSocketStore = defineStore("socket", () => {
         attachEventListener, removeEventListener, removeAllEventListeners, emitEvent
     }
 })
+export type SocketStore = ReturnType<typeof useSocketStore>;
