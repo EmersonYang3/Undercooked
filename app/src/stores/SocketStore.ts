@@ -53,6 +53,7 @@ export const useSocketStore = defineStore("socket", () => {
     }
 
     function setGameRole(role: string) {
+        console.log("Setting game role:", role)
         gameRole = role
     }
 

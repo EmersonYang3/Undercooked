@@ -19,6 +19,27 @@ socketStore.removeAllEventListeners()
 const isJoiningAsClient = socketStore.gameRole === gameRoles.client
 const fromServerEvents = socketStore.FromServerRemotes
 
+console.log(socketStore.gameRole, gameRoles.client)
+console.log("Waiting Room: Joining as " + (isJoiningAsClient ? "Client" : "Station"))
 
+function disconnectHostApproval() {
+    socketStore.removeEventListener(fromServerEvents.ToClient.clientAccepted)
+    socketStore.removeEventListener(fromServerEvents.ToStation.stationAssigned)
+}
 
+function connectHostApproval() {
+    if (isJoiningAsClient) {
+        socketStore.attachEventListener(fromServerEvents.ToClient.clientAccepted, (specialKey: string) => {
+            disconnectHostApproval()
+            console.log("Host accepted client with special key: " + specialKey) 
+        })
+    } else {
+        socketStore.attachEventListener(fromServerEvents.ToStation.stationAssigned, (stationType: string) => {
+            disconnectHostApproval()
+            console.log("Station assigned: " + stationType)
+        })
+    }
+}
+
+connectHostApproval()
 </script>
