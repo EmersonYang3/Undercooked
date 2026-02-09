@@ -24,7 +24,7 @@ import WaitingArea from '@/components/Home/WaitingArea.vue';
 
 import sharedEnums from '@shared/enums';
 import { holdableItem } from '@shared/types';
-import { createSingleClick, SingleClickChecker } from '@/components/Stations/comp';
+import { createSingleClick, SingleClickChecker } from '@/services/NotificationHandlerDispatcher/keyHandlers';
 
 import { StationType } from '@/stores/rewrite/roleStores';
 import { useGameStore } from '@/stores/Shared/PlayerStore';

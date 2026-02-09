@@ -77,7 +77,7 @@ export function createSingleClick(
 export type SingleClickChecker = ReturnType<typeof createSingleClick>
 //takes a single string to prevent improper usage
 function validateKey(key: string): boolean {
-    return key != " " && key.length == 1;
+    return key.length == 1;
 }
 /**
  * Crates a checker that checks if a specific key was held down for a specified duration.
@@ -109,40 +109,47 @@ function validateKey(key: string): boolean {
 export function createHoldChecker(
     key: string,
     duration: number, // how long the key must be held
-    onFirstPress?: () => void // optional callback when the key is first pressed
+    onFirstPress?: () => void, // optional callback when the key is first pressed
+    onRelease?: (completed: boolean) => void,
 ) {
     if (!validateKey(key)) throw new Error("Invalid key")
 
     let pressed = false         // is the key currently down
     let completed = false       // did the hold succeed
+    let released = false;
     let timeoutId: number | null = null
     function keydownListener(event: KeyboardEvent) {
         if (event.key.toLowerCase() !== key.toLowerCase()) return
-        if (pressed) return // ignore repeat keydowns
+        if (pressed) return
 
         pressed = true
+        released = false
         completed = false
-        // Call user callback on first press
+
         if (onFirstPress) onFirstPress()
 
-        // Start the hold timer
         timeoutId = window.setTimeout(() => {
             if (pressed) {
                 completed = true
             }
         }, duration)
     }
-
     function keyupListener(event: KeyboardEvent) {
         if (event.key.toLowerCase() !== key.toLowerCase()) return
+        if (!pressed || released) return
 
         pressed = false
+        released = true
+
         if (timeoutId !== null) {
             clearTimeout(timeoutId)
             timeoutId = null
         }
-    }
 
+        if (onRelease) {
+            onRelease(completed)
+        }
+    }
     function arm() {
         document.addEventListener("keydown", keydownListener)
         document.addEventListener("keyup", keyupListener)
@@ -159,8 +166,13 @@ export function createHoldChecker(
     function wasHeldLongEnough() {
         return completed
     }
-
-    return { arm, disarm, wasHeldLongEnough }
+    return {
+        arm,
+        disarm,
+        wasHeldLongEnough,
+        isPressed: () => pressed,
+        isCompleted: () => completed
+    }
 }
 export type HoldChecker = ReturnType<typeof createHoldChecker>;
 /**
@@ -169,6 +181,7 @@ export type HoldChecker = ReturnType<typeof createHoldChecker>;
  * @param key - The key to track (single character, non-space)
  * @param callback - Function to call when the condition returns true
  * @param condition - Function that receives the current pressCount and returns true if callback should be executed
+ * @param single_callback - Function that triggers on every single key press (Mostly used to update some arbitrary counter)
  *
  * @returns An object with methods to arm/disarm the tracker
  * @example 
@@ -183,6 +196,7 @@ export function trackKeyPress(
     key: string,
     callback: () => void,
     condition: (pressCount: number) => boolean,
+    single_callback?: (count: number) => void,
 ) {
     if (!validateKey(key)) throw new Error("Invalid key")
 
@@ -193,6 +207,9 @@ export function trackKeyPress(
         if (event.key.toLowerCase() !== key.toLowerCase()) return
 
         pressCount++
+        if (single_callback) {
+            single_callback(pressCount);
+        }
         if (condition(pressCount)) {
             callback()
         }

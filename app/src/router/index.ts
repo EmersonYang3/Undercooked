@@ -3,7 +3,7 @@ const routes = [
     {
         path: '/',
         name: "Main",
-        component: () => import('@/views/Waiting/HomeScreen.vue')
+        component: () => import('@/ActualStations/Blending.vue')
     },
     {
         path: '/hosting',
@@ -23,12 +23,12 @@ const routes = [
     {
         path: '/terminal',
         name: "TerminalRoom",
-        component: () => import('@/views/TerminalRoom.vue')
+        component: () => import('@/views/Game/TerminalRoom.vue')
     },
     {
         path: '/host',
         name: "HostingView",
-        component: () => import('@/views/HostView.vue')
+        component: () => import('@/views/Game/HostView.vue')
     }
 ]
 const router = createRouter({ history: createWebHistory(import.meta.env.BASE_URL), routes })

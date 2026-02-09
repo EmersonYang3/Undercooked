@@ -1,6 +1,6 @@
 import { NotificationCallbackParameters, NotificationHandler } from "@/utils/types";
 
-import { useNotificationStore } from "@/stores/NotificationStore";
+import { useNotificationStore } from "@/stores/notificationStore";
 
 function onCallback(parameters: NotificationCallbackParameters, id: number) {
     useNotificationStore().removeNotification(id)
