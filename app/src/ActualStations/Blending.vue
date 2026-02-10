@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { createHoldChecker } from '@/services/NotificationHandlerDispatcher/keyHandlers';
+import { createHoldChecker } from '@/services/keyHandlers';
 import { onMounted, ref } from 'vue';
 
 const emits = defineEmits(["completed"]);

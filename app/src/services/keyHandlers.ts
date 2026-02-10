@@ -106,50 +106,33 @@ function validateKey(key: string): boolean {
  * - `wasHeldLongEnough` should be checked after the expected hold time.
  * - The timeout duration should be slightly longer than `duration` to account for timing variations.
  */
-export function createHoldChecker(
+export function createHoldTracker(
     key: string,
-    duration: number, // how long the key must be held
-    onFirstPress?: () => void, // optional callback when the key is first pressed
-    onRelease?: (completed: boolean) => void,
+    onPress?: () => void,
+    onRelease?: () => void,
 ) {
-    if (!validateKey(key)) throw new Error("Invalid key")
+    let pressed = false
+    let pressStart = 0
+    let heldTime = 0
 
-    let pressed = false         // is the key currently down
-    let completed = false       // did the hold succeed
-    let released = false;
-    let timeoutId: number | null = null
     function keydownListener(event: KeyboardEvent) {
         if (event.key.toLowerCase() !== key.toLowerCase()) return
         if (pressed) return
 
         pressed = true
-        released = false
-        completed = false
-
-        if (onFirstPress) onFirstPress()
-
-        timeoutId = window.setTimeout(() => {
-            if (pressed) {
-                completed = true
-            }
-        }, duration)
+        pressStart = performance.now()
+        onPress?.()
     }
+
     function keyupListener(event: KeyboardEvent) {
         if (event.key.toLowerCase() !== key.toLowerCase()) return
-        if (!pressed || released) return
+        if (!pressed) return
 
         pressed = false
-        released = true
-
-        if (timeoutId !== null) {
-            clearTimeout(timeoutId)
-            timeoutId = null
-        }
-
-        if (onRelease) {
-            onRelease(completed)
-        }
+        heldTime += performance.now() - pressStart
+        onRelease?.()
     }
+
     function arm() {
         document.addEventListener("keydown", keydownListener)
         document.addEventListener("keyup", keyupListener)
@@ -158,23 +141,23 @@ export function createHoldChecker(
     function disarm() {
         document.removeEventListener("keydown", keydownListener)
         document.removeEventListener("keyup", keyupListener)
-        if (timeoutId !== null) clearTimeout(timeoutId)
         pressed = false
-        completed = false
+        heldTime = 0
     }
 
-    function wasHeldLongEnough() {
-        return completed
+    function getCurrentHoldDuration() {
+        if (!pressed) return 0
+        return performance.now() - pressStart
     }
+
     return {
         arm,
         disarm,
-        wasHeldLongEnough,
         isPressed: () => pressed,
-        isCompleted: () => completed
+        getCurrentHoldDuration,
     }
 }
-export type HoldChecker = ReturnType<typeof createHoldChecker>;
+
 /**
  * Tracks the number of times a key is pressed and executes a callback when a condition is met.
  *

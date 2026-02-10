@@ -11,10 +11,12 @@
 </template>
 
 <script setup lang="ts">
-import { trackKeyPress } from '@/services/NotificationHandlerDispatcher/keyHandlers';
+import { trackKeyPress } from '@/services/keyHandlers';
 import { onMounted, ref } from 'vue';
 const key = " ";
-const requiredPressedCount = 10;
+const requiredPressedCount = 100;
+const emits = defineEmits(["completed"]);
+
 
 const pressCount = ref<number>(0);
 const finished = ref<boolean>(false);
@@ -26,11 +28,14 @@ function updateCounter(count: number) {
 }   
 
 function endCondition(count: number): boolean {
-    return count < requiredPressedCount;
+    return count >= requiredPressedCount;
 }
 
 function callback() {
     finished.value = true;
+    setTimeout(() => {
+        emits("completed");
+    }, 1000)
 }
 
 onMounted(() => {
