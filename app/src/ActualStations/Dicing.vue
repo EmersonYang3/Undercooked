@@ -18,6 +18,7 @@ const requiredPressedCount = 100;
 const emits = defineEmits(["completed"]);
 
 
+
 const pressCount = ref<number>(0);
 const finished = ref<boolean>(false);
 
@@ -45,7 +46,3 @@ onMounted(() => {
 
 
 </script>
-
-<style scoped>
-
-</style>
