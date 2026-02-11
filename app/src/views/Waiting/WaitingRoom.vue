@@ -11,9 +11,12 @@ import UniqueIdentifier from '@/components/Shared/UniqueIdentifier.vue'
 import { useSocketStore } from '@/stores/SocketStore';
 
 import sharedEnums from "@shared/enums"
+import { useClientStore } from '@/stores/Roles/ClientStore';
 const gameRoles = sharedEnums.gameRoles
 
 const socketStore = useSocketStore()
+const clientStore = useClientStore()
+
 socketStore.removeAllEventListeners()
 
 const isJoiningAsClient = socketStore.gameRole === gameRoles.client
@@ -21,6 +24,7 @@ const fromServerEvents = socketStore.FromServerRemotes
 
 console.log(socketStore.gameRole, gameRoles.client)
 console.log("Waiting Room: Joining as " + (isJoiningAsClient ? "Client" : "Station"))
+
 
 function disconnectHostApproval() {
     socketStore.removeEventListener(fromServerEvents.ToClient.clientAccepted)
@@ -30,8 +34,8 @@ function disconnectHostApproval() {
 function connectHostApproval() {
     if (isJoiningAsClient) {
         socketStore.attachEventListener(fromServerEvents.ToClient.clientAccepted, (specialKey: string) => {
+            clientStore.setSpecialKey(specialKey)
             disconnectHostApproval()
-            console.log("Host accepted client with special key: " + specialKey) 
         })
     } else {
         socketStore.attachEventListener(fromServerEvents.ToStation.stationAssigned, (stationType: string) => {

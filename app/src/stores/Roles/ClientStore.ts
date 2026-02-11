@@ -1,8 +1,11 @@
 import { defineStore } from "pinia"
+import { ref } from "vue"
+
 import { useSocketStore } from "../SocketStore"
 import { uniqueIdentifier } from "@shared/types"
 
 export const useClientStore = defineStore("client", () => {
+    const specialKey = ref<string | null>(null)
     const socketStore = useSocketStore()
     const fromServerEvents = socketStore.FromServerRemotes.ToClient
 
@@ -16,5 +19,11 @@ export const useClientStore = defineStore("client", () => {
 
         console.log("Client preconnections initialized")
     }
-    return { initializePreconnections }
+
+    function setSpecialKey(key: string) {
+        console.log("Setting special key:", key)
+        specialKey.value = key
+    }
+
+    return { initializePreconnections, setSpecialKey, specialKey }
 })

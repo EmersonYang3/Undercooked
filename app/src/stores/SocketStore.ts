@@ -19,7 +19,7 @@ const ToServerRemotes = {
 
 export const useSocketStore = defineStore("socket", () => {
     let socket: Socket | null = (null)
-    let gameRole: string | intendedRoles = (null)
+    let gameRole = ref<string | intendedRoles | null>(null)
 
     let dispatchingEvents: boolean = false
     let eventsToFunctionMap: Record<string, (...args: any[]) => void> = {}
@@ -52,9 +52,9 @@ export const useSocketStore = defineStore("socket", () => {
         uniqueIdentifier.value = id
     }
 
-    function setGameRole(role: string) {
+    function setGameRole(role: string | intendedRoles) {
         console.log("Setting game role:", role)
-        gameRole = role
+        gameRole.value = role
     }
 
     function attachEventListener(event: string, callback: (...args: any[]) => void) {

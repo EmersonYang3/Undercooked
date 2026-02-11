@@ -11,6 +11,7 @@ export const useStationStore = defineStore("station", () => {
         const pendingJoin = fromServerEvents.pendingJoin
 
         socketStore.attachEventListener(pendingJoin, (identifier: uniqueIdentifier) => {
+            console.log("Received station pending join with identifier:", identifier)
             socketStore.setUniqueIdentifier(identifier)
             socketStore.removeEventListener(pendingJoin)
         })
