@@ -11,15 +11,14 @@ import Boiling from "@/components/ActualStations/Gameplay/Boiling.vue";
 import Frying from "@/ActualStations/Gameplay/Frying.vue";
 
 let stationTypes = sharedEnums.stationTypes;
-//Stations that don't get de rendered and are persistent.
 
-export const staticComponents: Record<string, Component> = {
+export const staticComponentsMap: Record<string, Component> = {
     [stationTypes.submitStation]: Submit,
     [stationTypes.dispenseStation]: Dispense,
     [stationTypes.disposeStation]: Dispose,
     [stationTypes.emptyStation]: Empty,
 }
-export const dynamicComponents: Record<string, Component> = {
+export const dynamicComponentsMap: Record<string, Component> = {
     [stationTypes.blendingStation]: Blending,
     [stationTypes.dicingStation]: Dicing,
     [stationTypes.boilingStation]: Boiling,

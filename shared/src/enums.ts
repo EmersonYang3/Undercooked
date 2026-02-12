@@ -182,6 +182,8 @@ export default {
     gameRoles,
 
     stationTypes,
+    staticStations,
+    dynamicStations,
     methods,
     foods,
 }

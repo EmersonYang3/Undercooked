@@ -1,0 +1,12 @@
+Props for each static component
+
+Empty requires the holdableitem
+Empty might require an additional holdableitem if the logic doesn't work out
+Pass in the previous holdableitem and the new one and the component can most likely
+Infer the required items to be shown. 
+
+Dispose requires the holdableitem
+
+Dispense requires the holdableitem
+
+Submit requires the holdableitem plus an additional paramter indicating success/failure

@@ -3,7 +3,7 @@ const routes = [
     {
         path: '/',
         name: "Main",
-        component: () => import('@/ActualStations/Gameplay/Boiling.vue')
+        component: () => import('@/components/ActualStations/Gameplay/Boiling.vue')
     },
     {
         path: '/hosting',
