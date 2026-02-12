@@ -75,6 +75,22 @@ enum stationTypes {
     disposeStation = "disposalStation",
 }
 
+enum staticStations {
+    emptyStation = "emptyStation",
+    dispenseStation = "dispenseStation",
+    disposeStation = "disposalStation",
+    submitStation = "submitStation",
+    steamingStation = "steamingStation",
+    blendingStation = "blendingStation",
+}
+enum dynamicStations {
+    boilingStation = "boilingStation",
+    fryingStation = "fryingStation",
+    dicingStation = "dicingStation",
+}
+
+
+
 enum foods {
     uncookedEgg = "uncookedEgg",
     boiledEgg = "boiledEgg",
@@ -146,6 +162,8 @@ enum methods {
     submit = "submit",
     disposal = "disposal",
 }
+
+
 
 export default {
     hostToServerRemotes,

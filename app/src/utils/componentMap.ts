@@ -1,23 +1,27 @@
-import BlendingStation from "@/components/Stations/BlendingStation.vue";
-import BoilingStation from "@/components/Stations/BoilingStation.vue";
-import DicingStation from "@/components/Stations/DicingStation.vue";
-import DispenseStation from "@/components/Stations/DispenseStation.vue";
-import DisposeStation from "@/components/Stations/DisposeStation.vue";
-import EmptyStation from "@/components/Stations/EmptyStation.vue";
-import FryingStation from "@/components/Stations/FryingStation.vue";
-import SubmitStation from "@/components/Stations/SubmitStation.vue";
 
 import { Component } from "vue";
 import sharedEnums from "@shared/enums";
+import Submit from "@/components/ActualStations/Static/Submit.vue";
+import Dispense from "@/components/ActualStations/Static/Dispense.vue";
+import Dispose from "@/components/ActualStations/Static/Dispose.vue";
+import Empty from "@/components/ActualStations/Static/Empty.vue";
+import Blending from "@/components/ActualStations/Gameplay/Blending.vue";
+import Dicing from "@/components/ActualStations/Gameplay/Dicing.vue";
+import Boiling from "@/components/ActualStations/Gameplay/Boiling.vue";
+import Frying from "@/ActualStations/Gameplay/Frying.vue";
 
 let stationTypes = sharedEnums.stationTypes;
-export const componentMap: Record<string, Component> = {
-    [stationTypes.submitStation]: SubmitStation,
-    [stationTypes.dispenseStation]: DispenseStation,
-    [stationTypes.emptyStation]: EmptyStation,
-    [stationTypes.dicingStation]: DicingStation,
-    [stationTypes.disposeStation]: DisposeStation,
-    [stationTypes.fryingStation]: FryingStation,
-    [stationTypes.blendingStation]: BlendingStation,
-    [stationTypes.boilingStation]: BoilingStation,
+//Stations that don't get de rendered and are persistent.
+
+export const staticComponents: Record<string, Component> = {
+    [stationTypes.submitStation]: Submit,
+    [stationTypes.dispenseStation]: Dispense,
+    [stationTypes.disposeStation]: Dispose,
+    [stationTypes.emptyStation]: Empty,
+}
+export const dynamicComponents: Record<string, Component> = {
+    [stationTypes.blendingStation]: Blending,
+    [stationTypes.dicingStation]: Dicing,
+    [stationTypes.boilingStation]: Boiling,
+    [stationTypes.fryingStation]: Frying,
 }

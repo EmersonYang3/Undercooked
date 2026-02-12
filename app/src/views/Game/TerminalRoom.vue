@@ -26,7 +26,6 @@ import sharedEnums from '@shared/enums';
 import { holdableItem } from '@shared/types';
 import { createSingleClick, SingleClickChecker } from '@/services/keyHandlers';
 
-import { StationType } from '@/stores/rewrite/roleStores';
 import { useGameStore } from '@/stores/Shared/PlayerStore';
 import { useSocketStore } from '@/stores/SocketStore';
 
@@ -64,12 +63,12 @@ socketStore.attachEventListener(sharedEnums.serverToStationRemotes.gameStarted,
     }
 );
 socketStore.attachEventListener(sharedEnums.serverToStationRemotes.stationAssigned, 
-    (stationName: StationType) => {
+    (stationName: string) => {
         //check if the stationType is a static or dynamic station
         //static stations mean the station doesn't have any gameplay
         //dynamic = gameplay and routes to another component via the key presser
     
-        selectedComponent =  componentMap[stationName];
+        selectedComponent = componentMap[stationName];
     }
 );
 
