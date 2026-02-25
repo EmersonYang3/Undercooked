@@ -9,7 +9,7 @@ function onCallback(parameters: NotificationCallbackParameters, id: number) {
 
     const hostToServerRemotes = socketStore.ToServerRemotes.FromHost
 
-    socketStore.emitEvent(hostToServerRemotes.acceptClientJoin, parameters.clientIdentifier)
+    socketStore.emitEvent(hostToServerRemotes.acceptStationJoin, parameters.stationIdentifier)
     notificationStore.removeNotification(id)
 }
 

@@ -4,8 +4,8 @@
     <CodeArea />
     <RequestNotif />
     <UniqueIdentifier />
-    <div>Current station count :{{ activeStations.length }}</div>
-    <div>Current player count : {{ activePlayers.length }}</div>
+    <div>Current station count: {{ numberOfStations }}</div>
+    <div>Current player count: {{ numberOfPlayers }}</div>
     <DecisionButton text="START GAME" @on-click="startGame" />
 </template>
 
@@ -13,6 +13,7 @@
 import { useNotificationStore } from '@/stores/NotificationStore'
 import { useSocketStore } from '@/stores/SocketStore'
 import { uniqueIdentifier } from '@shared/types'
+import { ref } from 'vue'
 
 import CodeArea from '@/components/Waiting/CodeArea.vue'
 import RequestNotif from '@/components/Waiting/RequestNotif.vue'
@@ -24,6 +25,9 @@ const notificationStore = useNotificationStore()
 
 const fromServerToHostRemotes = socketStore.FromServerRemotes.ToHost
 const notificationHandlerKeys = notificationStore.HANDLER_KEYS
+
+const numberOfPlayers = ref(0)
+const numberOfStations = ref(0)
 
 function listenForPlayersPendingJoin() {
     socketStore.attachEventListener(fromServerToHostRemotes.clientPendingJoin, (identifier: uniqueIdentifier) => {
@@ -43,10 +47,14 @@ function listenForPlayersPendingJoin() {
     })
 }
 
-// TODO: Implement these listeners properly
 function listenForPlayersJoined() {
-    socketStore.attachEventListener(fromServerToHostRemotes.newClientJoined, () => {})
-    socketStore.attachEventListener(fromServerToHostRemotes.newStationJoined, () => {})
+    socketStore.attachEventListener(fromServerToHostRemotes.newClientJoined, () => {
+        numberOfPlayers.value += 1
+    })
+
+    socketStore.attachEventListener(fromServerToHostRemotes.newStationJoined, () => {
+        numberOfStations.value += 1
+    })
 }
 
 function removeListenersForPlayersPendingJoin() {
@@ -54,10 +62,18 @@ function removeListenersForPlayersPendingJoin() {
     socketStore.removeEventListener(fromServerToHostRemotes.stationPendingJoin)
 }
 
+function removeListenersForPlayersJoined() {
+    socketStore.removeEventListener(fromServerToHostRemotes.newClientJoined)
+    socketStore.removeEventListener(fromServerToHostRemotes.newStationJoined)
+}
+
 function startGame() {
     removeListenersForPlayersPendingJoin() 
+    removeListenersForPlayersJoined()
     console.log("Starting Game...") 
 }
 
 listenForPlayersPendingJoin()
+listenForPlayersJoined()
+
 </script>
