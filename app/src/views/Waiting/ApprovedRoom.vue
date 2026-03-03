@@ -32,4 +32,20 @@ const isCurrentlyClient = socketStore.getIsClient()
 const clientSpecialKey = isCurrentlyClient ? clientStore.specialKey : "NO CLIENT SPECIAL KEY"
 
 console.log(isCurrentlyClient)
+
+const fromServerRemotes = socketStore.FromServerRemotes
+
+function listenForGameStarted() {
+    if (isCurrentlyClient) {
+        socketStore.attachEventListener(fromServerRemotes.ToClient.gameStarted, function() {
+            console.log("Game has started! Transitioning to game screen maybe...")
+        })
+    } else {
+        socketStore.attachEventListener(fromServerRemotes.ToStation.gameStarted, function() {
+            console.log("Game has started! Transitioning to game screen maybe...")
+        })
+    }
+}
+
+listenForGameStarted()
 </script>

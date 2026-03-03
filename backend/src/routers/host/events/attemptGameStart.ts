@@ -11,6 +11,7 @@ import unqiService from "services/unqi"
 
 const serverTSRemotes = sharedEnums.serverToStationRemotes
 const serverTCRemotes = sharedEnums.serverToClientRemotes
+const serverTHRemotes = sharedEnums.serverToHostRemotes
 const sharedStationData = sharedData.stationData
 
 function alertPlayersAndStations() {
@@ -48,6 +49,12 @@ function setDispensingItemsToStations() {
 }
 
 function attemptGameStart() {
+    const lobbyData = lobbyService.getLobbyData()
+    const hostData = lobbyData.host
+    if (!hostData) { return }
+
+    hostData.socket?.emit(serverTHRemotes.GAME_STARTED)
+
     singletons.recipeGenerator.RefreshMethods();
     singletons.recipeGenerator.RefreshValidRecipes();
 
