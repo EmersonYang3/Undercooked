@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { createHoldTracker } from '@/services/keyHandlers';
+import { createHoldTracker } from '@/services/SpecialKeyService';
 import { onMounted, ref } from 'vue';
 const emits = defineEmits(["completed"]);
 

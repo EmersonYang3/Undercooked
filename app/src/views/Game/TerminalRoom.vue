@@ -32,7 +32,7 @@ import WaitingArea from '@/components/Home/WaitingArea.vue';
 
 import sharedEnums from '@shared/enums';
 import { holdableItem } from '@shared/types';
-import { createSingleClick, SingleClickChecker } from '@/services/keyHandlers';
+import { createSingleClick, SingleClickChecker } from '@/services/SpecialKeyService';
 
 import { useSocketStore } from '@/stores/SocketStore';
 

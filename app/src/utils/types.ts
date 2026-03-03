@@ -20,3 +20,4 @@ export type NotificationEntry = NotificationInput & {
 export type NotificationHandler = {
     onCallback: (parameters: NotificationCallbackParameters, id: number, ...args: any[]) => void;
 }
+
