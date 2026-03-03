@@ -41,8 +41,9 @@ function listenForGameStarted() {
             console.log("Game has started! Transitioning to game screen maybe...")
         })
     } else {
-        socketStore.attachEventListener(fromServerRemotes.ToStation.gameStarted, function() {
+        socketStore.attachEventListener(fromServerRemotes.ToStation.gameStarted, (registeredKeys: string[]) => {
             console.log("Game has started! Transitioning to game screen maybe...")
+            console.log(registeredKeys)
         })
     }
 }
