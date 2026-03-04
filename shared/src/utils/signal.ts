@@ -54,4 +54,8 @@ export class Signal implements SignalType {
     Fire(...args: any): void {
         this.subscribers.forEach((callback) => callback(...args));
     }
+
+    IsConnected(): boolean {
+        return this.subscribers.size > 0;
+    }
 }

@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { trackKeyPress } from '@/services/SpecialKeyService';
+import { trackKeyPress } from '@/services/KeyBindService';
 import { onMounted, ref } from 'vue';
 const key = " ";
 const requiredPressedCount = 100;

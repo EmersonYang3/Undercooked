@@ -13,7 +13,6 @@
 </template>
 
 <script setup lang="ts">
-import { createHoldTracker } from '@/services/SpecialKeyService';
 import { onMounted, ref } from 'vue';
 const emits = defineEmits(["completed"]);
 
@@ -23,27 +22,11 @@ const duration = 1000;
 const isBlending = ref<boolean>(false);
 const finishedBlending = ref<boolean>(false);
 
-const holdChecker = createHoldTracker(
-    trackedKey,
-    initialClick,
-    onRelease,
-)
 
 function initialClick() {
     isBlending.value = true;
     //play an audio of the blender blending 
 }
-
-function onRelease() {
-    if (holdChecker.getCurrentHoldDuration() < duration) {
-        //reset the progress
-        holdChecker.disarm();
-        holdChecker.arm();
-    }
-}
-onMounted(() => {
-    holdChecker.arm();
-})
 </script>
 
 <style scoped>
