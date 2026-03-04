@@ -62,7 +62,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { trackKeyPress } from "@/services/SpecialKeyService"
+import { trackKeyPress } from "@/services/KeyBindService"
 import { ref, onMounted, onUnmounted } from "vue"
 const heat = ref(0)
 const timeLeft = ref(5000)
