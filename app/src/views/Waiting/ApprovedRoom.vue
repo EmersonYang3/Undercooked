@@ -23,6 +23,8 @@ import { useSocketStore } from '@/stores/SocketStore';
 import { useClientStore } from '@/stores/Roles/ClientStore';
 import { useStationStore } from '@/stores/Roles/StationStore';
 
+import KeyBindService from '@/services/KeyBindService';
+
 const socketStore = useSocketStore()
 
 const clientStore = useClientStore()
@@ -41,9 +43,11 @@ function listenForGameStarted() {
             console.log("Game has started! Transitioning to game screen maybe...")
         })
     } else {
-        socketStore.attachEventListener(fromServerRemotes.ToStation.gameStarted, (registeredKeys: string[]) => {
+        socketStore.attachEventListener(fromServerRemotes.ToStation.gameStarted, (clientSpecialKeys: string[]) => {
+            KeyBindService.RegisterSpecialKeys(clientSpecialKeys)
+            
             console.log("Game has started! Transitioning to game screen maybe...")
-            console.log(registeredKeys)
+            console.log(clientSpecialKeys)
         })
     }
 }
