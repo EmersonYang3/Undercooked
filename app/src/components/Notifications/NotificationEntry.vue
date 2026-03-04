@@ -2,7 +2,7 @@
     <p> {{ props.entry.message }}</p>
     <p> {{ props.entry.callbackParameters }}</p>
 
-    <DecisionButton v-for="notificationOption in props.entry.options" :text="notificationOption.optionText" @on-click="onCallback(notificationOption.handlerKey)"/>
+    <DecisionButton v-for="notificationOption in props.entry.options" :text="notificationOption.optionText" @on-click="onCallback(notificationOption.handlerKey, notificationOption.handlerArgs)"/>
 </template>
 
 <script setup lang="ts">
@@ -13,7 +13,7 @@ import dispatchNotificationHandler from '@/services/NotificationHandlerDispatche
 
 const props = defineProps<{ entry: NotificationEntry }>()
 
-function onCallback(handlerKey: string) {
-    dispatchNotificationHandler(handlerKey, props.entry.callbackParameters, props.entry.id)
+function onCallback(handlerKey: string, handlerArgs?: any[]) {
+    dispatchNotificationHandler(handlerKey, props.entry.callbackParameters, props.entry.id, ...handlerArgs || [])
 }
 </script>

@@ -4,8 +4,9 @@ import { uniqueIdentifier } from "@shared/types";
 
 export const useStationStore = defineStore("station", () => {
     const socketStore = useSocketStore()
-
     const fromServerEvents = socketStore.FromServerRemotes.ToStation
+
+    let thisStationRole = null
 
     function initializePreconnections() {
         const pendingJoin = fromServerEvents.pendingJoin
@@ -17,6 +18,10 @@ export const useStationStore = defineStore("station", () => {
         })
 
         console.log("Station preconnections initialized")
+    }
+
+    function setStationRole(role: string) {
+        thisStationRole = role
     }
 
     return { initializePreconnections }

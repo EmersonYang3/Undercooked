@@ -3,7 +3,7 @@ const routes = [
     {
         path: '/',
         name: "Main",
-        component: () => import('@/views/Waiting/HomeScreen.vue')
+        component: () => import('@/components/ActualStations/Gameplay/Boiling.vue')
     },
     {
         path: '/hosting',
@@ -29,6 +29,11 @@ const routes = [
         path: '/host',
         name: "HostingView",
         component: () => import('@/views/Game/HostView.vue')
+    },
+    {
+        path: "/approved",
+        name: "ApprovedRoom",
+        component: () => import("@/views/Waiting/ApprovedRoom.vue")
     }
 ]
 const router = createRouter({ history: createWebHistory(import.meta.env.BASE_URL), routes })
