@@ -50,7 +50,6 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from "vue"
-import { createHoldTracker } from "@/services/SpecialKeyService"
 
 const heat = ref(50)
 const score = ref(0)
@@ -66,8 +65,6 @@ let sweetMax = ref(70)
 const HEAT_INCREASE = 70
 const HEAT_DECREASE = 45
 const JITTER = 15
-
-const hold = createHoldTracker(" ", () => {}, () => {})
 
 const heatColor = computed(() => {
     if (heat.value < sweetMin.value) return "bg-blue-500"
