@@ -2,7 +2,6 @@
     <p> ~ HOSTING LOBBY ~ </p>
 
     <CodeArea />
-    <RequestNotif />
     <UniqueIdentifier />
     <div>Current station count: {{ numberOfStations }}</div>
     <div>Current player count: {{ numberOfPlayers }}</div>
@@ -10,15 +9,14 @@
 </template>
 
 <script setup lang="ts">
-import { useNotificationStore } from '@/stores/NotificationStore'
 import { useSocketStore } from '@/stores/SocketStore'
 import { uniqueIdentifier } from '@shared/types'
 import { ref } from 'vue'
 
 import CodeArea from '@/components/Waiting/CodeArea.vue'
-import RequestNotif from '@/components/Waiting/RequestNotif.vue'
 import DecisionButton from '@/components/Shared/DecisionButton.vue'
 import UniqueIdentifier from '@/components/Shared/UniqueIdentifier.vue'
+import { useNotificationStore } from '@/stores/notificationStore'
 
 const socketStore = useSocketStore()
 const notificationStore = useNotificationStore()
@@ -70,6 +68,7 @@ function removeListenersForPlayersJoined() {
 function startGame() {
     removeListenersForPlayersPendingJoin() 
     removeListenersForPlayersJoined()
+    socketStore.socket.emit("startLobby");
     console.log("Starting Game...") 
 }
 

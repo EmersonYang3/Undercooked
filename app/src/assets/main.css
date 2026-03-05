@@ -1,10 +1,1 @@
 @import "tailwindcss";
-
-@theme {
-  --font-bungee: "Bungee Spice", sans-serif;
-  --font-cherry: "Cherry Bomb One", sans-serif;
-}
-
-button {
-  cursor: pointer;
-}

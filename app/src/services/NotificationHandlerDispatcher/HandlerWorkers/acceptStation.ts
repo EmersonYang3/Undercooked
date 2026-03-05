@@ -1,7 +1,7 @@
 import { NotificationCallbackParameters, NotificationHandler } from "@/utils/types";
 
-import { useNotificationStore } from "@/stores/NotificationStore";
 import { useSocketStore } from "@/stores/SocketStore";
+import { useNotificationStore } from "@/stores/notificationStore";
 
 function onCallback(parameters: NotificationCallbackParameters, id: number) {
     const socketStore = useSocketStore()
