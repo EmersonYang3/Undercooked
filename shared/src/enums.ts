@@ -19,7 +19,9 @@ enum serverToHostRemotes {
     scoreUpdate = "scoreUpdate",
     wrongItem = "wrongItem",
 
-    pong = "pong"
+    GAME_STARTED = "gameStarted",
+
+    pong = "pong",
 }
 
 enum serverToClientRemotes {

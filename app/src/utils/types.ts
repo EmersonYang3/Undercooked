@@ -1,6 +1,7 @@
 export type NotificationOptionEntry = {
     optionText?: string;
     handlerKey?: string;
+    handlerArgs?: any[];
 }
 
 export type NotificationCallbackParameters = Record<string, any>;
@@ -17,5 +18,6 @@ export type NotificationEntry = NotificationInput & {
 }
 
 export type NotificationHandler = {
-    onCallback: (parameters: NotificationCallbackParameters, id: number) => void;
+    onCallback: (parameters: NotificationCallbackParameters, id: number, ...args: any[]) => void;
 }
+

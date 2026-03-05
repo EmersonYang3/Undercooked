@@ -1,12 +1,28 @@
 import { SocketStore } from "@/stores/SocketStore";
+
+let specialKeys: Set<string> = new Set<string>();
+let LISTEN_FLAG: boolean = false;
+
+export function RegisterSpecialKeys(keys: string[]) {
+    for (const key of keys) {
+        specialKeys.add(key.toLowerCase())
+    }
+}
+
+export function SetListenFlag(value: boolean) {
+    LISTEN_FLAG = value;
+}
+
 export function validateKeys(keys: Set<string>): boolean {
     keys.forEach((key) => {
         if (key.length != 1 || key == " ") {
             return false;
         }
     })
+
     return true;
 }
+
 /**
  * Creates a single-click listener for a set of keys that triggers a callback and emits a socket event.
  * 
@@ -218,4 +234,5 @@ export function trackKeyPress(
 
     return { arm, disarm, reset, getPressCount: () => pressCount }
 }
+
 export type KeyPressTracker = ReturnType<typeof trackKeyPress>

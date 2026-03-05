@@ -5,7 +5,8 @@
     "src/**/*",
     "src/**/*.vue",
     "tailwind.config.js",
-    "postcss.config.cjs"
+    "postcss.config.cjs",
+    "../shared/src/utils/signal.ts"
   ],
   "exclude": [
     "src/**/__tests__/*"

@@ -5,6 +5,7 @@
     <UniqueIdentifier />
     <div>Current station count: {{ numberOfStations }}</div>
     <div>Current player count: {{ numberOfPlayers }}</div>
+
     <DecisionButton text="START GAME" @on-click="startGame" />
 </template>
 
@@ -21,14 +22,15 @@ import { useNotificationStore } from '@/stores/notificationStore'
 const socketStore = useSocketStore()
 const notificationStore = useNotificationStore()
 
-const fromServerToHostRemotes = socketStore.FromServerRemotes.ToHost
+const ServerToHostRemotes = socketStore.FromServerRemotes.ToHost
+const HostToServerRemotes = socketStore.ToServerRemotes.FromHost
 const notificationHandlerKeys = notificationStore.HANDLER_KEYS
 
 const numberOfPlayers = ref(0)
 const numberOfStations = ref(0)
 
 function listenForPlayersPendingJoin() {
-    socketStore.attachEventListener(fromServerToHostRemotes.clientPendingJoin, (identifier: uniqueIdentifier) => {
+    socketStore.attachEventListener(ServerToHostRemotes.clientPendingJoin, (identifier: uniqueIdentifier) => {
         notificationStore.addNotification({
             message: `Player with ID ${identifier} is requesting to join your lobby.`,
             options: [{"optionText": "ACCEPT", handlerKey: notificationHandlerKeys.ACCEPT_CLIENT}],
@@ -36,7 +38,7 @@ function listenForPlayersPendingJoin() {
         })
     })
 
-    socketStore.attachEventListener(fromServerToHostRemotes.stationPendingJoin, (identifier: uniqueIdentifier) => {
+    socketStore.attachEventListener(ServerToHostRemotes.stationPendingJoin, (identifier: uniqueIdentifier) => {
         notificationStore.addNotification({
             message: `Station with ID ${identifier} is requesting to join your lobby.`,
             options: [{"optionText": "ACCEPT", handlerKey: notificationHandlerKeys.ACCEPT_STATION}],
@@ -46,32 +48,45 @@ function listenForPlayersPendingJoin() {
 }
 
 function listenForPlayersJoined() {
-    socketStore.attachEventListener(fromServerToHostRemotes.newClientJoined, () => {
+    socketStore.attachEventListener(ServerToHostRemotes.newClientJoined, () => {
         numberOfPlayers.value += 1
     })
 
-    socketStore.attachEventListener(fromServerToHostRemotes.newStationJoined, () => {
+    socketStore.attachEventListener(ServerToHostRemotes.newStationJoined, () => {
         numberOfStations.value += 1
     })
 }
 
+function removeGameStartedListener() {
+    socketStore.removeEventListener(ServerToHostRemotes.GAME_STARTED)
+}
+
+function listenForGameStarted() {
+    socketStore.attachEventListener(ServerToHostRemotes.GAME_STARTED, function() {
+        console.log("Game has started! Transitioning to game screen maybe...")
+
+        removeListenersForPlayersPendingJoin() 
+        removeListenersForPlayersJoined()
+        removeGameStartedListener()
+    })
+}
+
 function removeListenersForPlayersPendingJoin() {
-    socketStore.removeEventListener(fromServerToHostRemotes.clientPendingJoin)
-    socketStore.removeEventListener(fromServerToHostRemotes.stationPendingJoin)
+    socketStore.removeEventListener(ServerToHostRemotes.clientPendingJoin)
+    socketStore.removeEventListener(ServerToHostRemotes.stationPendingJoin)
 }
 
 function removeListenersForPlayersJoined() {
-    socketStore.removeEventListener(fromServerToHostRemotes.newClientJoined)
-    socketStore.removeEventListener(fromServerToHostRemotes.newStationJoined)
+    socketStore.removeEventListener(ServerToHostRemotes.newClientJoined)
+    socketStore.removeEventListener(ServerToHostRemotes.newStationJoined)
 }
 
 function startGame() {
-    removeListenersForPlayersPendingJoin() 
-    removeListenersForPlayersJoined()
-    socketStore.socket.emit("startLobby");
+    socketStore.emitEvent(HostToServerRemotes.startLobby)
     console.log("Starting Game...") 
 }
 
+listenForGameStarted()
 listenForPlayersPendingJoin()
 listenForPlayersJoined()
 

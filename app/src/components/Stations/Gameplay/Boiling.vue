@@ -50,7 +50,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from "vue"
-import { createHoldTracker } from "@/services/keyHandlers"
+import { createHoldTracker } from "@/services/SpecialKeyService"
 
 const heat = ref(50)
 const score = ref(0)

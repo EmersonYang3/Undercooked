@@ -80,7 +80,7 @@ const fryer = trackKeyPress(
         state.value = "perfect"
         stop()
     },
-    (count) => count >= 20,
+    (count: number) => count >= 20,
     () => {
         if (state.value === "perfect" || state.value === "burnt") return
 
