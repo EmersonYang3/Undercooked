@@ -75,23 +75,6 @@ socketStore.attachEventListener(sharedEnums.serverToStationRemotes.gameStarted,
     }
 )
 
-socketStore.attachEventListener(sharedEnums.serverToStationRemotes.stationAssigned, 
-    (stationName: string) => {
-        if (!stationName) {
-            throw new Error("No station name was provided. Disconnect and reconnect");
-        }
-        if (selectedComponent) {
-            throw new Error("A station type for this was already set.");
-        }
-        if (Object.values(staticStations).includes(stationName as any)) {
-            isPersistent.value = true;
-            selectedComponent.value = staticComponentsMap[stationName];
-            return;
-        }
-        selectedComponent.value = dynamicComponentsMap[stationName];
-    }
-);
-
 function startListening(keys: Set<string>) {
     if (!selectedComponent.value) {
         throw new Error("There was no selected component put. Cannot route to the apporpiate component")
