@@ -32,8 +32,7 @@ import WaitingArea from '@/components/Home/WaitingArea.vue';
 
 import sharedEnums from '@shared/enums';
 import { holdableItem } from '@shared/types';
-import { createSingleClick, SingleClickChecker } from '@/services/KeyBindService';
-
+import KeyBindService from '@/services/KeyBindService';
 import { useSocketStore } from '@/stores/SocketStore';
 
 const staticStations = sharedEnums.staticStations;
@@ -55,8 +54,10 @@ const startedGame = ref(false);
 const isWaiting = ref<boolean>(true);
 const isPersistent = ref<boolean>(false);
 
-let listener: SingleClickChecker | null = null;
 const selectedComponent = ref<Component | null>(null);
+
+
+
 
 socketStore.attachEventListener(sharedEnums.sharedRemotes.setCurrentItem, 
     (item: holdableItem) => {
@@ -99,7 +100,9 @@ function startListening(keys: Set<string>) {
     if (isPersistent.value) {
         return;
     }
+    KeyBindService.OnKeyHeldDown("a", )
     if (!listener) {
+    
         listener = createSingleClick(keys, socketStore, triggerGameplay);
     };
     listener.arm();

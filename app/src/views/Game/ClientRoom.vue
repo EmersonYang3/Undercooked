@@ -16,8 +16,8 @@ import sharedEnums from '@shared/enums';
 import { holdableItem } from '@shared/types';
 import { ref } from 'vue';
 const clientKey = ref<null | string>(null);
-const clientStore = useClientStore();
-const isWaiting = ref(true);
+
+    const isWaiting = ref(true);
 const gameStore = useGameStore();
 const socketStore = useSocketStore();
 socketStore.attachEventListener(sharedEnums.serverToClientRemotes.gameStarted, (key: string) => {
