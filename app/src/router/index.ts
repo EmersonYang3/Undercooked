@@ -3,7 +3,7 @@ const routes = [
     {
         path: '/',
         name: "Main",
-        component: () => import('@/components/ActualStations/Gameplay/Boiling.vue')
+        component: () => import('@/views/Waiting/HomeScreen.vue')
     },
     {
         path: '/hosting',
@@ -27,7 +27,7 @@ const routes = [
     },
     {
         path: '/host',
-        name: "HostingView",
+        name: "HostingRoom",
         component: () => import('@/views/Game/HostView.vue')
     },
     {

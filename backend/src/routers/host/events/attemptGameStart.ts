@@ -38,6 +38,10 @@ function setDispensingItemsToStations() {
 
     for (const [stationIdentifier, station] of Object.entries(stationData)) {
         const internalStationData = sharedStationData[station.stationType]
+        if (!internalStationData) {
+            console.log(`No internal station data found for station type: ${station.stationType}`); continue
+        }
+
         const dispensingItem = internalStationData.dispensingItem
         if (!dispensingItem) continue
 
