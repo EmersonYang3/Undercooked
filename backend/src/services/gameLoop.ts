@@ -3,6 +3,10 @@ import lobby from "./lobby";
 import unqi from "./unqi";
 import recipeGenerator from "utils/Singletons/recipeGenerator";
 
+import sharedEnums from "shared/enums"
+
+const serverToHostRemotes = sharedEnums.serverToHostRemotes
+
 const Timing = {
     startGrace: { min: 10 * 1000, max: 20 * 1000 },
     timeIncreaseMax: { min: 2 * 60 * 1000, max: 3 * 60 * 1000 },
@@ -121,7 +125,7 @@ function tick(): void {
     if (shouldGenerateNewRecipe()) {
         const newActiveRecipe = generateNewRecipe()
         lobbyData.recipesInProgress[newActiveRecipe.id] = newActiveRecipe
-        lobbyData.host.socket.emit("newRecipe", newActiveRecipe)
+        lobbyData.host.socket.emit(serverToHostRemotes.NEW_RECIPE, newActiveRecipe)
     }
 
     timeCache = performance.now()

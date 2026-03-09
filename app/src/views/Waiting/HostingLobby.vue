@@ -12,6 +12,7 @@
 <script setup lang="ts">
 import { useSocketStore } from '@/stores/SocketStore'
 import { uniqueIdentifier } from '@shared/types'
+import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 
 import CodeArea from '@/components/Waiting/CodeArea.vue'
@@ -19,6 +20,7 @@ import DecisionButton from '@/components/Shared/DecisionButton.vue'
 import UniqueIdentifier from '@/components/Shared/UniqueIdentifier.vue'
 import { useNotificationStore } from '@/stores/notificationStore'
 
+const router = useRouter()
 const socketStore = useSocketStore()
 const notificationStore = useNotificationStore()
 
@@ -28,6 +30,10 @@ const notificationHandlerKeys = notificationStore.HANDLER_KEYS
 
 const numberOfPlayers = ref(0)
 const numberOfStations = ref(0)
+
+function routeToHostRoom() {
+    router.push({name: 'HostingRoom'})
+}
 
 function listenForPlayersPendingJoin() {
     socketStore.attachEventListener(ServerToHostRemotes.clientPendingJoin, (identifier: uniqueIdentifier) => {
@@ -68,6 +74,8 @@ function listenForGameStarted() {
         removeListenersForPlayersPendingJoin() 
         removeListenersForPlayersJoined()
         removeGameStartedListener()
+
+        routeToHostRoom()
     })
 }
 

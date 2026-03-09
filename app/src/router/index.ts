@@ -27,7 +27,7 @@ const routes = [
     },
     {
         path: '/host',
-        name: "HostingView",
+        name: "HostingRoom",
         component: () => import('@/views/Game/HostView.vue')
     },
     {
