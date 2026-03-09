@@ -14,12 +14,12 @@ enum serverToHostRemotes {
     newClientJoined = "newClientJoined",
     newStationJoined = "newStationJoined",
 
-    newRecipe = "newRecipe",
     recipeFinished = "recipeFinished",
     scoreUpdate = "scoreUpdate",
     wrongItem = "wrongItem",
 
-    GAME_STARTED = "gameStarted",
+    GAME_STARTED = "GAME_STARTED",
+    NEW_RECIPE = "NEW_RECIPE",
 
     pong = "pong",
 }

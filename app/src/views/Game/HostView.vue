@@ -1,50 +1,24 @@
 <template>
-    <div>
-        <div v-for="[id, recipe] in activeRecipes" :key="id">
-            <div>
-                {{ recipe.targetFoodItem }}
-            </div>
-            <div>
-                {{ Math.floor(recipe.timeRemaining / 1000) }} seconds left
-            </div>
-        </div>
-    </div>
-    <div>
-        Current Score : {{ currentScore }}
-    </div>
+    
 </template>
 
 <script setup lang="ts">
-import { useSocketStore } from '@/stores/SocketStore';
-import enums from '@shared/enums';
-import { activeRecipe } from '@shared/types';
-import { reactive, ref } from 'vue';
-//put the message store here
+import { useSocketStore } from '@/stores/SocketStore'
+import { activeRecipe } from '@shared/types'
 
-const activeRecipes = reactive(new Map());
-//map stores by uniqueidentifier
-//statistics 
-const currentScore = ref(0);
-const messageStore = "temporary";
-const socketStore = useSocketStore();
-socketStore.attachEventListener(enums.serverToHostRemotes.newRecipe, (recipe: activeRecipe) => {
-    activeRecipes.set(recipe.id, recipe);
-})
+const socketStore = useSocketStore()
+const serverToHostRemotes = socketStore.FromServerRemotes.ToHost
 
-socketStore.attachEventListener(enums.serverToHostRemotes.recipeFinished, (id: number) => {
-    activeRecipes.delete(id);
-})
+function connectHostEvents() {
+    socketStore.attachEventListener(serverToHostRemotes.NEW_RECIPE, (newRecipe: activeRecipe) => {
+        console.log("Received new recipe from server:", newRecipe)
+    })
+}
 
-socketStore.attachEventListener(enums.serverToHostRemotes.scoreUpdate, (newScore: number) => {
-    currentScore.value =  newScore;
-})
+function init() {
+    connectHostEvents()
+}
 
-
-
-//this definitely will not function 
+init()
 
 </script>
-
-<style scoped>
-
-</style>

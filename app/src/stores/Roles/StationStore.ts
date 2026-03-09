@@ -24,5 +24,9 @@ export const useStationStore = defineStore("station", () => {
         thisStationRole = role
     }
 
-    return { initializePreconnections }
+    function getStationRole() {
+        return thisStationRole
+    }
+
+    return { initializePreconnections, setStationRole, getStationRole }
 })

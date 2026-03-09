@@ -13,12 +13,14 @@ import { useRouter } from 'vue-router';
 
 import sharedEnums from "@shared/enums"
 import { useClientStore } from '@/stores/Roles/ClientStore';
+import { useStationStore } from '@/stores/Roles/StationStore';
 const gameRoles = sharedEnums.gameRoles
 
 const router = useRouter()
 
 const socketStore = useSocketStore()
 const clientStore = useClientStore()
+const stationStore = useStationStore()
 socketStore.removeAllEventListeners()
 
 const currentGameRole: string = socketStore.getGameRole()
@@ -43,6 +45,8 @@ function connectHostApproval() {
         })
     } else {
         socketStore.attachEventListener(fromServerEvents.ToStation.stationAssigned, (stationType: string) => {
+            stationStore.setStationRole(stationType)
+
             console.log("Station assigned: " + stationType)
             onAnyApproved()
         })
