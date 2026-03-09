@@ -92,7 +92,7 @@ function removeListenersForPlayersJoined() {
 function startGame() {
     socketStore.emitEvent(HostToServerRemotes.startLobby)
     console.log("Starting Game...") 
-}
+}w
 
 listenForGameStarted()
 listenForPlayersPendingJoin()
