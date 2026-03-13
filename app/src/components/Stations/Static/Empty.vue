@@ -25,7 +25,7 @@ const props = defineProps<{
 if (!props.items) {
     throw new Error("An item wasn't passed")
     //instead of a hard fail make it exit gracefully
-    //route back 
+    //route back
 }
 //check if there even is an item in the item passed
 if (props.items.foodItems.length >= 0) {

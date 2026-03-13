@@ -10,7 +10,6 @@
 </template>
 
 <script setup lang="ts">
-import { useNotificationStore } from '@/stores/NotificationStore'
 import { useSocketStore } from '@/stores/SocketStore'
 import { uniqueIdentifier } from '@shared/types'
 import { useRouter } from 'vue-router'
@@ -19,6 +18,7 @@ import { ref } from 'vue'
 import CodeArea from '@/components/Waiting/CodeArea.vue'
 import DecisionButton from '@/components/Shared/DecisionButton.vue'
 import UniqueIdentifier from '@/components/Shared/UniqueIdentifier.vue'
+import { useNotificationStore } from '@/stores/notificationStore'
 
 const router = useRouter()
 const socketStore = useSocketStore()

@@ -13,6 +13,7 @@
 
     <div v-else>
         <p> You are a station in this room.</p>
+        <p> You are a {{ stationRole }}</p>
     </div>
 </template>
 
@@ -31,6 +32,9 @@ const router = useRouter()
 
 const clientStore = useClientStore()
 const stationStore = useStationStore()
+
+const stationRole = stationStore.getStationRole()
+
 
 const isCurrentlyClient = socketStore.getIsClient()
 const clientSpecialKey = isCurrentlyClient ? clientStore.specialKey : "NO CLIENT SPECIAL KEY"

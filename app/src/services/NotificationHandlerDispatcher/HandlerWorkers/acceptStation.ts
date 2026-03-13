@@ -1,6 +1,6 @@
 import { NotificationCallbackParameters, NotificationHandler, NotificationOptionEntry } from "@/utils/types";
 
-import { useNotificationStore } from "@/stores/NotificationStore";
+import { useNotificationStore } from "@/stores/notificationStore";
 
 import sharedEnums from "@shared/enums"
 import { frontendEnums } from "@/utils/enums";
