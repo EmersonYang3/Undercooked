@@ -1,37 +1,30 @@
 <template>
-    <WaitingArea v-if="isWaiting"></WaitingArea>
-    <div v-else>
-        Your client key: 
-        Held Item: {{ gameStore.heldItem }}
-        <img :src="'placeholder'">
-    </div>
+    <SpecialKey />
 </template>
 
 <script setup lang="ts">
-import WaitingArea from '@/components/Home/WaitingArea.vue';
-import { useClientStore } from '@/stores/Roles/ClientStore';
-import { useGameStore } from '@/stores/Shared/PlayerStore';
-import { useSocketStore } from '@/stores/SocketStore';
-import sharedEnums from '@shared/enums';
-import { holdableItem } from '@shared/types';
-import { ref } from 'vue';
-const clientKey = ref<null | string>(null);
+import SpecialKey from '@/components/Client/SpecialKey.vue'
+import { useSocketStore } from '@/stores/SocketStore'
+import { holdableItem } from '@shared/types'
+import { ref } from 'vue'
 
-    const isWaiting = ref(true);
-const gameStore = useGameStore();
-const socketStore = useSocketStore();
-socketStore.attachEventListener(sharedEnums.serverToClientRemotes.gameStarted, (key: string) => {
-    clientKey.value = key;
-    isWaiting.value = false;
-})
-socketStore.attachEventListener(sharedEnums.serverToClientRemotes.pendingJoin, () => {
-    console.log("Identifier", )
-})
-socketStore.attachEventListener(sharedEnums.sharedRemotes.setCurrentItem, (item: holdableItem) => {
-    gameStore.setItem(item);
-})
+const socketStore = useSocketStore()
+const serverToSharedRemotes = socketStore.SharedRemotes
+const setItemRemote = serverToSharedRemotes.ToAny.setCurrentItem
+
+const currentHoldableItem = ref<holdableItem | null>(null)
+
+function init() {
+    socketStore.removeAllEventListeners()
+
+    console.log("Attaching event listener for receiving new holdable items from server...")
+
+    socketStore.attachEventListener(setItemRemote, (newHoldableItem: holdableItem) => {
+        console.log("Received new holdable item from server: ", newHoldableItem)
+        currentHoldableItem.value = newHoldableItem
+    })
+}
+
+init()
+
 </script>
-
-<style scoped>
-
-</style>
