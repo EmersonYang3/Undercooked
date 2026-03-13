@@ -17,6 +17,10 @@ const ToServerRemotes = {
     FromHost: sharedEnums.hostToServerRemotes
 }
 
+const SharedRemotes = {
+    ToAny: sharedEnums.sharedRemotes
+}
+
 const GameRoles = sharedEnums.gameRoles
 
 export const useSocketStore = defineStore("socket", () => {
@@ -89,7 +93,7 @@ export const useSocketStore = defineStore("socket", () => {
 
     return {
         socket, gameRole, uniqueIdentifier,
-        FromServerRemotes, ToServerRemotes,
+        FromServerRemotes, ToServerRemotes, SharedRemotes,
         setSocket, setUniqueIdentifier, setGameRole, getGameRole, getIsClient,
         attachEventListener, removeEventListener, removeAllEventListeners, emitEvent
     }
